@@ -14,9 +14,9 @@ Kosta Java Mini Project
 # 팀 소개
 팀 명: 5팀   
 참여 인원   
-> 오태호: apiod [github](https://github.com/apiod, "오태호")   
-> 임재열: duckrobot52 [github](https://github.com/duckrobot52, "임재열")   
-> 유정현: yusin-bit [github](https://github.com/yusin-bit, "유정현")   
+> 오태호: apiod [github](https://github.com/apiod "오태호")   
+> 임재열: duckrobot52 [github](https://github.com/duckrobot52 "임재열")   
+> 유정현: yusin-bit [github](https://github.com/yusin-bit "유정현")   
 
 # 개발환경
 > 운영체제: window 10, 11   
