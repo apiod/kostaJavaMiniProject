@@ -13,16 +13,16 @@ Kosta Java Mini Project
 
 - - -
 # 팀 소개
-팀 명: 5팀
-참여 인원
-> 오태호: apiod
-> 임재열: duckrobot52
-> 유정현: yusin-bit
+팀 명: 5팀   
+참여 인원   
+> 오태호: apiod   
+> 임재열: duckrobot52   
+> 유정현: yusin-bit   
 
 # 개발환경
-> 운영체제: window 10, 11
-> Language: Java Programming(jdk 21), JDBC
-> DataBase: MySQL 8.0/ AWS Cloud RDS
-> Tool : Eclipse, MySQL-Workbench, ERD_Cloud
-> 형상관리 : Git & GitHub
-> 협업Tool : Notion / Slack / Discord
+> 운영체제: window 10, 11   
+> Language: Java Programming(jdk 21), JDBC    
+> DataBase: MySQL 8.0/ AWS Cloud RDS   
+> Tool : Eclipse, MySQL-Workbench, ERD_Cloud   
+> 형상관리 : Git & GitHub   
+> 협업Tool : Notion / Slack / Discord   
