@@ -12,7 +12,7 @@ Kosta Java Mini Project
 
 - - -
 ### 팀 소개
-팀 명: 5팀   
+팀 명: 4팀   
 참여 인원   
 > 오태호: apiod [github](https://github.com/apiod "오태호")   
 > 임재열: duckrobot52 [github](https://github.com/duckrobot52 "임재열")   
