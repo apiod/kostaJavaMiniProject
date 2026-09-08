@@ -24,4 +24,8 @@ Kosta Java Mini Project
 > DataBase: MySQL 8.0/ AWS Cloud RDS   
 > Tool : Eclipse, MySQL-Workbench, ERD_Cloud   
 > 형상관리 : Git & GitHub   
-> 협업Tool : Notion / Slack / Discord   
+> 협업Tool : Notion / Slack / Discord
+
+
+
+a
