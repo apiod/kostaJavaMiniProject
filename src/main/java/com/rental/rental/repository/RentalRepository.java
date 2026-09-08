@@ -1,0 +1,5 @@
+package main.java.com.rental.rental.repository;
+
+public class RentalRepository {
+
+}
