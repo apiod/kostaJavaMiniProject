@@ -1,12 +1,12 @@
-package com.rental.user.repository;
+package main.java.com.rental.user.repository;
 
 import java.sql.SQLException;
 
-import com.rental.user.dto.FindIdRequest;
-import com.rental.user.dto.PasswordChangeRequest;
-import com.rental.user.dto.UserLoginRequest;
-import com.rental.user.dto.UserSignUpRequest;
-import com.rental.user.entity.User;
+import main.java.com.rental.user.dto.FindIdRequest;
+import main.java.com.rental.user.dto.PasswordChangeRequest;
+import main.java.com.rental.user.dto.UserLoginRequest;
+import main.java.com.rental.user.dto.UserSignUpRequest;
+import main.java.com.rental.user.entity.User;
 
 public interface UserRepository {
 	

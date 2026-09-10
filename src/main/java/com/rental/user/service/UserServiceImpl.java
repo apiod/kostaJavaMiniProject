@@ -1,18 +1,18 @@
-package com.rental.user.service;
+package main.java.com.rental.user.service;
 
 import java.sql.SQLException;
 
-import com.rental.common.exception.PasswordUpdateException;
-import com.rental.common.exception.UserNotFoundException;
-import com.rental.session.Session;
-import com.rental.user.dto.FindIdRequest;
-import com.rental.user.dto.PasswordChangeRequest;
-import com.rental.user.dto.UserLoginRequest;
-import com.rental.user.dto.UserResponse;
-import com.rental.user.dto.UserSignUpRequest;
-import com.rental.user.entity.User;
-import com.rental.user.repository.UserRepository;
-import com.rental.user.repository.UserRepositoryImpl;
+import main.java.com.rental.common.exception.PasswordUpdateException;
+import main.java.com.rental.common.exception.UserNotFoundException;
+import main.java.com.rental.session.Session;
+import main.java.com.rental.user.dto.FindIdRequest;
+import main.java.com.rental.user.dto.PasswordChangeRequest;
+import main.java.com.rental.user.dto.UserLoginRequest;
+import main.java.com.rental.user.dto.UserResponse;
+import main.java.com.rental.user.dto.UserSignUpRequest;
+import main.java.com.rental.user.entity.User;
+import main.java.com.rental.user.repository.UserRepository;
+import main.java.com.rental.user.repository.UserRepositoryImpl;
 
 
 public class UserServiceImpl implements UserService{

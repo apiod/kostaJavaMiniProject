@@ -1,4 +1,4 @@
-package com.rental.user.entity;
+package main.java.com.rental.user.entity;
 
 public class User {
 

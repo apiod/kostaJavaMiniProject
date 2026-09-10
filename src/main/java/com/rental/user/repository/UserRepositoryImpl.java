@@ -1,17 +1,17 @@
-package com.rental.user.repository;
+package main.java.com.rental.user.repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.rental.user.dto.FindIdRequest;
-import com.rental.user.dto.PasswordChangeRequest;
-import com.rental.user.dto.UserLoginRequest;
-import com.rental.user.dto.UserSignUpRequest;
-import com.rental.user.entity.User;
-import com.rental.common.exception.UserNotFoundException;
-import com.rental.common.util.DBManager;
+import main.java.com.rental.user.dto.FindIdRequest;
+import main.java.com.rental.user.dto.PasswordChangeRequest;
+import main.java.com.rental.user.dto.UserLoginRequest;
+import main.java.com.rental.user.dto.UserSignUpRequest;
+import main.java.com.rental.user.entity.User;
+import main.java.com.rental.common.exception.UserNotFoundException;
+import main.java.com.rental.common.util.DBManager;
 
 public class UserRepositoryImpl implements UserRepository{
 	
