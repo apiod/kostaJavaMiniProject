@@ -1,4 +1,4 @@
-package com.rental.common.util;
+package main.java.com.rental.common.util;
 
 import java.io.FileInputStream;
 

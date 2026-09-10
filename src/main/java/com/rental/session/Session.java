@@ -1,6 +1,6 @@
-package com.rental.session;
+package main.java.com.rental.session;
 
-import com.rental.user.dto.UserResponse;
+import main.java.com.rental.user.dto.UserResponse;
 
 public class Session {
 

@@ -1,18 +1,18 @@
-package com.rental.user.controller;
+package main.java.com.rental.user.controller;
 
 import java.sql.SQLException;
 
 
-import com.rental.common.exception.PasswordUpdateException;
-import com.rental.common.exception.UserNotFoundException;
-import com.rental.user.dto.FindIdRequest;
-import com.rental.user.dto.PasswordChangeRequest;
-import com.rental.user.dto.UserLoginRequest;
-import com.rental.user.dto.UserSignUpRequest;
-import com.rental.user.service.UserService;
-import com.rental.user.service.UserServiceImpl;
-import com.rental.view.FailView;
-import com.rental.view.SuccessView;
+import main.java.com.rental.common.exception.PasswordUpdateException;
+import main.java.com.rental.common.exception.UserNotFoundException;
+import main.java.com.rental.user.dto.FindIdRequest;
+import main.java.com.rental.user.dto.PasswordChangeRequest;
+import main.java.com.rental.user.dto.UserLoginRequest;
+import main.java.com.rental.user.dto.UserSignUpRequest;
+import main.java.com.rental.user.service.UserService;
+import main.java.com.rental.user.service.UserServiceImpl;
+import main.java.com.rental.view.FailView;
+import main.java.com.rental.view.SuccessView;
 
 
 public class UserController {

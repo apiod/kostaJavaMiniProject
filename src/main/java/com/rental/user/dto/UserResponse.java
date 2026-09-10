@@ -1,4 +1,4 @@
-package com.rental.user.dto;
+package main.java.com.rental.user.dto;
 
 public class UserResponse {
 	private String id;

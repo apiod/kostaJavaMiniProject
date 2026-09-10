@@ -1,4 +1,4 @@
-package com.rental.common.exception;
+package main.java.com.rental.common.exception;
 
 public class InvalidRentalStatusException extends RuntimeException {
 	public InvalidRentalStatusException(String message) {
