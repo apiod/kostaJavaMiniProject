@@ -1,54 +1,53 @@
 package main.java.com.rental.item.dto;
 
-
 public class ItemSearchRequest {
-	private String keyword;      
-	private String addr;         
-	private int itemcategory;   
-	private Boolean status;      
+	
+	private int itemNum;
+	private String itemName;
+	private String status;
+	private String lenderID;
 	
 	public ItemSearchRequest() {}
 
-	public ItemSearchRequest(String keyword, String addr, int itemcategory, Boolean status) {
-		this.keyword = keyword;
-		this.addr = addr;
-		this.itemcategory = itemcategory;
+	public ItemSearchRequest(int itemNum, String itemName, String status, String lenderID) {
+		super();
+		this.itemNum = itemNum;
+		this.itemName = itemName;
 		this.status = status;
+		this.lenderID = lenderID;
 	}
 
-	public String getKeyword() {
-		return keyword;
+	public int getItemNum() {
+		return itemNum;
 	}
 
-	public void setKeyword(String keyword) {
-		this.keyword = keyword;
+	public void setItemNum(int itemNum) {
+		this.itemNum = itemNum;
 	}
 
-	public String getAddr() {
-		return addr;
+	public String getItemName() {
+		return itemName;
 	}
 
-	public void setAddr(String addr) {
-		this.addr = addr;
+	public void setItemName(String itemName) {
+		this.itemName = itemName;
 	}
 
-	public int getItemcategory() {
-		return itemcategory;
-	}
-
-	public void setItemcategory(int itemcategory) {
-		this.itemcategory = itemcategory;
-	}
-
-	public Boolean getStatus() {
+	public String getStatus() {
 		return status;
 	}
 
-	public void setStatus(Boolean status) {
+	public void setStatus(String status) {
 		this.status = status;
 	}
 
-	
+	public String getLenderID() {
+		return lenderID;
+	}
+
+	public void setLenderID(String lenderID) {
+		this.lenderID = lenderID;
+	}
 
 	
 }

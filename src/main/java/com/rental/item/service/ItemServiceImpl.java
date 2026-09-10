@@ -1,175 +1,77 @@
 package main.java.com.rental.item.service;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
 
-import main.java.com.rental.common.util.DBManeger;
+import main.java.com.rental.common.exception.InvalidRentalStatusException;
+import main.java.com.rental.common.exception.ItemNotFoundException;
 import main.java.com.rental.item.entity.Item;
+import main.java.com.rental.item.repository.ItemRepositoryImpl;
 
-public abstract class ItemServiceImpl implements ItemService {
+public class ItemServiceImpl implements ItemService {
 
-	@Override
-	public List<Item> itemSelect() throws SQLException {
-		Connection con = null;
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		List<Item> list = new ArrayList<>();
+	private static final ItemService instance = new ItemServiceImpl();
 
-		try {
-			con = DBManeger.getConnection();
-			ps = con.prepareStatement("select * from item");
-			rs = ps.executeQuery();
+	private ItemServiceImpl() {}
 
-			while (rs.next()) {
-				list.add(mapRow(rs));
-			}
-		} finally {
-			DBManeger.close(con, ps, rs);
+	public static ItemService getInstance() {
+		return instance;
+	}
+
+	// 물품 전체 조회
+	public List<Item> itemSelectAll() throws ItemNotFoundException, SQLException {
+		List<Item> itemList = ItemRepositoryImpl.itemSelect();
+		if (itemList == null) {
+			throw new ItemNotFoundException("목록에 물품이 없습니다");
 		}
-		return list;
+		return itemList;
 	}
 
 	@Override
-	public Item itemSelectByitemNum(int itemNum) throws SQLException {
-		Connection con = null;
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		Item item = null;
-
-		try {
-			con = DBManeger.getConnection();
-			ps = con.prepareStatement("select * from item where itemnum = ?");
-			ps.setInt(1, itemNum);
-			rs = ps.executeQuery();
-
-			if (rs.next()) {
-				item = mapRow(rs);
-			}
-		} finally {
-			DBManeger.close(con, ps, rs);
+	public Item itemSelectByitemNum(int itemNum) throws ItemNotFoundException, SQLException {
+		Item item = ItemRepositoryImpl.itemSelectByitemNum(itemNum);
+		if (item == null) {
+			throw new ItemNotFoundException("해당번호 물품 정보가 없습니다");
 		}
 		return item;
 	}
 
 	@Override
-	public List<Item> itemSearch(String keyword) throws SQLException {
-		Connection con = null;
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		List<Item> list = new ArrayList<>();
-
-		try {
-			con = DBManeger.getConnection();
-			ps = con.prepareStatement(
-					"select * from item where title like ?");
-			String like = "%" + (keyword) + "%";
-			ps.setString(1, like);
-			rs = ps.executeQuery();
-
-			while (rs.next()) {
-				list.add(mapRow(rs));
-			}
-		} finally {
-			DBManeger.close(con, ps, rs);
+	public List<Item> itemSearch(String keyword) throws ItemNotFoundException, SQLException {
+		List<Item> itemList = ItemRepositoryImpl.itemSearch(keyword);
+		if (itemList == null) {
+			throw new ItemNotFoundException("검색 결과가 없습니다");
 		}
-		return list;
+		return itemList;
 	}
 
 	@Override
-	public int itemInsert(Item item) throws SQLException {
-		String sql = "insert into item "
-				+ "(rentdate, returndate, addr, lenderID, title, itemname, itemcontent, status, itemcategory) "
-				+ "values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-		Connection con = null;
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		try {
-			con = DBManeger.getConnection();
-			ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-			ps.setString(1, item.getRentdate());
-			ps.setString(2, item.getReturndate());
-			ps.setString(3, item.getAddr());
-			ps.setString(4, item.getLenderID());
-			ps.setString(5, item.getTitle());
-			ps.setString(6, item.getItemname());
-			ps.setString(7, item.getItemcontent());
-			ps.setBoolean(8, item.isStatus());
-			ps.setInt(9, item.getItemcategory());
-
-			if (ps.executeUpdate() == 0) {
-				return -1;
-			}
-			rs = ps.getGeneratedKeys();
-			if (rs.next()) {
-				return rs.getInt(1);
-			}
-			return -1;
-		} finally {
-			DBManeger.close(con, ps, rs);
+	public void itemInsert(Item item) throws SQLException {
+		int result = ItemRepositoryImpl.itemInsert(item);
+		if (result <= 0) {
+			throw new InvalidRentalStatusException("등록되지 않았습니다");
 		}
 	}
 
 	@Override
-	public int itemUpdate(Item item) throws SQLException {
-		String sql = "update item set "
-				+ "rentdate = ?, returndate = ?, addr = ?, title = ?, itemname = ?, "
-				+ "itemcontent = ?, status = ?, itemcategory = ? "
-				+ "where itemnum = ?";
-
-		Connection con = null;
-		PreparedStatement ps = null;
-		try {
-			con = DBManeger.getConnection();
-			ps = con.prepareStatement(sql);
-			ps.setString(1, item.getRentdate());
-			ps.setString(2, item.getReturndate());
-			ps.setString(3, item.getAddr());
-			ps.setString(4, item.getTitle());
-			ps.setString(5, item.getItemname());
-			ps.setString(6, item.getItemcontent());
-			ps.setBoolean(7, item.isStatus());
-			ps.setInt(8, item.getItemcategory());
-			ps.setInt(9, item.getItemnum());
-			return ps.executeUpdate();
-		} finally {
-			DBManeger.close(con, ps, null);
+	public void itemUpdate(Item item) throws ItemNotFoundException, SQLException {
+		int result = ItemRepositoryImpl.itemUpdate(item);
+		if (result == 0) {
+			throw new ItemNotFoundException("수정되지 않았습니다");
 		}
 	}
 
+	@Override
+	public int itemUpdateStatus(int itemNum, String status) throws ItemNotFoundException, SQLException {
+		int result = ItemRepositoryImpl.itemUpdateStatus(itemNum, Boolean.parseBoolean(status));
+		if (result == 0) {
+			throw new ItemNotFoundException("상태가 변경되지 않았습니다");
+		}
+		return result;
+	}
 
 	@Override
 	public int itemDelete(int itemNum) throws SQLException {
-		Connection con = null;
-		PreparedStatement ps = null;
-		try {
-			con = DBManeger.getConnection();
-			ps = con.prepareStatement("delete from item where itemnum = ?");
-			ps.setInt(1, itemNum);
-			return ps.executeUpdate();
-		} finally {
-			DBManeger.close(con, ps, null);
-		}
-	}
-
-	// ResultSet 현재 행을 Item으로 매핑
-	private Item mapRow(ResultSet rs) throws SQLException {
-		Item item = new Item();
-		item.setItemnum(rs.getInt("itemnum"));
-		item.setRentdate(rs.getString("rentdate"));
-		item.setReturndate(rs.getString("returndate"));
-		item.setAddr(rs.getString("addr"));
-		item.setLenderID(rs.getString("lenderID"));
-		item.setTitle(rs.getString("title"));
-		item.setItemname(rs.getString("itemname"));
-		item.setItemcontent(rs.getString("itemcontent"));
-		item.setStatus(rs.getBoolean("status"));
-		item.setItemcategory(rs.getInt("itemcategory"));
-		return item;
+		return ItemRepositoryImpl.itemDelete(itemNum);
 	}
 }

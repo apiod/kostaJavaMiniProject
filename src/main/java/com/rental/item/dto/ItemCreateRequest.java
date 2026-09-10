@@ -1,107 +1,76 @@
 package main.java.com.rental.item.dto;
 
-
-
 public class ItemCreateRequest {
-	private String title;        
-	private String itemname;     
-	private String itemcontent;  
-	private String addr;         
-	private String lenderID;    
-	private int itemcategory;    
-	private String rentdate;     
-	private String returndate;   
-	private boolean status;
+	
+	private int itemNum;
+	private String itemName;
+	private String status;
+	private String category;
+	private String lenderID;
+	
 
 	public ItemCreateRequest() {}
 
-	public ItemCreateRequest(String title, String itemname, String itemcontent, String addr, String lenderID,
-			int itemcategory, String rentdate, String returndate, boolean status) {
+
+	public ItemCreateRequest(int itemNum, String itemName, String status, String category, String lenderID) {
 		super();
-		this.title = title;
-		this.itemname = itemname;
-		this.itemcontent = itemcontent;
-		this.addr = addr;
+		this.itemNum = itemNum;
+		this.itemName = itemName;
+		this.status = status;
+		this.category = category;
 		this.lenderID = lenderID;
-		this.itemcategory = itemcategory;
-		this.rentdate = rentdate;
-		this.returndate = returndate;
+	}
+
+
+	public int getItemNum() {
+		return itemNum;
+	}
+
+
+	public void setItemNum(int itemNum) {
+		this.itemNum = itemNum;
+	}
+
+
+	public String getItemName() {
+		return itemName;
+	}
+
+
+	public void setItemName(String itemName) {
+		this.itemName = itemName;
+	}
+
+
+	public String getStatus() {
+		return status;
+	}
+
+
+	public void setStatus(String status) {
 		this.status = status;
 	}
 
-	public String getTitle() {
-		return title;
+
+	public String getCategory() {
+		return category;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
+
+	public void setCategory(String category) {
+		this.category = category;
 	}
 
-	public String getItemname() {
-		return itemname;
-	}
-
-	public void setItemname(String itemname) {
-		this.itemname = itemname;
-	}
-
-	public String getItemcontent() {
-		return itemcontent;
-	}
-
-	public void setItemcontent(String itemcontent) {
-		this.itemcontent = itemcontent;
-	}
-
-	public String getAddr() {
-		return addr;
-	}
-
-	public void setAddr(String addr) {
-		this.addr = addr;
-	}
 
 	public String getLenderID() {
 		return lenderID;
 	}
 
+
 	public void setLenderID(String lenderID) {
 		this.lenderID = lenderID;
 	}
 
-	public int getItemcategory() {
-		return itemcategory;
-	}
-
-	public void setItemcategory(int itemcategory) {
-		this.itemcategory = itemcategory;
-	}
-
-	public String getRentdate() {
-		return rentdate;
-	}
-
-	public void setRentdate(String rentdate) {
-		this.rentdate = rentdate;
-	}
-
-	public String getReturndate() {
-		return returndate;
-	}
-
-	public void setReturndate(String returndate) {
-		this.returndate = returndate;
-	}
-
-	public boolean isStatus() {
-		return status;
-	}
-
-	public void setStatus(boolean status) {
-		this.status = status;
-	}
-
 	
-	
-	
+		
 }
