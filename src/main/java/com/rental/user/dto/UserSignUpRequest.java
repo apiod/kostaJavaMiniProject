@@ -2,12 +2,11 @@ package com.rental.user.dto;
 
 public class UserSignUpRequest {
 
-
+		private String id;                  // PK
 		private String password; 
 		private String nickName;
 		private String name; 
 		private String phoneNo; 
-		private String id;                  // PK
 		
 		
 		public UserSignUpRequest() {}

@@ -38,7 +38,7 @@ public class UserRepositoryImpl implements UserRepository{
 		        }
 		        
 	        } finally {
-	        	DBManager.releaseConnection(con, ps, rs);
+	        	DBManager.close(con, ps, rs);
 	        }
 			return user;
 		}
@@ -66,7 +66,7 @@ public class UserRepositoryImpl implements UserRepository{
 
 
 				 } finally {
-					 DBManager.releaseConnection(con, ps);
+					 DBManager.close(con, ps);
 				 
 				 }
 
@@ -97,7 +97,7 @@ public class UserRepositoryImpl implements UserRepository{
 		        	result = rs.getString("ID");
 		        }
 	        }finally {
-	        	DBManager.releaseConnection(con, ps, rs);
+	        	DBManager.close(con, ps, rs);
 	        }
 			return result;
 		}
@@ -125,7 +125,7 @@ public class UserRepositoryImpl implements UserRepository{
 	             result = ps.executeUpdate();
 
 	         } finally {
-	             DBManager.releaseConnection(con, ps);
+	             DBManager.close(con, ps);
 	         }
 	         return result;
 	 
