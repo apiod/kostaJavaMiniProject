@@ -2,5 +2,10 @@
 bin/
 .classpath
 .project
+<<<<<<< HEAD
 */*.properties
 .metadata
+=======
+*.properties
+
+>>>>>>> 61239dd25a738b15b20dadcee238a2ea21e16a24
