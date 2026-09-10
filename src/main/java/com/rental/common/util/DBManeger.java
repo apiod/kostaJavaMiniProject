@@ -13,7 +13,7 @@ public class DBManeger {
 	
 	static {
 		try {
-			proFile.load(new FileInputStream("resoures/dbInfo.properties"));
+			proFile.load(new FileInputStream("resources/dbInfo.properties"));
 			Class.forName(proFile.getProperty("driverName"));
 			
 
