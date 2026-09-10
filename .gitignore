@@ -2,4 +2,6 @@
 bin/
 .classpath
 .project
-*/*.properties
+**/*.properties
+src/main/java/com/rental/common/util/DBProperties.java
+lib/
