@@ -26,7 +26,7 @@ public class UserServiceImpl implements UserService{
 		public UserResponse login(UserLoginRequest request ) throws UserNotFoundException , SQLException{
 			User user=userRepository.login(request);
 			if(user==null) {
-				throw new UserNotFoundException("정보를 다시 확인해주세요.");
+				throw new UserNotFoundException("회원님의 정보를 찾을 수 없습니다");
 			}
 			
 			UserResponse response = new UserResponse(
@@ -49,8 +49,12 @@ public class UserServiceImpl implements UserService{
 	    return result;
 	}
 	@Override
-	public String findId(FindIdRequest request) throws SQLException {
+	public String findId(FindIdRequest request) throws SQLException, UserNotFoundException {
 		String result = userRepository.findId(request);
+		
+		if(result==null) {
+			throw new UserNotFoundException("회원님의 ID를 찾을 수 없습니다");
+		}
 		
 		return result;
 		
@@ -62,7 +66,7 @@ public class UserServiceImpl implements UserService{
 		int result = userRepository.updatePassword(request);
 		
 		if(result==0) {
-			throw new PasswordUpdateException("정보를 다시 확인해주세요.");
+			throw new PasswordUpdateException("정보를 다시 입력해 주세요");
 		
 		}
 		return result;
