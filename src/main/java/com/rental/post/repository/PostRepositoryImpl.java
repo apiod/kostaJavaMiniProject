@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import main.java.com.rental.common.exception.PostException;
 import main.java.com.rental.common.util.DBManager;
 import main.java.com.rental.post.dto.PostCreate;
 import main.java.com.rental.post.dto.PostUpdate;
@@ -15,7 +16,7 @@ import main.java.com.rental.post.entity.Post;
 public class PostRepositoryImpl implements PostRepository {
 
 	@Override
-	public int postCreate(PostCreate postCreate) {
+	public int postCreate(PostCreate postCreate) throws PostException {
 		Connection con = null;
 		PreparedStatement ps = null;
 		String sql = "INSERT INTO Post" + "(ItemNum, Title, Content," + "RentDate, ReturnDate, Addr)"
@@ -34,7 +35,8 @@ public class PostRepositoryImpl implements PostRepository {
 			result = ps.executeUpdate();
 
 		} catch (SQLException e) {
-			// TODO: handle exception
+			e.printStackTrace();
+			throw new PostException();
 		} finally {
 			DBManager.close(con, ps);
 		}
@@ -42,7 +44,7 @@ public class PostRepositoryImpl implements PostRepository {
 	}
 
 	@Override
-	public int postUpdate(PostUpdate postUpdate) {
+	public int postUpdate(PostUpdate postUpdate)throws PostException {
 		Connection con = null;
 		PreparedStatement ps = null;
 		String sql = "UPDATE Post SET Title = ?," 
@@ -64,6 +66,8 @@ public class PostRepositoryImpl implements PostRepository {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+			throw new PostException();
+			
 		} finally {
 			DBManager.close(con, ps);
 		}
@@ -72,7 +76,7 @@ public class PostRepositoryImpl implements PostRepository {
 	}
 
 	@Override
-	public int postDelete(int postNum) {
+	public int postDelete(int postNum) throws PostException{
 		String sql = " DELETE FROM Post WHERE Postnum = ?";
 		Connection con = null;
 		PreparedStatement ps = null;
@@ -81,19 +85,16 @@ public class PostRepositoryImpl implements PostRepository {
 			con = DBManager.getConnection();
 			ps = con.prepareStatement(sql);
 			ps.setInt(1, postNum);
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}finally {
 			DBManager.close(con, ps);
 		}
-
 		return result;
-
 	}
 	
 	@Override
-	public Post selectByItemNum(int itemNum) {
+	public Post selectByItemNum(int itemNum)throws PostException {
 
 	    String sql = "SELECT * FROM Post WHERE ItemNum = ?";
 	    Connection con =null;
@@ -108,47 +109,39 @@ public class PostRepositoryImpl implements PostRepository {
 
 	    } catch (SQLException e) {
 	        e.printStackTrace();
+	        throw new PostException();
 	    } finally {
 			DBManager.close(con, ps, rs);
 		}
-
 	    return null;
 	}
 	
 	@Override
-	public List<Post> selectByTitleKeyword(String titleKeyword) {
-
+	public List<Post> selectByTitleKeyword(String titleKeyword) throws PostException{
 	    String sql = """
 	            SELECT *
 	            FROM Post
 	            WHERE Title LIKE ?
 	            ORDER BY Postnum DESC
 	            """;
-
 	    List<Post> posts = new ArrayList<>();
-
 	    try (Connection conn = DBManager.getConnection();
 	         PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
 	        pstmt.setString(1, "%" + titleKeyword + "%");
-
 	        try (ResultSet rs = pstmt.executeQuery()) {
-
 	            while (rs.next()) {
 	                posts.add(mapPost(rs));
 	            }
 	        }
-
 	    } catch (SQLException e) {
 	        e.printStackTrace();
+	        throw new PostException();
 	    }
-
 	    return posts;
 	}
 	
 	@Override
-	public List<Post> selectByContentKeyword(String contentKeyword) {
-
+	public List<Post> selectByContentKeyword(String contentKeyword) throws PostException{
 	    String sql = """
 	            SELECT *
 	            FROM Post
@@ -157,28 +150,22 @@ public class PostRepositoryImpl implements PostRepository {
 	            """;
 
 	    List<Post> posts = new ArrayList<>();
-
 	    try (Connection conn = DBManager.getConnection();
 	         PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
 	        pstmt.setString(1, "%" + contentKeyword + "%");
-
 	        try (ResultSet rs = pstmt.executeQuery()) {
-
 	            while (rs.next()) {
 	                posts.add(mapPost(rs));
 	            }
 	        }
-
 	    } catch (SQLException e) {
 	        e.printStackTrace();
+	        throw new PostException();
 	    }
-
 	    return posts;
 	}
 	@Override
-	public List<Post> selectByRentDate(String rentDate) {
-
+	public List<Post> selectByRentDate(String rentDate) throws PostException{
 	    String sql = """
 	            SELECT *
 	            FROM Post
@@ -187,54 +174,43 @@ public class PostRepositoryImpl implements PostRepository {
 	            """;
 
 	    List<Post> posts = new ArrayList<>();
-
 	    try (Connection conn = DBManager.getConnection();
 	         PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
 	        pstmt.setString(1, rentDate);
-
 	        try (ResultSet rs = pstmt.executeQuery()) {
-
 	            while (rs.next()) {
 	                posts.add(mapPost(rs));
 	            }
 	        }
-
 	    } catch (SQLException e) {
 	        e.printStackTrace();
+	        throw new PostException();
 	    }
-
 	    return posts;
 	}
 	
 	@Override
-	public List<Post> selectByAddr(String addr) {
+	public List<Post> selectByAddr(String addr) throws PostException{
 
 	    String sql = """
 	            SELECT *
 	            FROM Post
 	            WHERE Addr LIKE ?
 	            ORDER BY Postnum DESC
-	            """;
-
+	    		""";
 	    List<Post> posts = new ArrayList<>();
-
 	    try (Connection conn = DBManager.getConnection();
 	         PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
 	        pstmt.setString(1, "%" + addr + "%");
-
 	        try (ResultSet rs = pstmt.executeQuery()) {
-
 	            while (rs.next()) {
 	                posts.add(mapPost(rs));
 	            }
 	        }
-
 	    } catch (SQLException e) {
 	        e.printStackTrace();
+	        throw new PostException();
 	    }
-
 	    return posts;
 	}
 	
