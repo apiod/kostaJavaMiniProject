@@ -19,9 +19,10 @@ public class DBManager {
 	static {
 		try {
 			
-			proFile.load(new FileInputStream("src/main/resources/dbmanager.properties"));
+			proFile.load(new FileInputStream("resources/dbmanager.properties"));
 			
 			Class.forName(proFile.getProperty("driverName"));
+			
 
 		} catch (Exception e) {
 			e.printStackTrace();

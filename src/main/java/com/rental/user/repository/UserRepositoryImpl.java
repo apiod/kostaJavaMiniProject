@@ -10,7 +10,7 @@ import main.java.com.rental.user.dto.PasswordChangeRequest;
 import main.java.com.rental.user.dto.UserLoginRequest;
 import main.java.com.rental.user.dto.UserSignUpRequest;
 import main.java.com.rental.user.entity.User;
-import main.java.com.rental.common.exception.UserNotFoundException;
+import main.java.com.rental.common.exception.NotFoundException;
 import main.java.com.rental.common.util.DBManager;
 
 public class UserRepositoryImpl implements UserRepository{
@@ -25,7 +25,7 @@ public class UserRepositoryImpl implements UserRepository{
 			  
 			 try {
 			   con = DBManager.getConnection();
-			   ps= con.prepareStatement("select * from User where ID=? and passWord=?");
+			   ps= con.prepareStatement("select * from User where ID=? and PassWord=?");
 			   ps.setString(1, request.getId());
 			   ps.setString(2, request.getPassword());
 			   
