@@ -4,23 +4,23 @@ import java.sql.SQLException;
 import java.util.List;
 
 import main.java.com.rental.common.exception.InvalidRentalStatusException;
-import main.java.com.rental.common.exception.ItemNotFoundException;
+import main.java.com.rental.common.exception.NotFoundException;
 import main.java.com.rental.item.entity.Item;
 import main.java.com.rental.item.service.ItemService;
 import main.java.com.rental.item.service.ItemServiceImpl;
 import main.java.com.rental.view.FailView;
 import main.java.com.rental.view.SuccessView;
 
-public class ItemController implements ItemService {
+public class ItemController  {
 
 	private ItemService itemService = ItemServiceImpl.getInstance();
 
 	// 전체 목록 조회
 	public void itemSelect() {
 		try {
-			List<Item> list = ItemService.itemSelectAll();
+			List<Item> list = ItemService.itemSelect();
 			SuccessView.printItemList(list);
-		} catch (ItemNotFoundException e) {
+		} catch (NotFoundException e) {
 			FailView.FailMessage(e.getMessage());
 		}
 	}
@@ -30,9 +30,7 @@ public class ItemController implements ItemService {
 		try {
 			Item item = itemService.itemSelectByitemNum(itemNum);
 			SuccessView.printItem(item);
-		} catch (ItemNotFoundException e) {
-			FailView.FailMessage(e.getMessage());
-		} catch (SQLException e) {
+		} catch (NotFoundException e) {
 			FailView.FailMessage(e.getMessage());
 		}
 	}
@@ -42,11 +40,9 @@ public class ItemController implements ItemService {
 		try {
 			List<Item> list = itemService.itemSearch(keyword);
 			SuccessView.printItemList(list);
-		} catch (ItemNotFoundException e) {
+		} catch (NotFoundException e) {
 			FailView.FailMessage(e.getMessage());
-		} catch (SQLException e) {
-			FailView.FailMessage(e.getMessage());
-		}
+		} 
 	}
 
 	// 물품 등록
@@ -66,23 +62,19 @@ public class ItemController implements ItemService {
 		try {
 			itemService.itemUpdate(item);
 			SuccessView.printMessage("물품이 수정되었습니다");
-		} catch (ItemNotFoundException e) {
+		} catch (NotFoundException e) {
 			FailView.FailMessage(e.getMessage());
-		} catch (SQLException e) {
-			FailView.FailMessage(e.getMessage());
-		}
+		} 
 	}
 
 	// 대여 상태 변경
-	public void itemUpdateStatus(int itemNum, String status) {
+	public void itemUpdateStatus(int itemNum, boolean status) {
 		try {
 			itemService.itemUpdateStatus(itemNum, status);
 			SuccessView.printMessage("상태가 변경되었습니다");
-		} catch (ItemNotFoundException e) {
+		} catch (NotFoundException e) {
 			FailView.FailMessage(e.getMessage());
-		} catch (SQLException e) {
-			FailView.FailMessage(e.getMessage());
-		}
+		} 
 	}
 
 	// 물품 삭제

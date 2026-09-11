@@ -8,20 +8,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import main.java.com.rental.common.exception.ItemNotFoundException;
+import main.java.com.rental.common.exception.NotFoundException;
 import main.java.com.rental.common.util.DBManager;
 import main.java.com.rental.item.entity.Item;
 
 public class ItemRepositoryImpl implements ItemRepository {
 
-	private static ItemRepository instance = new ItemRepositoryImpl();
-
-	private ItemRepositoryImpl() {
-	}
-
-	public static ItemRepository getInstance() {
-		return instance;
-	}
 
 	// 전체 조회
 	public List<Item> itemSelect() throws SQLException {
@@ -38,14 +30,18 @@ public class ItemRepositoryImpl implements ItemRepository {
 			while (rs.next()) {
 				list.add(mapRow(rs));
 			}
-		} finally {
+		}catch (SQLException e) {
+			e.printStackTrace();
+			throw new NotFoundException();
+		}
+		finally {
 			DBManager.close(con, ps, rs);
 		}
 		return list;
 	}
 
 	// 물품번호 검색
-	public Item itemSelectByitemNum(int itemNum) throws ItemNotFoundException {
+	public Item itemSelectByitemNum(int itemNum) throws NotFoundException {
 		String sql = "select * from Item where ItemNum = ?";
 		Connection con = null;
 		PreparedStatement ps = null;
@@ -62,6 +58,7 @@ public class ItemRepositoryImpl implements ItemRepository {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+			throw new NotFoundException();
 		} finally {
 			DBManager.close(con, ps, rs);
 		}
@@ -69,7 +66,7 @@ public class ItemRepositoryImpl implements ItemRepository {
 	}
 
 	// 물품 검색
-	public static List<Item> itemSearch(String keyword) throws SQLException {
+	public List<Item> itemSearch(String keyword) throws NotFoundException {
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
@@ -85,14 +82,18 @@ public class ItemRepositoryImpl implements ItemRepository {
 			while (rs.next()) {
 				list.add(mapRow(rs));
 			}
-		} finally {
+		}catch (SQLException e) {
+			e.printStackTrace();
+			throw new NotFoundException();
+		}
+		finally {
 			DBManager.close(con, ps, rs);
 		}
 		return list;
 	}
 
 	// 물품 등록
-	public static int itemInsert(Item item) throws SQLException {
+	public int itemInsert(Item item) throws NotFoundException {
 		String sql = "insert into item " + "(ItemNum, ItemName, Status, Num2, LenderID) " + "values (?, ?, ?, ?, ?)";
 
 		Connection con = null;
@@ -110,13 +111,16 @@ public class ItemRepositoryImpl implements ItemRepository {
 				return -1;
 			}
 			return -1;
-		} finally {
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new NotFoundException();
+		}finally {
 			DBManager.close(con, ps);
 		}
 	}
 
 	// 물품 수정
-	public static int itemUpdate(Item item) throws SQLException {
+	public int itemUpdate(Item item) throws NotFoundException {
 		String sql = "update Item set " + "ItemNum = ?, ItemName = ?, Status = ?, Num2 = ?" + "where ItemNum = ?";
 
 		Connection con = null;
@@ -130,13 +134,16 @@ public class ItemRepositoryImpl implements ItemRepository {
 			ps.setString(4, item.getNum2());
 
 			return ps.executeUpdate();
-		} finally {
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new NotFoundException();
+		}finally {
 			DBManager.close(con, ps);
 		}
 	}
 
 	// 물품 삭제
-	public static int itemDelete(int itemNum) throws SQLException {
+	public int itemDelete(int itemNum) throws NotFoundException {
 		Connection con = null;
 		PreparedStatement ps = null;
 		try {
@@ -144,8 +151,29 @@ public class ItemRepositoryImpl implements ItemRepository {
 			ps = con.prepareStatement("delete from Item where ItemNum = ?");
 			ps.setInt(1, itemNum);
 			return ps.executeUpdate();
-		} finally {
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new NotFoundException();
+		}finally {
 			DBManager.close(con, ps);
+		}
+	}
+	
+	// 대여 상태 변경
+	public int itemUpdateStatus(int itemNum, boolean status) throws NotFoundException{
+		Connection con = null;
+		PreparedStatement ps = null;
+		try {
+			con = DBManager.getConnection();
+			ps = con.prepareStatement("update Item set Status = ? where ItemNum=?");
+			ps.setBoolean(1, status);
+			ps.setInt(2, itemNum);
+			return ps.executeUpdate();
+		}catch (SQLException e) {
+			e.printStackTrace();
+			throw new NotFoundException();
+		}finally {
+			DBManager.close(con,ps);
 		}
 	}
 
@@ -160,8 +188,5 @@ public class ItemRepositoryImpl implements ItemRepository {
 		return item;
 	}
 
-	public static int itemUpdateStatus(int itemNum, boolean status) throws SQLException {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+
 }

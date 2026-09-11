@@ -5,6 +5,7 @@ import java.util.List;
 import main.java.com.rental.item.entity.Item;
 
 public interface ItemRepository {
+	
 	// 물품 전체 조회
 	List<Item> itemSelect() throws SQLException;
 
@@ -21,7 +22,7 @@ public interface ItemRepository {
 	int itemUpdate(Item item) throws SQLException;
 
 	// 대여 상태 변경
-	int itemUpdateStatus(int itemNum, String status) throws SQLException;
+	int itemUpdateStatus(int itemNum, boolean status) throws SQLException;
 
 	// 물품 삭제
 	int itemDelete(int itemNum) throws SQLException;

@@ -69,6 +69,13 @@ public class Item {
 	public void setLenderID(String lenderID) {
 		this.lenderID = lenderID;
 	}
+
+
+	@Override
+	public String toString() {
+		return "Item [itemNum=" + itemNum + ", itemName=" + itemName + ", status=" + status + ", num2=" + num2
+				+ ", lenderID=" + lenderID + "]";
+	}
 	
 	
 
