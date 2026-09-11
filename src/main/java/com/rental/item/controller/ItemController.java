@@ -11,24 +11,22 @@ import main.java.com.rental.item.service.ItemServiceImpl;
 import main.java.com.rental.view.FailView;
 import main.java.com.rental.view.SuccessView;
 
-public class ItemController {
+public class ItemController implements ItemService {
 
-	private static ItemService itemService = ItemServiceImpl.getInstance();
+	private ItemService itemService = ItemServiceImpl.getInstance();
 
 	// 전체 목록 조회
-	public static void itemSelect() {
+	public void itemSelect() {
 		try {
-			List<Item> list = ItemService.itemSelect();
+			List<Item> list = ItemService.itemSelectAll();
 			SuccessView.printItemList(list);
 		} catch (ItemNotFoundException e) {
-			FailView.FailMessage(e.getMessage());
-		} catch (SQLException e) {
 			FailView.FailMessage(e.getMessage());
 		}
 	}
 
 	// 물품 번호 조회
-	public static void itemSelectByno(int itemNum) {
+	public void itemSelectByno(int itemNum) {
 		try {
 			Item item = itemService.itemSelectByitemNum(itemNum);
 			SuccessView.printItem(item);
@@ -40,7 +38,7 @@ public class ItemController {
 	}
 
 	// 키워드 검색
-	public static void itemSearch(String keyword) {
+	public void itemSearch(String keyword) {
 		try {
 			List<Item> list = itemService.itemSearch(keyword);
 			SuccessView.printItemList(list);
@@ -52,7 +50,7 @@ public class ItemController {
 	}
 
 	// 물품 등록
-	public static void itemInsert(Item item) {
+	public void itemInsert(Item item) {
 		try {
 			itemService.itemInsert(item);
 			SuccessView.printMessage("물품이 등록되었습니다");
@@ -64,7 +62,7 @@ public class ItemController {
 	}
 
 	// 물품 수정
-	public static void itemUpdate(Item item) {
+	public void itemUpdate(Item item) {
 		try {
 			itemService.itemUpdate(item);
 			SuccessView.printMessage("물품이 수정되었습니다");
@@ -76,7 +74,7 @@ public class ItemController {
 	}
 
 	// 대여 상태 변경
-	public static void itemUpdateStatus(int itemNum, String status) {
+	public void itemUpdateStatus(int itemNum, String status) {
 		try {
 			itemService.itemUpdateStatus(itemNum, status);
 			SuccessView.printMessage("상태가 변경되었습니다");
@@ -88,7 +86,7 @@ public class ItemController {
 	}
 
 	// 물품 삭제
-	public static void itemDelete(int itemNum) {
+	public void itemDelete(int itemNum) {
 		try {
 			itemService.itemDelete(itemNum);
 			SuccessView.printMessage("물품이 삭제되었습니다");

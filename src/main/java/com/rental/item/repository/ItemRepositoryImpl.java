@@ -1,6 +1,5 @@
 package main.java.com.rental.item.repository;
 
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,22 +8,30 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import main.java.com.rental.common.util.DBManeger;
+import main.java.com.rental.common.exception.ItemNotFoundException;
+import main.java.com.rental.common.util.DBManager;
 import main.java.com.rental.item.entity.Item;
 
+public class ItemRepositoryImpl implements ItemRepository {
 
-public interface ItemRepositoryImpl{
- // db연결
+	private static ItemRepository instance = new ItemRepositoryImpl();
+
+	private ItemRepositoryImpl() {
+	}
+
+	public static ItemRepository getInstance() {
+		return instance;
+	}
 
 	// 전체 조회
-	public static List<Item> itemSelect() throws SQLException {
+	public List<Item> itemSelect() throws SQLException {
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		List<Item> list = new ArrayList<>();
 
 		try {
-			con = DBManeger.getConnection();
+			con = DBManager.getConnection();
 			ps = con.prepareStatement("select * from Item order by ItemNum");
 			rs = ps.executeQuery();
 
@@ -32,31 +39,33 @@ public interface ItemRepositoryImpl{
 				list.add(mapRow(rs));
 			}
 		} finally {
-			DBManeger.close(con, ps, rs);
+			DBManager.close(con, ps, rs);
 		}
 		return list;
 	}
 
 	// 물품번호 검색
-	public static Item itemSelectByitemNum(int itemNum) throws SQLException {
+	public Item itemSelectByitemNum(int itemNum) throws ItemNotFoundException {
+		String sql = "select * from Item where ItemNum = ?";
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		Item item = null;
 
 		try {
-			con = DBManeger.getConnection();
-			ps = con.prepareStatement("select * from Item where ItemNum = ?");
+			con = DBManager.getConnection();
+			ps = con.prepareStatement(sql);
 			ps.setInt(1, itemNum);
 			rs = ps.executeQuery();
 
 			if (rs.next()) {
-				item = mapRow(rs);
+				return mapRow(rs);
 			}
+		} catch (SQLException e) {
+			e.printStackTrace();
 		} finally {
-			DBManeger.close(con, ps, rs);
+			DBManager.close(con, ps, rs);
 		}
-		return item;
+		return null;
 	}
 
 	// 물품 검색
@@ -67,9 +76,8 @@ public interface ItemRepositoryImpl{
 		List<Item> list = new ArrayList<>();
 
 		try {
-			con = DBManeger.getConnection();
-			ps = con.prepareStatement(
-					"select * from item where ItemName like ?");
+			con = DBManager.getConnection();
+			ps = con.prepareStatement("select * from Item where ItemName like ?");
 			String like = "%" + (keyword) + "%";
 			ps.setString(1, like);
 			rs = ps.executeQuery();
@@ -78,61 +86,52 @@ public interface ItemRepositoryImpl{
 				list.add(mapRow(rs));
 			}
 		} finally {
-			DBManeger.close(con, ps, rs);
+			DBManager.close(con, ps, rs);
 		}
 		return list;
 	}
 
 	// 물품 등록
 	public static int itemInsert(Item item) throws SQLException {
-		String sql = "insert into item "
-				+ "(ItemNum, ItemName, Status, Num2, LenderID) "
-				+ "values (?, ?, ?, ?, ?)";
+		String sql = "insert into item " + "(ItemNum, ItemName, Status, Num2, LenderID) " + "values (?, ?, ?, ?, ?)";
 
 		Connection con = null;
 		PreparedStatement ps = null;
-		ResultSet rs = null;
 		try {
-			con = DBManeger.getConnection();
+			con = DBManager.getConnection();
 			ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			ps.setInt(1, item.getItemNum());
 			ps.setString(2, item.getItemName());
-			ps.setString(3, item.getStatus());
+			ps.setBoolean(3, item.isStatus());
 			ps.setString(4, item.getNum2());
 			ps.setString(5, item.getLenderID());
 
 			if (ps.executeUpdate() == 0) {
 				return -1;
 			}
-			rs = ps.getGeneratedKeys();
-			if (rs.next()) {
-				return rs.getInt(1);
-			}
 			return -1;
 		} finally {
-			DBManeger.close(con, ps, rs);
+			DBManager.close(con, ps);
 		}
 	}
 
 	// 물품 수정
 	public static int itemUpdate(Item item) throws SQLException {
-		String sql = "update Item set "
-				+ "ItemNum = ?, ItemName = ?, Status = ?, Num2 = ?"
-				+ "where itemnum = ?";
- 
+		String sql = "update Item set " + "ItemNum = ?, ItemName = ?, Status = ?, Num2 = ?" + "where ItemNum = ?";
+
 		Connection con = null;
 		PreparedStatement ps = null;
 		try {
-			con = DBManeger.getConnection();
+			con = DBManager.getConnection();
 			ps = con.prepareStatement(sql);
 			ps.setInt(1, item.getItemNum());
 			ps.setString(2, item.getItemName());
-			ps.setString(3, item.getStatus());
+			ps.setBoolean(3, item.isStatus());
 			ps.setString(4, item.getNum2());
 
 			return ps.executeUpdate();
 		} finally {
-			DBManeger.close(con, ps, null);
+			DBManager.close(con, ps);
 		}
 	}
 
@@ -141,12 +140,12 @@ public interface ItemRepositoryImpl{
 		Connection con = null;
 		PreparedStatement ps = null;
 		try {
-			con = DBManeger.getConnection();
+			con = DBManager.getConnection();
 			ps = con.prepareStatement("delete from Item where ItemNum = ?");
 			ps.setInt(1, itemNum);
 			return ps.executeUpdate();
 		} finally {
-			DBManeger.close(con, ps, null);
+			DBManager.close(con, ps);
 		}
 	}
 
@@ -155,7 +154,7 @@ public interface ItemRepositoryImpl{
 		Item item = new Item();
 		item.setItemNum(rs.getInt("ItemNum"));
 		item.setItemName(rs.getString("ItemName"));
-		item.setStatus(rs.getString("Status"));
+		item.setStatus(rs.getBoolean("Status"));
 		item.setNum2(rs.getString("Num2"));
 		item.setLenderID(rs.getString("LenderID"));
 		return item;

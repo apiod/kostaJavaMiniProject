@@ -3,13 +3,15 @@ package main.java.com.rental.item.entity;
 public class Item {
 	private int itemNum;
 	private String itemName;
-	private String status;
+	private boolean status;
 	private String num2;
 	private String lenderID;
 
 	
 	public Item() {}
-	public Item(int itemNum, String itemName, String status, String num2, String lenderID) {
+
+
+	public Item(int itemNum, String itemName, boolean status, String num2, String lenderID) {
 		super();
 		this.itemNum = itemNum;
 		this.itemName = itemName;
@@ -19,11 +21,9 @@ public class Item {
 	}
 
 
-
 	public int getItemNum() {
 		return itemNum;
 	}
-
 
 
 	public void setItemNum(int itemNum) {
@@ -31,11 +31,9 @@ public class Item {
 	}
 
 
-
 	public String getItemName() {
 		return itemName;
 	}
-
 
 
 	public void setItemName(String itemName) {
@@ -43,29 +41,24 @@ public class Item {
 	}
 
 
-
-	public String getStatus() {
+	public boolean isStatus() {
 		return status;
 	}
 
 
-
-	public void setStatus(String status) {
+	public void setStatus(boolean status) {
 		this.status = status;
 	}
 
 
-
-	public String getCategory() {
+	public String getNum2() {
 		return num2;
 	}
 
 
-
-	public void setCategory(String category) {
-		this.num2 = category;
+	public void setNum2(String num2) {
+		this.num2 = num2;
 	}
-
 
 
 	public String getLenderID() {
@@ -73,25 +66,9 @@ public class Item {
 	}
 
 
-
 	public void setLenderID(String lenderID) {
 		this.lenderID = lenderID;
 	}
-
-
-
-	public String getNum2() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-
-	public void setNum2(String string) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	
 	
 

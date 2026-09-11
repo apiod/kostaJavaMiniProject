@@ -9,10 +9,7 @@ import main.java.com.rental.item.entity.Item;
 public interface ItemService {
 
 	//물품 전체 조회
-	static List<Item> itemSelect() throws ItemNotFoundException,SQLException {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	static List<Item> itemSelectAll() throws ItemNotFoundException;
 
 	// 물품 번호 조회 
 	Item itemSelectByitemNum(int itemNum) throws ItemNotFoundException, SQLException;
