@@ -128,10 +128,10 @@ CREATE TABLE Admin (
     CONSTRAINT PK_Admin PRIMARY KEY (ID)
 );
 
-DROP VIEW IF EXISTS v_return_info;
 DROP VIEW IF EXISTS v_rental_info;
+DROP VIEW IF EXISTS View_Rental_Info;
 
-CREATE or replace view v_rental_info AS
+CREATE or replace view View_Rental_Info AS
 SELECT
     r.RentalNum,
     r.BorrowerID,
@@ -139,16 +139,16 @@ SELECT
     p.ReturnDate,
     p.Addr,
     r.Status,
-    i.lenderID,
-    u.NickName AS lenderNickName,
-    u.Phone AS lenderPhone
+    i.LenderID,
+    u.NickName AS LenderNickName,
+    u.Phone AS LenderPhone
 FROM Rental r
 JOIN Post p
     ON r.PostNum = p.PostNum
 JOIN Item i
     ON p.ItemNum = i.ItemNum
 JOIN User u
-    ON i.lenderID = u.ID;
+    ON i.LenderID = u.ID;
     
-    SELECT *
-FROM v_rental_info;
+SELECT *
+FROM View_Rental_Info;
