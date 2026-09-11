@@ -1,6 +1,8 @@
 package main.java.com.rental.post.controller;
 
 
+import java.util.List;
+
 import main.java.com.rental.post.dto.PostCreate;
 import main.java.com.rental.post.dto.PostUpdate;
 import main.java.com.rental.post.entity.Post;
@@ -10,6 +12,8 @@ import main.java.com.rental.view.FailView;
 import main.java.com.rental.view.SuccessView;
 
 public class PostController {
+	
+	
 	PostService ps = PostServiceImpl.getInstance();
 	public void postCreate(PostCreate postCreate) {
 		try {
@@ -46,15 +50,35 @@ public class PostController {
 		}
 	}
 	public void selectByTitleKeyword(String titleKeyword) {
-		
+		try {
+			List<Post> list = ps.selectByTitleKeyword(titleKeyword);
+			SuccessView.printEntityList(list);
+		} catch (Exception e) {
+			FailView.FailMessage(e.getMessage());
+		}
 	}
 	public void selectByContentKeyword(String contentKeyword) {
-		
+		try {
+			List<Post> list = ps.selectByContentKeyword(contentKeyword);
+			SuccessView.printEntityList(list);
+		} catch (Exception e) {
+			FailView.FailMessage(e.getMessage());
+		}
 	}
 	public void selectByRentDate(String rentDate) {
-		
+		try {
+			List<Post> list = ps.selectByRentDate(rentDate);
+			SuccessView.printEntityList(list);
+		} catch (Exception e) {
+			FailView.FailMessage(e.getMessage());
+		}
 	}
 	public void selectByAddr(String addr) {
-		
+		try {
+			List<Post> list = ps.selectByAddr(addr);
+			SuccessView.printEntityList(list);
+		} catch (Exception e) {
+			FailView.FailMessage(e.getMessage());
+		}
 	}
 }
