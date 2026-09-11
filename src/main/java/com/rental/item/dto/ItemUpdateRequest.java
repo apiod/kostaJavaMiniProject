@@ -4,12 +4,12 @@ public class ItemUpdateRequest {
 
 	private int itemNum;
 	private String itemName;
-	private String status;
+	private boolean status;
 	private String num2;
 	
 	public ItemUpdateRequest() {}
 
-	public ItemUpdateRequest(int itemNum, String itemName, String status, String num2) {
+	public ItemUpdateRequest(int itemNum, String itemName, boolean status, String num2) {
 		super();
 		this.itemNum = itemNum;
 		this.itemName = itemName;
@@ -33,11 +33,11 @@ public class ItemUpdateRequest {
 		this.itemName = itemName;
 	}
 
-	public String getStatus() {
+	public boolean getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(boolean status) {
 		this.status = status;
 	}
 

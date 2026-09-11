@@ -1,6 +1,6 @@
 package main.java.com.rental.item.service;
 
-import java.sql.SQLException;
+
 import java.util.List;
 
 import main.java.com.rental.common.exception.InvalidRentalStatusException;
