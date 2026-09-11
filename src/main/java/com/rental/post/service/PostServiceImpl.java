@@ -2,6 +2,7 @@ package main.java.com.rental.post.service;
 
 import java.util.List;
 
+import main.java.com.rental.common.exception.NotFoundException;
 import main.java.com.rental.common.exception.PostException;
 import main.java.com.rental.post.dto.PostCreate;
 import main.java.com.rental.post.dto.PostUpdate;
@@ -41,35 +42,35 @@ public class PostServiceImpl implements PostService{
 	@Override
 	public Post selectByItemNum(int itemNum) throws PostException {
 		Post post = pr.selectByItemNum(itemNum);
-		if(post==null) throw new PostException("검색결과가 존재하지 않습니다."); 
+		if(post==null) throw new NotFoundException("검색결과가 존재하지 않습니다."); 
 		return post;
 	}
 
 	@Override
 	public List<Post> selectByTitleKeyword(String titleKeyword) throws PostException {
 		List<Post> list = pr.selectByTitleKeyword(titleKeyword);
-		if(list.isEmpty()) throw new PostException("검색결과가 존재하지 않습니다."); 
+		if(list.isEmpty()) throw new NotFoundException("검색결과가 존재하지 않습니다."); 
 		return list;
 	}
 
 	@Override
 	public List<Post> selectByContentKeyword(String contentKeyword) throws PostException {
 		List<Post> list = pr.selectByContentKeyword(contentKeyword);
-		if(list.isEmpty()) throw new PostException("검색결과가 존재하지 않습니다."); 
+		if(list.isEmpty()) throw new NotFoundException("검색결과가 존재하지 않습니다."); 
 		return list;
 	}
 
 	@Override
 	public List<Post> selectByRentDate(String rentDate) throws PostException {
 		List<Post> list = pr.selectByRentDate(rentDate);
-		if(list.isEmpty()) throw new PostException("검색결과가 존재하지 않습니다."); 
+		if(list.isEmpty()) throw new NotFoundException("검색결과가 존재하지 않습니다."); 
 		return list;
 	}
 
 	@Override
 	public List<Post> selectByAddr(String addr) throws PostException {
 		List<Post> list = pr.selectByAddr(addr);
-		if(list.isEmpty()) throw new PostException("검색결과가 존재하지 않습니다."); 
+		if(list.isEmpty()) throw new NotFoundException("검색결과가 존재하지 않습니다."); 
 		return list;
 	}
 

@@ -19,5 +19,8 @@ public class SuccessView {
 	public static void printUser(User user) {
 		System.out.println(user);
 	}
+	public static void printEntity(Object obj) {
+		System.out.println(obj);
+	}
 	
 }

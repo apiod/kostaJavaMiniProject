@@ -27,6 +27,30 @@ public class Post {
 		this.addr = addr;
 	}
 	
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Post [postNum=");
+		builder.append(postNum);
+		builder.append(", itemNum=");
+		builder.append(itemNum);
+		builder.append(", title=");
+		builder.append(title);
+		builder.append(", content=");
+		builder.append(content);
+		builder.append(", createAt=");
+		builder.append(createAt);
+		builder.append(", updateAt=");
+		builder.append(updateAt);
+		builder.append(", rentDate=");
+		builder.append(rentDate);
+		builder.append(", returnDate=");
+		builder.append(returnDate);
+		builder.append(", addr=");
+		builder.append(addr);
+		builder.append("]");
+		return builder.toString();
+	}
 	public int getPostNum() {
 		return postNum;
 	}
