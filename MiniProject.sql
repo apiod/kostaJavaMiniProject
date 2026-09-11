@@ -133,22 +133,22 @@ DROP VIEW IF EXISTS View_Rental_Info;
 
 CREATE or replace view View_Rental_Info AS
 SELECT
-    r.RentalNum,
+	r.RentalNum,
     r.BorrowerID,
+    b.NickName AS BorrowerNickName,
+    b.Phone AS BorrowerPhone,
     i.ItemName,
     p.ReturnDate,
     p.Addr,
     r.Status,
     i.LenderID,
-    u.NickName AS LenderNickName,
-    u.Phone AS LenderPhone
+    l.NickName AS LenderNickName,
+    l.Phone AS LenderPhone
 FROM Rental r
-JOIN Post p
-    ON r.PostNum = p.PostNum
-JOIN Item i
-    ON p.ItemNum = i.ItemNum
-JOIN User u
-    ON i.LenderID = u.ID;
+JOIN Post p ON r.PostNum = p.PostNum
+JOIN Item i ON p.ItemNum = i.ItemNum
+JOIN User l ON i.LenderID = l.ID
+JOIN User b ON r.BorrowerID = b.ID;
     
 SELECT *
 FROM View_Rental_Info;
