@@ -1,6 +1,5 @@
 package main.java.com.rental.rental.entity;
 
-
 import main.java.com.rental.rental.enums.RentalStatus;
 
 public class Rental {
