@@ -1,108 +1,85 @@
 package main.java.com.rental.rental.dto;
 
-public class ReturnResponse {
+public class LenderRentalResponse {
 
 	private int rentalNum;
 	private String itemName;
 	private String returnDate;
 	private String addr;
 	private int status;
-	private String lenderNickName;
-	private String lenderPhone;
+	private String borrowerNickname;
+	private String borrowerPhone;
 	
-	
-	public ReturnResponse() {}
+	public LenderRentalResponse() {}
 
-
-	public ReturnResponse(int rentalNum, String itemName, String returnDate, String addr, int status,
-			String lenderNickName, String lenderPhone) {
+	public LenderRentalResponse(int rentalNum, String name, String returnDate, String addr, int status,
+			String borrowerNickname, String borrowerPhone) {
 		super();
 		this.rentalNum = rentalNum;
 		this.itemName = itemName;
 		this.returnDate = returnDate;
 		this.addr = addr;
 		this.status = status;
-		this.lenderNickName = lenderNickName;
-		this.lenderPhone = lenderPhone;
+		this.borrowerNickname = borrowerNickname;
+		this.borrowerPhone = borrowerPhone;
 	}
-
 
 	public int getRentalNum() {
 		return rentalNum;
 	}
 
-
 	public void setRentalNum(int rentalNum) {
 		this.rentalNum = rentalNum;
 	}
 
-
-	public String getItemName() {
+	public String getName() {
 		return itemName;
 	}
 
-
-	public void setItemName(String itemName) {
+	public void setName(String itemName) {
 		this.itemName = itemName;
 	}
-
 
 	public String getReturnDate() {
 		return returnDate;
 	}
 
-
 	public void setReturnDate(String returnDate) {
 		this.returnDate = returnDate;
 	}
-
 
 	public String getAddr() {
 		return addr;
 	}
 
-
 	public void setAddr(String addr) {
 		this.addr = addr;
 	}
-
 
 	public int getStatus() {
 		return status;
 	}
 
-
 	public void setStatus(int status) {
 		this.status = status;
 	}
 
-
-	public String getLenderNickName() {
-		return lenderNickName;
+	public String getBorrowerNickname() {
+		return borrowerNickname;
 	}
 
-
-	public void setLenderNickName(String lenderNickName) {
-		this.lenderNickName = lenderNickName;
+	public void setBorrowerNickname(String borrowerNickname) {
+		this.borrowerNickname = borrowerNickname;
 	}
 
-
-	public String getLenderPhone() {
-		return lenderPhone;
+	public String getBorrowerPhone() {
+		return borrowerPhone;
 	}
 
-
-	public void setLenderPhone(String lenderPhone) {
-		this.lenderPhone = lenderPhone;
+	public void setBorrowerPhone(String borrowerPhone) {
+		this.borrowerPhone = borrowerPhone;
 	}
 	
-	@Override
-	public String toString() {
-	    return "물품명 : " + itemName
-	            + ", 대여자 : " + lenderNickName
-	            + ", 전화번호 : " + lenderPhone
-	            + ", 반납 예정일 : " + returnDate
-	            + ", 반납 장소 : " + addr
-	            + ", 상태 : " + status;
-	}
+	
+	
 }

@@ -1,85 +1,108 @@
 package main.java.com.rental.rental.dto;
 
-public class BorrowerReturnResponse {
+public class BorrowerRentalResponse {
 
 	private int rentalNum;
 	private String itemName;
 	private String returnDate;
 	private String addr;
-	private String status;
-	private String borrowerNickname;
-	private int borrowerPhone;
-	
-	public BorrowerReturnResponse() {}
+	private int status;
+	private String lenderNickName;
+	private String lenderPhone;
 
-	public BorrowerReturnResponse(int rentalNum, String name, String returnDate, String addr, String status,
-			String borrowerNickname, int borrowerPhone) {
-		super();
-		this.rentalNum = rentalNum;
-		this.itemName = name;
-		this.returnDate = returnDate;
-		this.addr = addr;
-		this.status = status;
-		this.borrowerNickname = borrowerNickname;
-		this.borrowerPhone = borrowerPhone;
+
+	public BorrowerRentalResponse() {}
+
+
+	public BorrowerRentalResponse(int rentalNum, String itemName, String returnDate, String addr, int status,
+	        String lenderNickName, String lenderPhone) {
+	    super();
+	    this.rentalNum = rentalNum;
+	    this.itemName = itemName;
+	    this.returnDate = returnDate;
+	    this.addr = addr;
+	    this.status = status;
+	    this.lenderNickName = lenderNickName;
+	    this.lenderPhone = lenderPhone;
 	}
+
 
 	public int getRentalNum() {
-		return rentalNum;
+	    return rentalNum;
 	}
+
 
 	public void setRentalNum(int rentalNum) {
-		this.rentalNum = rentalNum;
+	    this.rentalNum = rentalNum;
 	}
 
-	public String getName() {
-		return itemName;
+
+	public String getItemName() {
+	    return itemName;
 	}
 
-	public void setName(String name) {
-		this.itemName = name;
+
+	public void setItemName(String itemName) {
+	    this.itemName = itemName;
 	}
+
 
 	public String getReturnDate() {
-		return returnDate;
+	    return returnDate;
 	}
+
 
 	public void setReturnDate(String returnDate) {
-		this.returnDate = returnDate;
+	    this.returnDate = returnDate;
 	}
+
 
 	public String getAddr() {
-		return addr;
+	    return addr;
 	}
+
 
 	public void setAddr(String addr) {
-		this.addr = addr;
+	    this.addr = addr;
 	}
 
-	public String getStatus() {
-		return status;
+
+	public int getStatus() {
+	    return status;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
+
+	public void setStatus(int status) {
+	    this.status = status;
 	}
 
-	public String getBorrowerNickname() {
-		return borrowerNickname;
+
+	public String getLenderNickName() {
+	    return lenderNickName;
 	}
 
-	public void setBorrowerNickname(String borrowerNickname) {
-		this.borrowerNickname = borrowerNickname;
+
+	public void setLenderNickName(String lenderNickName) {
+	    this.lenderNickName = lenderNickName;
 	}
 
-	public int getBorrowerPhone() {
-		return borrowerPhone;
+
+	public String getLenderPhone() {
+	    return lenderPhone;
 	}
 
-	public void setBorrowerPhone(int borrowerPhone) {
-		this.borrowerPhone = borrowerPhone;
+
+	public void setLenderPhone(String lenderPhone) {
+	    this.lenderPhone = lenderPhone;
 	}
-	
-	
-	
-}
+
+	@Override
+	public String toString() {
+	    return "물품명 : " + itemName
+	            + ", 대여자 : " + lenderNickName
+	            + ", 전화번호 : " + lenderPhone
+	            + ", 반납 예정일 : " + returnDate
+	            + ", 반납 장소 : " + addr
+	            + ", 상태 : " + status;
+	}
+	}

@@ -8,32 +8,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 import main.java.com.rental.common.util.DBManager;
-import main.java.com.rental.rental.dto.ReturnRequest;
-import main.java.com.rental.rental.dto.ReturnResponse;
-import main.java.com.rental.rental.dto.ReturnSearchRequest;
+import main.java.com.rental.rental.dto.BorrowerActionRequest;
+import main.java.com.rental.rental.dto.BorrowerRentalResponse;
+import main.java.com.rental.rental.dto.LenderRentalResponse;
+import main.java.com.rental.rental.dto.LenderActionRequest;
 import main.java.com.rental.session.Session;
 
 
 public class RentalRepositoryImpl implements RentalRepository {
 
 	@Override
-	public List<ReturnResponse> findRentedItems(ReturnSearchRequest request) throws SQLException {
+	public List<BorrowerRentalResponse> findBorrowedItems(BorrowerActionRequest request) throws SQLException {
 		
 		Connection con=null;
 		PreparedStatement ps = null;
 		ResultSet rs =null;
-		List<ReturnResponse> list = new ArrayList<>();
-		String sql="SELECT RentalNum, itemName, returnDate, addr, status, "
-			      + "lenderNickName, lenderPhone "
-			      + "FROM v_rental_info "
-			      + "WHERE BorrowerID = ? AND status = ?";
+		List<BorrowerRentalResponse> list = new ArrayList<>();
+		String sql= "SELECT RentalNum, ItemName, ReturnDate, Addr, Status, "
+				  + "LenderNickName, LenderPhone "
+				  + "FROM View_Rental_Info "
+				  + "WHERE BorrowerID = ? AND Status = ?";
 		
-		//대여자 입장 
-//		SELECT RentalNum, itemName, returnDate, addr, status,
-//	       borrowerNickName, borrowerPhone
-//	FROM v_rental_info
-//	WHERE lenderID = ?
-//	AND status = ?;
 		
 		
 		try {
@@ -42,57 +37,93 @@ public class RentalRepositoryImpl implements RentalRepository {
 			String loginId = Session.getInstance().getLoginUser().getId();
 
 			ps.setString(1, loginId);
-			ps.setInt(2, 100);
+			ps.setInt(2, request.getStatus().getCode());
 			
 			 rs = ps.executeQuery();
 
 		        while (rs.next()) {
-		        	ReturnResponse response = new ReturnResponse(
+		        	BorrowerRentalResponse response = new BorrowerRentalResponse(
 		                     rs.getInt("RentalNum"),
-		                     rs.getString("itemName"),
-		                     rs.getString("returnDate"),
-		                     rs.getString("addr"),
-		                     rs.getInt("status"),
-		                     rs.getString("lenderNickName"),
-		                     rs.getString("lenderPhone")
+		                     rs.getString("ItemName"),
+		                     rs.getString("ReturnDate"),
+		                     rs.getString("Addr"),
+		                     rs.getInt("Status"),
+		                     rs.getString("LenderNickName"),
+		                     rs.getString("LenderPhone")
 		                  
 		                 );
 
 		                 list.add(response);
 		        	}
-		        
-		        //대여자 입장 
-//		        while (rs.next()) {
-//		            LenderRentalResponse response = new LenderRentalResponse(
-//		                rs.getInt("RentalNum"),
-//		                rs.getString("itemName"),
-//		                rs.getString("returnDate"),
-//		                rs.getString("addr"),
-//		                rs.getInt("status"),
-//		                rs.getString("borrowerNickName"),
-//		                rs.getString("borrowerPhone")
-//		            );
-//		        }
-		        
+		      	        
 		        } finally {
 		            DBManager.close(con, ps, rs);
 		        }
 
 		        return list;
 		}
-
+	
+	
 	@Override
-	public int requestReturn(ReturnRequest request) throws SQLException {
+	public List<LenderRentalResponse> findLentItems(LenderActionRequest request) throws SQLException {
+		
+		Connection con=null;
+		PreparedStatement ps = null;
+		ResultSet rs =null;
+		List<LenderRentalResponse> list = new ArrayList<>();
+		String sql=  "SELECT RentalNum, ItemName, ReturnDate, Addr, Status, "
+				  + "BorrowerNickName, BorrowerPhone "
+				  + "FROM View_Rental_Info "
+				  + "WHERE LenderID = ? AND Status = ?";
+		
+		
+		try {
+			con = DBManager.getConnection();
+			ps = con.prepareStatement(sql);
+			String loginId = Session.getInstance().getLoginUser().getId();
+
+			ps.setString(1, loginId);
+			ps.setInt(2, request.getStatus().getCode());
+			 rs = ps.executeQuery();
+			 
+		 while (rs.next()) {
+	            LenderRentalResponse response = new LenderRentalResponse(
+	                rs.getInt("RentalNum"),
+	                rs.getString("ItemName"),
+	                rs.getString("ReturnDate"),
+	                rs.getString("Addr"),
+	                rs.getInt("Status"),
+	                rs.getString("BorrowerNickName"),
+	                rs.getString("BorrowerPhone")
+	            );
+	            
+	            list.add(response);
+	        }
+	        
+	        } finally {
+	            DBManager.close(con, ps, rs);
+	        }
+
+	        return list;
+}
+
+		
+
+			
+	
+	@Override
+	public int requestRental(BorrowerActionRequest request) throws SQLException {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
+
 	@Override
-	public List<ReturnResponse> findRequestedReturnItems() throws SQLException {
+	public int requestReturn(LenderActionRequest request) throws SQLException {
 		// TODO Auto-generated method stub
-		return null;
+		return 0;
 	}
+
 }
-			
 		
 	

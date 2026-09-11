@@ -2,16 +2,17 @@ package main.java.com.rental.rental.dto;
 
 import main.java.com.rental.rental.enums.RentalStatus;
 
-public class BorrowerActionRequest  {
+public class LenderActionRequest  {
 
     private int rentalNum;
     private RentalStatus status;
     
-    public BorrowerActionRequest() {}
+    public LenderActionRequest() {}
 
-    public BorrowerActionRequest(int rentalNum) {
+    public LenderActionRequest(int rentalNum) {
         this.rentalNum = rentalNum;
         this.status = status;
+        
     }
 
     public int getRentalNum() {
