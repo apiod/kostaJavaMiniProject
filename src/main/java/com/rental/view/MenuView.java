@@ -21,21 +21,21 @@ import main.java.com.rental.user.dto.UserLoginRequest;
 import main.java.com.rental.user.dto.UserSignUpRequest;
 
 public class MenuView {
-    // 콘솔 입력을 받기 위한 Scanner 인스턴스
+    // 콘솔 입력을 처리하기 위한 Scanner 객체
     private static final Scanner sc = new Scanner(System.in);
 
-    // ItemController 가 인스턴스 메서드로 되어 있어 객체를 미리 만들어 둔다
+    // 물품 컨트롤러 인스턴스 생성
     private static final ItemController itemController = new ItemController();
 
     /**
-     * 프로그램 진입점 - 시작 메뉴(로그인/회원가입)부터 실행한다
+     * 프로그램 진입점
      */
     public static void main(String[] args) {
         loginMenu();
     }
 
     /**
-     * [시작 메뉴] 로그인 및 회원가입
+     * [시작 메뉴] 로그인, 회원가입, 아이디 찾기 처리
      */
     public static void loginMenu() {
         boolean status = true;
@@ -58,7 +58,7 @@ public class MenuView {
                         break;
                     case 2:
                         login();
-                        // 로그인 성공(세션에 사용자 정보가 저장됨) 시에만 루프 탈출
+                        // 세션에 로그인 사용자 정보가 저장되면 시작 메뉴 루프 종료
                         if (Session.getInstance().getLoginUser() != null) {
                             status = false;
                         }
@@ -83,20 +83,26 @@ public class MenuView {
             }
         }
 
-        // 로그인한 본인의 대여 목록 중 확인이 필요한 상태(101,102,201,202,211)가 있으면 알림 출력
+        // 로그인 성공 시 대여/반납 상태 알림 내역 출력
         checkMyNotifications();
 
-        // 로그인 성공 후 메인 메뉴로 진입
+        // 메인 메뉴 화면으로 진입
         mainMenu();
     }
 
     /**
-     * 로그인한 본인의 대여 목록(v_rental_info) 중 확인이 필요한 상태(101,102,201,202,211)를 조회해 알림을 출력한다.
+     * 로그인 사용자의 대여 목록 중 확인이 필요한 상태(101, 102, 201, 202, 211) 조회
+     * Rental -> Post -> Item 테이블을 조인하여 ItemName 컬럼을 정상 참조하도록 수정
      */
     private static void checkMyNotifications() {
         String borrowerId = Session.getInstance().getLoginUser().getId();
-        String sql = "select RentalNum, ItemName, Status from Rental "
-                + "where BorrowerID = ? and Status in (101, 102, 201, 202, 211)";
+
+        // SQL 관계 반영: Rental(Postnum) -> Post(PostNum, ItemNum) -> Item(ItemNum, ItemName)
+        String sql = "SELECT r.RentalNum, i.ItemName, r.Status "
+                   + "FROM Rental r "
+                   + "INNER JOIN Post p ON r.Postnum = p.PostNum "
+                   + "INNER JOIN Item i ON p.ItemNum = i.ItemNum "
+                   + "WHERE r.BorrowerID = ? AND r.Status IN (101, 102, 201, 202, 211)";
 
         Connection con = null;
         PreparedStatement ps = null;
@@ -113,18 +119,19 @@ public class MenuView {
                     System.out.println("\n[알림] 확인이 필요한 대여/반납 내역이 있습니다.");
                     hasNotification = true;
                 }
-                System.out.println(" - " + rs.getString("itemName") + " (대여번호 " + rs.getInt("RentalNum") + ") : "
-                        + rentalStatusText(rs.getInt("status")));
+                System.out.println(" - " + rs.getString("ItemName") + " (대여번호 " + rs.getInt("RentalNum") + ") : "
+                        + rentalStatusText(rs.getInt("Status")));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
+            // DB 연결 자원 해제
             DBManager.close(con, ps, rs);
         }
     }
 
     /**
-     * 대여 상태 코드를 안내 문구로 변환한다.
+     * 대여 상태 코드를 화면 표시용 명칭으로 변환
      */
     private static String rentalStatusText(int status) {
         switch (status) {
@@ -132,13 +139,13 @@ public class MenuView {
             case 102: return "대여 거절";
             case 201: return "반납 승인";
             case 202: return "반납 거절";
-            case 211: return "반납 확인 완료";
+            case 211: return "반납 확인";
             default: return "상태 코드 " + status;
         }
     }
 
     /**
-     * 아이디 찾기 입력 (UserRepositoryImpl.findId 활용)
+     * 아이디 찾기 요청 입력
      */
     public static void findId() {
         System.out.println("\n[아이디 찾기]");
@@ -150,7 +157,7 @@ public class MenuView {
     }
 
     /**
-     * 회원 가입 입력
+     * 회원 가입 정보 입력
      */
     public static void userSignUp() {
         System.out.println("\n[회원가입]");
@@ -169,13 +176,12 @@ public class MenuView {
         System.out.print("핸드폰 번호: ");
         String phoneNo = sc.nextLine().trim();
 
-        // 입력 데이터 DTO 변환 및 컨트롤러 전달
         UserSignUpRequest signup = new UserSignUpRequest(id, password, nickName, name, phoneNo);
         UserController.signUp(signup);
     }
 
     /**
-     * 로그인 입력
+     * 로그인 계정 정보 입력
      */
     public static void login() {
         System.out.println("\n[로그인]");
@@ -185,13 +191,12 @@ public class MenuView {
         System.out.print("PW: ");
         String password = sc.nextLine().trim();
 
-        // 입력 데이터 DTO 변환 및 컨트롤러 전달
         UserLoginRequest login = new UserLoginRequest(id, password);
         UserController.login(login);
     }
 
     /**
-     * 비밀번호 변경 입력 (로그인 상태에서만 진입 가능)
+     * 로그인 계정의 비밀번호 변경 입력
      */
     public static void inputPasswordChange() {
         System.out.println("\n[비밀번호 변경]");
@@ -205,7 +210,7 @@ public class MenuView {
     }
 
     /**
-     * [메인 메뉴] 로그인 성공 후 진입하는 메인 메뉴
+     * [메인 메뉴] 로그인 성공 후 주요 서비스 진입
      */
     public static void mainMenu() {
         boolean status = true;
@@ -239,7 +244,7 @@ public class MenuView {
                     case 0:
                         System.out.println("로그아웃 되었습니다.");
                         status = false;
-                        loginMenu(); // 시작 메뉴로 복귀
+                        loginMenu();
                         break;
                     default:
                         System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
@@ -256,7 +261,7 @@ public class MenuView {
     }
 
     /**
-     * [물품 관리 메뉴]
+     * [물품 관리 메뉴] 등록, 수정, 삭제 선택
      */
     public static void itemMenu() {
         boolean status = true;
@@ -284,7 +289,6 @@ public class MenuView {
                         inputItemDelete();
                         break;
                     case 0:
-                        // 루프를 종료하고 mainMenu로 복귀
                         status = false;
                         break;
                     default:
@@ -302,7 +306,7 @@ public class MenuView {
     }
 
     /**
-     * 새 물품 등록 입력
+     * 새 물품 등록 정보 입력
      */
     public static void inputItemInsert() {
         try {
@@ -310,14 +314,14 @@ public class MenuView {
             System.out.print("물품명: ");
             String itemName = sc.nextLine().trim();
 
-            // 카테고리(대분류 -> 소분류) 선택
+            // 대분류 -> 소분류 카테고리 코드(Num2) 선택
             String num2 = selectCategory();
             if (num2 == null) {
                 System.out.println("카테고리 선택이 취소되어 등록을 중단합니다.");
                 return;
             }
 
-            // 입력 데이터를 Item 엔티티로 변환 후 컨트롤러 전달
+            // Item 엔티티 객체 생성 및 속성 주입
             Item item = new Item();
             item.setItemName(itemName);
             item.setNum2(num2);
@@ -331,12 +335,11 @@ public class MenuView {
     }
 
     /**
-     * 물품 등록 시 대분류 -> 소분류 순서로 카테고리를 선택받아 소분류 코드(Num2)를 반환한다.
-     * 선택이 취소되거나 목록이 없으면 null을 반환한다.
+     * 대분류 및 소분류 카테고리 선택 후 Num2 코드 반환
      */
     private static String selectCategory() {
-        // 대분류 목록 조회 ([0]=Num, [1]=Category)
-        List<String[]> bigList = queryCategory("select Num, Category from BigCategory order by Num", null);
+        // 대분류 목록 조회
+        List<String[]> bigList = queryCategory("SELECT Num, Category FROM BigCategory ORDER BY Num", null);
         if (bigList.isEmpty()) {
             System.out.println("등록된 대분류 카테고리가 없습니다.");
             return null;
@@ -355,9 +358,9 @@ public class MenuView {
         String selectedBigNum = bigList.get(bigChoice - 1)[0];
         String selectedBigName = bigList.get(bigChoice - 1)[1];
 
-        // 소분류 목록 조회 ([0]=Num2, [1]=Category)
+        // 선택한 대분류에 속한 소분류 목록 조회
         List<String[]> smallList = queryCategory(
-                "select Num2, Category from SmallCategory where Num = ? order by Num2", selectedBigNum);
+                "SELECT Num2, Category FROM SmallCategory WHERE Num = ? ORDER BY Num2", selectedBigNum);
         if (smallList.isEmpty()) {
             System.out.println("등록된 소분류 카테고리가 없습니다.");
             return null;
@@ -378,8 +381,7 @@ public class MenuView {
     }
 
     /**
-     * 카테고리 조회 공용 헬퍼. 결과 행을 [코드, 이름] 문자열 배열 목록으로 반환한다.
-     * filterValue가 null이면 파라미터 없는 조회, 아니면 첫 번째 ? 자리에 바인딩한다.
+     * 카테고리 조회 전용 DB 헬퍼 메서드
      */
     private static List<String[]> queryCategory(String sql, String filterValue) {
         List<String[]> list = new ArrayList<>();
@@ -416,21 +418,18 @@ public class MenuView {
             System.out.print("수정할 물품명: ");
             String updateName = sc.nextLine().trim();
 
-
-            // 수정 데이터를 Item 엔티티로 변환 후 컨트롤러 전달
             Item item = new Item();
             item.setItemNum(itemNo);
             item.setItemName(updateName);
 
-
             itemController.itemUpdate(item);
         } catch (NumberFormatException e) {
-            System.out.println("물품 번호와 대여 가능 여부는 형식에 맞게 입력해주세요.");
+            System.out.println("물품 번호는 숫자만 입력 가능합니다.");
         }
     }
 
     /**
-     * 등록 물품 삭제 입력
+     * 물품 삭제 번호 입력
      */
     public static void inputItemDelete() {
         try {
@@ -445,19 +444,16 @@ public class MenuView {
     }
 
     /**
-     * [대여 메뉴] 물품 대여 신청
-     * RentalController 에 아직 기능이 구현되어 있지 않아 목록 조회까지만 연결한다.
+     * [대여 메뉴] 물품 목록 조회 및 대여 신청
      */
     public static void rentItemMenu() {
         System.out.println("\n[대여 신청]");
-        // 대여 가능 물품을 확인할 수 있도록 전체 목록을 먼저 보여준다
         itemController.itemSelect();
         System.out.println("(대여 신청 기능은 " + RentalController.class.getSimpleName() + " 구현 후 연결 예정입니다)");
     }
 
     /**
-     * [반납 메뉴] 대여 중인 물품 확인 및 반납 처리
-     * RentalController 에 아직 기능이 구현되어 있지 않아 안내 메시지만 출력한다.
+     * [반납 메뉴] 대여 중인 물품 반납 확인
      */
     public static void returnItemMenu() {
         System.out.println("\n[반납]");
