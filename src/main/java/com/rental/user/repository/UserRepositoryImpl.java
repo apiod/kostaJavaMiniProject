@@ -10,7 +10,7 @@ import main.java.com.rental.user.dto.PasswordChangeRequest;
 import main.java.com.rental.user.dto.UserLoginRequest;
 import main.java.com.rental.user.dto.UserSignUpRequest;
 import main.java.com.rental.user.entity.User;
-import main.java.com.rental.common.exception.UserNotFoundException;
+import main.java.com.rental.common.exception.NotFoundException;
 import main.java.com.rental.common.util.DBManager;
 
 public class UserRepositoryImpl implements UserRepository{

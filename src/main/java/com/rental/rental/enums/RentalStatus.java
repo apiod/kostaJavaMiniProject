@@ -2,11 +2,11 @@ package main.java.com.rental.rental.enums;
 
 public enum RentalStatus {
 
-    REQUESTED(0),          // 대여 신청
-    APPROVED(1),           // 대여 승인
-    REJECTED(2),           // 대여 거절
+    REQUESTED(100),          // 대여 신청
+    APPROVED(101),           // 대여 승인
+    REJECTED(102),           // 대여 거절
 
-    RENTED(100),           // 대여 중
+    RENTED(110),           // 대여 중
 
     RETURN_REQUESTED(200), // 임차인 반납 신청
     RETURN_APPROVED(201),  // 대여자 반납 승인
