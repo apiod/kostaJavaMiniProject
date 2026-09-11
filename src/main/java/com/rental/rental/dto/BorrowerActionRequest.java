@@ -9,7 +9,7 @@ public class BorrowerActionRequest  {
     
     public BorrowerActionRequest() {}
 
-    public BorrowerActionRequest(int rentalNum) {
+    public BorrowerActionRequest(int rentalNum, RentalStatus status) {
         this.rentalNum = rentalNum;
         this.status = status;
     }
