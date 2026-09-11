@@ -1,29 +1,29 @@
 package main.java.com.rental.rental.dto;
 
-public class BorrowerRentalResponse {
+public class RentalResponse {
 
 	private int rentalNum;
 	private String itemName;
 	private String returnDate;
 	private String addr;
 	private int status;
-	private String lenderNickName;
-	private String lenderPhone;
+	private String NickName;
+	private String Phone;
 
 
-	public BorrowerRentalResponse() {}
+	public RentalResponse() {}
 
 
-	public BorrowerRentalResponse(int rentalNum, String itemName, String returnDate, String addr, int status,
-	        String lenderNickName, String lenderPhone) {
+	public RentalResponse(int rentalNum, String itemName, String returnDate, String addr, int status,
+	        String NickName, String Phone) {
 	    super();
 	    this.rentalNum = rentalNum;
 	    this.itemName = itemName;
 	    this.returnDate = returnDate;
 	    this.addr = addr;
 	    this.status = status;
-	    this.lenderNickName = lenderNickName;
-	    this.lenderPhone = lenderPhone;
+	    this.NickName = NickName;
+	    this.Phone = Phone;
 	}
 
 
@@ -77,30 +77,30 @@ public class BorrowerRentalResponse {
 	}
 
 
-	public String getLenderNickName() {
-	    return lenderNickName;
+	public String getNickName() {
+	    return NickName;
 	}
 
 
-	public void setLenderNickName(String lenderNickName) {
-	    this.lenderNickName = lenderNickName;
+	public void setNickName(String NickName) {
+	    this.NickName = NickName;
 	}
 
 
-	public String getLenderPhone() {
-	    return lenderPhone;
+	public String getPhone() {
+	    return Phone;
 	}
 
 
-	public void setLenderPhone(String lenderPhone) {
-	    this.lenderPhone = lenderPhone;
+	public void setPhone(String Phone) {
+	    this.Phone = Phone;
 	}
 
 	@Override
 	public String toString() {
 	    return "물품명 : " + itemName
-	            + ", 대여자 : " + lenderNickName
-	            + ", 전화번호 : " + lenderPhone
+	            + ", 닉네임 : " + NickName
+	            + ", 전화번호 : " + Phone
 	            + ", 반납 예정일 : " + returnDate
 	            + ", 반납 장소 : " + addr
 	            + ", 상태 : " + status;
