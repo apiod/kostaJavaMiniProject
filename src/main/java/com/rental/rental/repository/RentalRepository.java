@@ -25,13 +25,25 @@ public interface RentalRepository {
 	/*
 	 * 대여 신청하기 
 	 */
-	int requestRental(BorrowerActionRequest request) throws SQLException;
+	int requestRental(BorrowerActionRequest request, int postNum) throws SQLException;
+	
+	
+	
+	/*
+	 *  대여 신청 승인 하기 
+	 */
+	int approveRental(LenderActionRequest request) throws SQLException;
+	
 	
 	
 	/*
 	 * 반납 신청하기 
 	 */
 	int requestReturn(LenderActionRequest request) throws SQLException;
+
+
+
+	
 	
 	
 

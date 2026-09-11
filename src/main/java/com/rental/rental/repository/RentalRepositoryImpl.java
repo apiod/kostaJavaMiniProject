@@ -112,9 +112,69 @@ public class RentalRepositoryImpl implements RentalRepository {
 			
 	
 	@Override
-	public int requestRental(BorrowerActionRequest request) throws SQLException {
-		// TODO Auto-generated method stub
-		return 0;
+	public int requestRental(BorrowerActionRequest request, int postNum) throws SQLException {
+		 Connection con = null;
+		    PreparedStatement ps = null;
+		    int result = 0;
+
+		    String sql = "INSERT INTO Rental(BorrowerID, Status, PostNum) "
+		               + "VALUES (?, ?, ?)";
+
+		    try {
+		        con = DBManager.getConnection();
+		        ps = con.prepareStatement(sql);
+
+		        String loginId = Session.getInstance()
+		                                .getLoginUser()
+		                                .getId();
+
+		        ps.setString(1, loginId);
+		        ps.setInt(2, request.getStatus().getCode());
+		        ps.setInt(3, postNum);
+
+		        result = ps.executeUpdate();
+
+		    } finally {
+		        DBManager.close(con, ps);
+		    }
+
+		    return result;
+	}
+	
+	@Override
+	public int approveRental(LenderActionRequest request) throws SQLException {
+
+	    Connection con = null;
+	    PreparedStatement ps = null;
+	    int result = 0;
+
+	    String sql =
+	            "UPDATE View_Rental_Approval "
+	          + "SET Status = ? "
+	          + "WHERE RentalNum = ? "
+	          + "AND LenderID = ? "
+	          + "AND Status = ?";
+
+	    try {
+	        con = DBManager.getConnection();
+	        ps = con.prepareStatement(sql);
+
+	        String loginId = Session.getInstance()
+	                                .getLoginUser()
+	                                .getId();
+
+	        ps.setInt(1, request.getStatus().getCode());      // APPROVED
+	        ps.setInt(2, request.getRentalNum());
+	        ps.setString(3, loginId);
+	        ps.setInt(4, RentalStatus.REQUESTED.getCode());
+
+	        result = ps.executeUpdate();
+
+	    } finally {
+	        DBManager.close(con, ps);
+	    }
+
+	    return result;
 	}
 
 
