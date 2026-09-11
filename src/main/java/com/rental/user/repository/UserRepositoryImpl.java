@@ -25,7 +25,7 @@ public class UserRepositoryImpl implements UserRepository{
 			  
 			 try {
 			   con = DBManager.getConnection();
-			   ps= con.prepareStatement("select * from User where ID=? and passWord=?");
+			   ps= con.prepareStatement("select * from User where ID=? and PassWord=?");
 			   ps.setString(1, request.getId());
 			   ps.setString(2, request.getPassword());
 			   

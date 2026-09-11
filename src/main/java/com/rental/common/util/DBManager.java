@@ -22,6 +22,7 @@ public class DBManager {
 			proFile.load(new FileInputStream("resources/dbmanager.properties"));
 			
 			Class.forName(proFile.getProperty("driverName"));
+			
 
 		} catch (Exception e) {
 			e.printStackTrace();

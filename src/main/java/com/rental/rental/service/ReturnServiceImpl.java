@@ -1,4 +1,4 @@
-package main.java.com.rental.returned.service;
+package main.java.com.rental.rental.service;
 
 public class ReturnServiceImpl implements ReturnService {
 
