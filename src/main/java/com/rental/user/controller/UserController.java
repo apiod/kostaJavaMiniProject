@@ -4,7 +4,7 @@ import java.sql.SQLException;
 
 
 import main.java.com.rental.common.exception.PasswordUpdateException;
-import main.java.com.rental.common.exception.UserNotFoundException;
+import main.java.com.rental.common.exception.NotFoundException;
 import main.java.com.rental.user.dto.FindIdRequest;
 import main.java.com.rental.user.dto.PasswordChangeRequest;
 import main.java.com.rental.user.dto.UserLoginRequest;
@@ -29,7 +29,7 @@ public class UserController {
 				 SuccessView.printMessage("로그인이 완료 되었습니다.");
 				}catch (SQLException e) {
 					e.printStackTrace();
-				}catch (UserNotFoundException e) {
+				}catch (NotFoundException e) {
 					FailView.FailMessage(e.getMessage());
 				}
 		   
@@ -61,7 +61,7 @@ public class UserController {
 				}catch (SQLException e) {
 					e.printStackTrace();
 				
-				}catch (UserNotFoundException e) {
+				}catch (NotFoundException e) {
 					FailView.FailMessage(e.getMessage());
 				}
 		   
