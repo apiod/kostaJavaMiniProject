@@ -1,9 +1,16 @@
 package main.java.com.rental;
 
-public class RentalApplication {
+import main.java.com.rental.post.controller.PostController;
+import main.java.com.rental.user.controller.UserController;
+import main.java.com.rental.user.dto.FindIdRequest;
 
+public class RentalApplication {
+	
 	public static void main(String[] args) {
-		System.out.println(11);
+		PostController pc = new PostController();
+		pc.selectByTitleKeyword("태블릿");
+		
+		
 	}
 
 }

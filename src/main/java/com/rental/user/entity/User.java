@@ -20,6 +20,23 @@ public class User {
 	}
 
 
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("User [id=");
+		builder.append(id);
+		builder.append(", password=");
+		builder.append(password);
+		builder.append(", nickName=");
+		builder.append(nickName);
+		builder.append(", name=");
+		builder.append(name);
+		builder.append(", phoneNo=");
+		builder.append(phoneNo);
+		builder.append("]");
+		return builder.toString();
+	}
+
 	public String getPassword() {
 		return password;
 	}
