@@ -8,91 +8,83 @@ import java.util.ArrayList;
 import java.util.List;
 
 import main.java.com.rental.common.util.DBManager;
-import main.java.com.rental.rental.dto.ReturnRequest;
-import main.java.com.rental.rental.dto.ReturnResponse;
-import main.java.com.rental.rental.dto.ReturnSearchRequest;
-import main.java.com.rental.session.Session;
+import main.java.com.rental.rental.dto.ActionRequest;
+import main.java.com.rental.rental.dto.RentalResponse;
 
+import main.java.com.rental.rental.dto.RentalCreateRequest;
+import main.java.com.rental.session.Session;
 
 public class RentalRepositoryImpl implements RentalRepository {
 
+	/*
+	 * 물품 조회하기
+	 */
 	@Override
-	public List<ReturnResponse> findRentedItems(ReturnSearchRequest request) throws SQLException {
-		
-		Connection con=null;
+	public List<RentalResponse> findBorrowedItems(ActionRequest request) throws SQLException {
+
+		Connection con = null;
 		PreparedStatement ps = null;
-		ResultSet rs =null;
-		List<ReturnResponse> list = new ArrayList<>();
-		String sql="SELECT RentalNum, itemName, returnDate, addr, status, "
-			      + "lenderNickName, lenderPhone "
-			      + "FROM v_rental_info "
-			      + "WHERE BorrowerID = ? AND status = ?";
-		
-		//대여자 입장 
-//		SELECT RentalNum, itemName, returnDate, addr, status,
-//	       borrowerNickName, borrowerPhone
-//	FROM v_rental_info
-//	WHERE lenderID = ?
-//	AND status = ?;
-		
-		
+		ResultSet rs = null;
+		List<RentalResponse> list = new ArrayList<>();
+		String sql = "SELECT RentalNum, ItemName, ReturnDate, Addr, Status, " + "LenderNickName, LenderPhone "
+				+ "FROM View_Rental_Info " + "WHERE BorrowerID = ? AND Status = ?";
+
 		try {
 			con = DBManager.getConnection();
 			ps = con.prepareStatement(sql);
 			String loginId = Session.getInstance().getLoginUser().getId();
 
 			ps.setString(1, loginId);
-			ps.setInt(2, 100);
-			
-			 rs = ps.executeQuery();
+			ps.setInt(2, request.getStatus().getCode());
 
-		        while (rs.next()) {
-		        	ReturnResponse response = new ReturnResponse(
-		                     rs.getInt("RentalNum"),
-		                     rs.getString("itemName"),
-		                     rs.getString("returnDate"),
-		                     rs.getString("addr"),
-		                     rs.getInt("status"),
-		                     rs.getString("lenderNickName"),
-		                     rs.getString("lenderPhone")
-		                  
-		                 );
+			rs = ps.executeQuery();
 
-		                 list.add(response);
-		        	}
-		        
-		        //대여자 입장 
-//		        while (rs.next()) {
-//		            LenderRentalResponse response = new LenderRentalResponse(
-//		                rs.getInt("RentalNum"),
-//		                rs.getString("itemName"),
-//		                rs.getString("returnDate"),
-//		                rs.getString("addr"),
-//		                rs.getInt("status"),
-//		                rs.getString("borrowerNickName"),
-//		                rs.getString("borrowerPhone")
-//		            );
-//		        }
-		        
-		        } finally {
-		            DBManager.close(con, ps, rs);
-		        }
+			while (rs.next()) {
+				RentalResponse response = new RentalResponse(rs.getInt("RentalNum"),
+						rs.getString("ItemName"), rs.getString("ReturnDate"), rs.getString("Addr"), rs.getInt("Status"),
+						rs.getString("LenderNickName"), rs.getString("LenderPhone")
 
-		        return list;
+				);
+
+				list.add(response);
+			}
+
+		} finally {
+			DBManager.close(con, ps, rs);
 		}
 
-	@Override
-	public int requestReturn(ReturnRequest request) throws SQLException {
-		// TODO Auto-generated method stub
-		return 0;
+		return list;
 	}
 
-	@Override
-	public List<ReturnResponse> findRequestedReturnItems() throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-}
-			
-		
 	
+	/*
+	 * 대여/반납 요청 
+	 */
+	@Override
+	public int requestRental(RentalCreateRequest request) throws SQLException {
+		Connection con = null;
+		PreparedStatement ps = null;
+		int result = 0;
+
+		String sql = "INSERT INTO Rental(BorrowerID, Status, PostNum) " + "VALUES (?, ?, ?)";
+
+		try {
+			con = DBManager.getConnection();
+			ps = con.prepareStatement(sql);
+
+			String loginId = Session.getInstance().getLoginUser().getId();
+
+			ps.setString(1, loginId);
+			ps.setInt(2, request.getStatus().getCode());
+			ps.setInt(3, request.getPostNum());
+
+			result = ps.executeUpdate();
+
+		} finally {
+			DBManager.close(con, ps);
+		}
+
+		return result;
+	}
+
+}
