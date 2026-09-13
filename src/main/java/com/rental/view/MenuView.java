@@ -26,18 +26,14 @@ public class MenuView {
     // 콘솔 입력을 처리하기 위한 Scanner 객체
     private static final Scanner sc = new Scanner(System.in);
 
-    // 물품 컨트롤러 인스턴스 생성
+    // 물품 컨트롤러 인스턴스 생성 (Controller - Service 계층 연결 진입점)
     private static final ItemController itemController = new ItemController();
 
     // 대여 컨트롤러 인스턴스 생성
     private static final RentalController rentalController = new RentalController();
 
-    /**
-     * 프로그램 진입점
-     */
-    public static void main(String[] args) {
-        loginMenu();
-    }
+    // 비정적 메서드 호출을 위한 MenuView 내부 인스턴스 생성
+    private static final MenuView menuView = new MenuView();
 
     /**
      * [시작 메뉴] 로그인, 회원가입, 아이디 찾기 처리
@@ -46,7 +42,7 @@ public class MenuView {
         boolean status = true;
         while (status) {
             System.out.println("\n========================================");
-            System.out.println("  개인 간 물품 대여 서비스");
+            System.out.println("   개인 간 물품 대여 서비스");
             System.out.println("========================================");
             System.out.println(" 1. 회원가입");
             System.out.println(" 2. 로그인");
@@ -218,7 +214,7 @@ public class MenuView {
         boolean status = true;
         while (status) {
             System.out.println("\n========================================");
-            System.out.println("               메인 메뉴");
+            System.out.println("                메인 메뉴");
             System.out.println("========================================");
             System.out.println(" 1. 물품 관리 (등록/수정/삭제)");
             System.out.println(" 2. 물품 대여 (목록 조회 및 대여 신청)");
@@ -292,7 +288,7 @@ public class MenuView {
                         inputItemDelete();
                         break;
                     case 4:
-                        printMyItemList();
+                        menuView.printMyItemList();
                         break;
                     case 0:
                         status = false;
@@ -332,6 +328,7 @@ public class MenuView {
             item.setStatus(true);
             item.setLenderID(Session.getInstance().getLoginUser().getId());
 
+            // Controller를 호출하여 Service의 itemInsert 로직을 수행
             itemController.itemInsert(item);
         } catch (NumberFormatException e) {
             System.out.println("숫자만 입력 가능합니다.");
@@ -415,35 +412,24 @@ public class MenuView {
     public static void inputItemUpdate() {
         try {
             System.out.println("\n[물품 수정]");
-            List<Item> myItems = printMyItemList();
-            if (myItems.isEmpty()) {
-                return;
-            }
+            // 수정 대상 물품 확인을 위해 전체 물품 목록 출력
+            menuView.printMyItemList();
 
             System.out.print("수정할 물품 번호: ");
             int itemNo = Integer.parseInt(sc.nextLine().trim());
 
-            Item existing = null;
-            for (Item i : myItems) {
-                if (i.getItemNum() == itemNo) {
-                    existing = i;
-                    break;
-                }
-            }
-            if (existing == null) {
-                System.out.println("본인이 등록한 물품 번호가 아닙니다.");
-                return;
-            }
-
             System.out.print("수정할 물품명: ");
             String updateName = sc.nextLine().trim();
 
-            // 기존 객체 속성(ItemNum, Status, Num2, LenderID)을 유지하고 물품명만 새로 반영
-            existing.setItemName(updateName);
-            existing.setLenderID(Session.getInstance().getLoginUser().getId());
+            // 수정 정보를 Item 객체에 바인딩하여 컨트롤러로 전달
+            Item item = new Item();
+            item.setItemNum(itemNo);
+            item.setItemName(updateName);
+            item.setStatus(true);
+            item.setLenderID(Session.getInstance().getLoginUser().getId());
 
-            // 완전한 5개 필드를 갖춘 객체를 전달합니다.
-            itemController.itemUpdate(existing);
+            // Controller를 호출하여 Service의 itemUpdate 로직을 수행
+            itemController.itemUpdate(item);
         } catch (NumberFormatException e) {
             System.out.println("물품 번호는 숫자만 입력 가능합니다.");
         }
@@ -455,13 +441,13 @@ public class MenuView {
     public static void inputItemDelete() {
         try {
             System.out.println("\n[물품 삭제]");
-            if (printMyItemList().isEmpty()) {
-                return;
-            }
+            // 삭제 대상 물품 확인을 위해 전체 물품 목록 출력
+            menuView.printMyItemList();
 
             System.out.print("삭제할 물품 번호: ");
             int itemNo = Integer.parseInt(sc.nextLine().trim());
 
+            // Controller를 호출하여 Service의 itemDelete 로직을 수행
             itemController.itemDelete(itemNo);
         } catch (NumberFormatException e) {
             System.out.println("물품 번호는 숫자만 입력 가능합니다.");
@@ -471,52 +457,13 @@ public class MenuView {
     /**
      * 로그인한 사용자가 등록한 물품 목록 조회 및 출력
      */
-    private static List<Item> printMyItemList() {
-        String lenderId = Session.getInstance().getLoginUser().getId();
-        String sql = "SELECT ItemNum, ItemName, Status, Num2 FROM Item WHERE LenderID = ? ORDER BY ItemNum";
-
-        List<Item> list = new ArrayList<>();
-        Connection con = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        try {
-            con = DBManager.getConnection();
-            ps = con.prepareStatement(sql);
-            ps.setString(1, lenderId);
-            rs = ps.executeQuery();
-
-            while (rs.next()) {
-                Item item = new Item();
-                item.setItemNum(rs.getInt("ItemNum"));
-                item.setItemName(rs.getString("ItemName"));
-                item.setStatus(rs.getBoolean("Status"));
-                item.setNum2(rs.getString("Num2"));
-                item.setLenderID(lenderId);
-                list.add(item);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            DBManager.close(con, ps, rs);
-        }
-
-        System.out.println("\n[내가 등록한 물품 목록]");
-        if (list.isEmpty()) {
-            System.out.println("등록한 물품이 없습니다.");
-        } else {
-            for (Item item : list) {
-                System.out.println(" - 물품번호: " + item.getItemNum()
-                        + " | 물품명: " + item.getItemName()
-                        + " | 상태: " + (item.isStatus() ? "대여가능" : "대여중"));
-            }
-        }
-        return list;
+    private void printMyItemList() {
+        // MenuView(View) -> ItemController(Controller) -> ItemService(Service) -> ItemRepository(Repository)
+        itemController.itemSelect();
     }
 
     /**
      * [대여 메뉴] 물품 목록 조회 및 대여 신청
-     * rental/post 폴더는 수정하지 않고, 이미 있는 RentalController.rentalCreate()만 그대로 사용하며
-     * 목록 조회(대여 가능한 게시글)는 MenuView 내부에서 직접 DB를 조회하여 처리합니다.
      */
     public static void rentItemMenu() {
         System.out.println("\n[물품 대여 - 목록 조회 및 대여 신청]");
@@ -588,14 +535,7 @@ public class MenuView {
 
     /**
      * [반납 및 대여 내역 관리 메뉴]
-     * 대여 상태 흐름: 100(신청) -> 101(승인)/102(거절) -> 110(대여중)
-     *              -> 200(반납신청) -> 201(반납승인) -> 210(임차인확인) -> 211(완료)
-     *
-     * rental 폴더의 컨트롤러/서비스/리포지토리는 수정하지 않고,
-     * 이미 구현된 approveRental/rejectRental/confirmReturn만 그대로 사용하며
-     * 목록 조회와 나머지 상태 전환(대여 시작, 반납 신청, 반납 승인, 임차인 확인)은
-     * MenuView 내부에서 직접 DB를 조회/갱신하여 처리합니다.
-     */
+    */
     public static void returnItemMenu() {
         boolean status = true;
         String userId = Session.getInstance().getLoginUser().getId();
