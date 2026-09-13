@@ -4,20 +4,20 @@ public class ItemCreateRequest {
 	
 	private int itemNum;
 	private String itemName;
-	private String status;
-	private String category;
+	private boolean status;
+	private String num2;
 	private String lenderID;
 	
 
 	public ItemCreateRequest() {}
 
 
-	public ItemCreateRequest(int itemNum, String itemName, String status, String category, String lenderID) {
+	public ItemCreateRequest(int itemNum, String itemName, boolean status, String num2, String lenderID) {
 		super();
 		this.itemNum = itemNum;
 		this.itemName = itemName;
 		this.status = status;
-		this.category = category;
+		this.num2 = num2;
 		this.lenderID = lenderID;
 	}
 
@@ -42,23 +42,23 @@ public class ItemCreateRequest {
 	}
 
 
-	public String getStatus() {
+	public boolean isStatus() {
 		return status;
 	}
 
 
-	public void setStatus(String status) {
+	public void setStatus(boolean status) {
 		this.status = status;
 	}
 
 
-	public String getCategory() {
-		return category;
+	public String getNum2() {
+		return num2;
 	}
 
 
-	public void setCategory(String category) {
-		this.category = category;
+	public void setNum2(String num2) {
+		this.num2 = num2;
 	}
 
 
@@ -71,6 +71,6 @@ public class ItemCreateRequest {
 		this.lenderID = lenderID;
 	}
 
-	
-		
+
+			
 }
