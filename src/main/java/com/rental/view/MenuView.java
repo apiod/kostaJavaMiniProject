@@ -13,6 +13,7 @@ import main.java.com.rental.common.util.DBManager;
 import main.java.com.rental.item.controller.ItemController;
 import main.java.com.rental.item.entity.Item;
 import main.java.com.rental.rental.controller.RentalController;
+import main.java.com.rental.rental.enums.RentalStatus;
 import main.java.com.rental.session.Session;
 import main.java.com.rental.user.controller.UserController;
 import main.java.com.rental.user.dto.FindIdRequest;
@@ -26,13 +27,6 @@ public class MenuView {
 
     // 물품 컨트롤러 인스턴스 생성
     private static final ItemController itemController = new ItemController();
-
-    /**
-     * 프로그램 진입점
-     */
-    public static void main(String[] args) {
-        loginMenu();
-    }
 
     /**
      * [시작 메뉴] 로그인, 회원가입, 아이디 찾기 처리
@@ -132,16 +126,32 @@ public class MenuView {
 
     /**
      * 대여 상태 코드를 화면 표시용 명칭으로 변환
+     * DB에서 조회한 숫자 코드를 RentalStatus enum으로 변환한 뒤 status.getCode()로 비교한다.
      */
-    private static String rentalStatusText(int status) {
-        switch (status) {
+    private static String rentalStatusText(int code) {
+        RentalStatus status = rentalStatusFromCode(code);
+        if (status == null) {
+            return "상태 코드 " + code;
+        }
+        switch (status.getCode()) {
             case 101: return "대여 승인";
             case 102: return "대여 거절";
             case 201: return "반납 승인";
-            case 202: return "반납 거절";
             case 211: return "반납 확인";
-            default: return "상태 코드 " + status;
+            default: return "상태 코드 " + status.getCode();
         }
+    }
+
+    /**
+     * 숫자 코드를 RentalStatus enum 상수로 변환
+     */
+    private static RentalStatus rentalStatusFromCode(int code) {
+        for (RentalStatus status : RentalStatus.values()) {
+            if (status.getCode() == code) {
+                return status;
+            }
+        }
+        return null;
     }
 
     /**
