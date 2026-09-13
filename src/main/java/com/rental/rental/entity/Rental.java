@@ -4,47 +4,66 @@ import main.java.com.rental.rental.enums.RentalStatus;
 
 public class Rental {
 
-    private int rentalNum;
-    private String borrowerId;
-    private RentalStatus status;
-    private int postNum;
+	private int rentalNum;
+	private String borrowerId;
+	private RentalStatus status;
+	private int postNum;
+	
+	
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Rental [rentalNum=");
+		builder.append(rentalNum);
+		builder.append(", borrowerId=");
+		builder.append(borrowerId);
+		builder.append(", status=");
+		builder.append(status);
+		builder.append(", postNum=");
+		builder.append(postNum);
+		builder.append("]");
+		return builder.toString();
+	}
 
-    public Rental(int rentalNum, String borrowerId, RentalStatus status, int postNum) {
-        this.rentalNum = rentalNum;
-        this.borrowerId = borrowerId;
-        this.status = status;
-        this.postNum = postNum;
-    }
+	public Rental() {
+	}
 
-    public int getRentalNum() {
-        return rentalNum;
-    }
+	public Rental(int rentalNum, String borrowerId, RentalStatus status, int postNum) {
+		this.rentalNum = rentalNum;
+		this.borrowerId = borrowerId;
+		this.status = status;
+		this.postNum = postNum;
+	}
 
-    public void setRentalNum(int rentalNum) {
-        this.rentalNum = rentalNum;
-    }
+	public int getRentalNum() {
+		return rentalNum;
+	}
 
-    public String getBorrowerId() {
-        return borrowerId;
-    }
+	public void setRentalNum(int rentalNum) {
+		this.rentalNum = rentalNum;
+	}
 
-    public void setBorrowerId(String borrowerId) {
-        this.borrowerId = borrowerId;
-    }
+	public String getBorrowerId() {
+		return borrowerId;
+	}
 
-    public RentalStatus getStatus() {
-        return status;
-    }
+	public void setBorrowerId(String borrowerId) {
+		this.borrowerId = borrowerId;
+	}
 
-    public void setStatus(RentalStatus status) {
-        this.status = status;
-    }
+	public RentalStatus getStatus() {
+		return status;
+	}
 
-    public int getPostNum() {
-        return postNum;
-    }
+	public void setStatus(RentalStatus status) {
+		this.status = status;
+	}
 
-    public void setPostNum(int postNum) {
-        this.postNum = postNum;
-    }
+	public int getPostNum() {
+		return postNum;
+	}
+
+	public void setPostNum(int postNum) {
+		this.postNum = postNum;
+	}
 }

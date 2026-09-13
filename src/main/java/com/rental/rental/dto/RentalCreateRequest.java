@@ -4,18 +4,20 @@ import main.java.com.rental.rental.enums.RentalStatus;
 
 public class RentalCreateRequest {
 
-    private int postNum;
-    private RentalStatus status;
-    private String borrowerId;
-    
-    public RentalCreateRequest() {}
+	private int postNum;
+	private RentalStatus status;
+	private String borrowerId;
+
+	public RentalCreateRequest() {
+	}
+
 	public RentalCreateRequest(int postNum, RentalStatus status, String borrowerId) {
 		super();
 		this.postNum = postNum;
 		this.status = status;
 		this.borrowerId = borrowerId;
 	}
-	
+
 	public int getPostNum() {
 		return postNum;
 	}
@@ -40,6 +42,4 @@ public class RentalCreateRequest {
 		this.borrowerId = borrowerId;
 	}
 
-
-   
 }
