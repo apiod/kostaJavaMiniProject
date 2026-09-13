@@ -150,5 +150,15 @@ JOIN Item i ON p.ItemNum = i.ItemNum
 JOIN User l ON i.LenderID = l.ID
 JOIN User b ON r.BorrowerID = b.ID;
     
-SELECT *
-FROM View_Rental_Info;
+CREATE or replace view View_Rental_LenderID AS
+SELECT
+	r.RentalNum,
+    r.BorrowerID,
+    r.Status,
+	r.PostNum,
+    i.LenderID
+FROM Rental r
+JOIN Post p ON r.PostNum = p.PostNum
+JOIN Item i ON p.ItemNum = i.ItemNum
+JOIN User l ON i.LenderID = l.ID;
+select *  from View_rental_lenderID;
