@@ -28,6 +28,13 @@ public class MenuView {
     private static final ItemController itemController = new ItemController();
 
     /**
+     * 프로그램 진입점
+     */
+    public static void main(String[] args) {
+        loginMenu();
+    }
+
+    /**
      * [시작 메뉴] 로그인, 회원가입, 아이디 찾기 처리
      */
     public static void loginMenu() {
@@ -85,12 +92,10 @@ public class MenuView {
 
     /**
      * 로그인 사용자의 대여 목록 중 확인이 필요한 상태(101, 102, 201, 202, 211) 조회
-     * Rental -> Post -> Item 테이블을 조인하여 ItemName 컬럼을 정상 참조하도록 수정
      */
     private static void checkMyNotifications() {
         String borrowerId = Session.getInstance().getLoginUser().getId();
 
-        // SQL 관계 반영: Rental(Postnum) -> Post(PostNum, ItemNum) -> Item(ItemNum, ItemName)
         String sql = "SELECT r.RentalNum, i.ItemName, r.Status "
                    + "FROM Rental r "
                    + "INNER JOIN Post p ON r.Postnum = p.PostNum "
@@ -118,7 +123,6 @@ public class MenuView {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            // DB 연결 자원 해제
             DBManager.close(con, ps, rs);
         }
     }
@@ -265,6 +269,7 @@ public class MenuView {
             System.out.println(" 1. 새 물품 등록");
             System.out.println(" 2. 등록 물품 정보 수정");
             System.out.println(" 3. 등록 물품 삭제");
+            System.out.println(" 4. 내가 등록한 물품 목록");
             System.out.println(" 0. 상위 메뉴로 이동");
             System.out.println("----------------------------------------");
             System.out.print("메뉴를 선택해주세요 >> ");
@@ -280,6 +285,9 @@ public class MenuView {
                         break;
                     case 3:
                         inputItemDelete();
+                        break;
+                    case 4:
+                        printMyItemList();
                         break;
                     case 0:
                         status = false;
@@ -307,14 +315,12 @@ public class MenuView {
             System.out.print("물품명: ");
             String itemName = sc.nextLine().trim();
 
-            // 대분류 -> 소분류 카테고리 코드(Num2) 선택
             String num2 = selectCategory();
             if (num2 == null) {
                 System.out.println("카테고리 선택이 취소되어 등록을 중단합니다.");
                 return;
             }
 
-            // Item 엔티티 객체 생성 및 속성 주입
             Item item = new Item();
             item.setItemName(itemName);
             item.setNum2(num2);
@@ -331,7 +337,6 @@ public class MenuView {
      * 대분류 및 소분류 카테고리 선택 후 Num2 코드 반환
      */
     private static String selectCategory() {
-        // 대분류 목록 조회
         List<String[]> bigList = queryCategory("SELECT Num, Category FROM BigCategory ORDER BY Num", null);
         if (bigList.isEmpty()) {
             System.out.println("등록된 대분류 카테고리가 없습니다.");
@@ -351,7 +356,6 @@ public class MenuView {
         String selectedBigNum = bigList.get(bigChoice - 1)[0];
         String selectedBigName = bigList.get(bigChoice - 1)[1];
 
-        // 선택한 대분류에 속한 소분류 목록 조회
         List<String[]> smallList = queryCategory(
                 "SELECT Num2, Category FROM SmallCategory WHERE Num = ? ORDER BY Num2", selectedBigNum);
         if (smallList.isEmpty()) {
@@ -401,21 +405,40 @@ public class MenuView {
 
     /**
      * 등록 물품 정보 수정 입력
+     * 기존 조회 객체(existing)의 모든 필드를 보존한 상태에서 물품명을 변경하여 전달합니다.
      */
     public static void inputItemUpdate() {
         try {
             System.out.println("\n[물품 수정]");
+            List<Item> myItems = printMyItemList();
+            if (myItems.isEmpty()) {
+                return;
+            }
+
             System.out.print("수정할 물품 번호: ");
             int itemNo = Integer.parseInt(sc.nextLine().trim());
+
+            Item existing = null;
+            for (Item i : myItems) {
+                if (i.getItemNum() == itemNo) {
+                    existing = i;
+                    break;
+                }
+            }
+            if (existing == null) {
+                System.out.println("본인이 등록한 물품 번호가 아닙니다.");
+                return;
+            }
 
             System.out.print("수정할 물품명: ");
             String updateName = sc.nextLine().trim();
 
-            Item item = new Item();
-            item.setItemNum(itemNo);
-            item.setItemName(updateName);
+            // 기존 객체 속성(ItemNum, Status, Num2, LenderID)을 유지하고 물품명만 새로 반영
+            existing.setItemName(updateName);
+            existing.setLenderID(Session.getInstance().getLoginUser().getId());
 
-            itemController.itemUpdate(item);
+            // 완전한 5개 필드를 갖춘 객체를 전달합니다.
+            itemController.itemUpdate(existing);
         } catch (NumberFormatException e) {
             System.out.println("물품 번호는 숫자만 입력 가능합니다.");
         }
@@ -427,6 +450,10 @@ public class MenuView {
     public static void inputItemDelete() {
         try {
             System.out.println("\n[물품 삭제]");
+            if (printMyItemList().isEmpty()) {
+                return;
+            }
+
             System.out.print("삭제할 물품 번호: ");
             int itemNo = Integer.parseInt(sc.nextLine().trim());
 
@@ -434,6 +461,51 @@ public class MenuView {
         } catch (NumberFormatException e) {
             System.out.println("물품 번호는 숫자만 입력 가능합니다.");
         }
+    }
+
+    /**
+     * 로그인한 사용자가 등록한 물품 목록 조회 및 출력
+     */
+    private static List<Item> printMyItemList() {
+        String lenderId = Session.getInstance().getLoginUser().getId();
+        String sql = "SELECT ItemNum, ItemName, Status, Num2 FROM Item WHERE LenderID = ? ORDER BY ItemNum";
+
+        List<Item> list = new ArrayList<>();
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            con = DBManager.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setString(1, lenderId);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Item item = new Item();
+                item.setItemNum(rs.getInt("ItemNum"));
+                item.setItemName(rs.getString("ItemName"));
+                item.setStatus(rs.getBoolean("Status"));
+                item.setNum2(rs.getString("Num2"));
+                item.setLenderID(lenderId);
+                list.add(item);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DBManager.close(con, ps, rs);
+        }
+
+        System.out.println("\n[내가 등록한 물품 목록]");
+        if (list.isEmpty()) {
+            System.out.println("등록한 물품이 없습니다.");
+        } else {
+            for (Item item : list) {
+                System.out.println(" - 물품번호: " + item.getItemNum()
+                        + " | 물품명: " + item.getItemName()
+                        + " | 상태: " + (item.isStatus() ? "대여가능" : "대여중"));
+            }
+        }
+        return list;
     }
 
     /**
