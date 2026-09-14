@@ -92,23 +92,26 @@ public class ItemMenuView {
 	 */
 	public void inputItemUpdate() {
 		try {
-			System.out.println("\n[물품 수정]");
-			// 수정 대상 물품 확인을 위해 전체 물품 목록 출력
-			SuccessView.printEntityList(list);
-
-			// TODO 물품번호가 list.getItemNum에 있는지 확인해야한다.
-			// 없으면 다시입력 받아야한다.
-			System.out.print("수정할 물품 번호: ");
-			int itemNo = Integer.parseInt(sc.nextLine().trim());
-
+			Item item =null;
+			while(true) {
+				System.out.println("\n[물품 수정]");
+				// 수정 대상 물품 확인을 위해 전체 물품 목록 출력
+				SuccessView.printEntityList(list);
+				
+				System.out.print("수정할 물품 번호: ");
+				int itemNo = Integer.parseInt(sc.nextLine().trim());
+				
+				item = checkedItemNum(itemNo);//list에 있는지 확인
+				if(item!=null)  break;
+				System.out.flush();
+				System.out.println("번호를 다시 입력해주세요.");
+			}
 			System.out.print("수정할 물품명: ");
 			String updateName = sc.nextLine().trim();
-
+			item.setItemName(updateName);
+			
 			// TODO 카테고리 설정 하는 메소드 추가
 			String category = null;
-
-			// 수정 정보를 ItemUpdateRequest 객체에 바인딩하여 컨트롤러로 전달
-			Item item = new Item(itemNo, updateName, category, id);
 
 			// Controller를 호출하여 Service의 itemUpdate 로직을 수행
 			itemController.itemUpdate(item);
@@ -146,16 +149,22 @@ public class ItemMenuView {
 		}
 		return null;
 	}
+	
 	//처음 지정할 때
 	private String selectCategory() {
-		String category = null;
+		String smallCategory=null;
 		
-		return category;
+		//TODO 카테고리 선택
+		
+		return smallCategory;
 	}
-	//수정 할 때
+	
+	//카테고리 변경할 때
 	private String selectCategory(Item item) {
-		String category = null;
+		String smallCategory=null;
 		
-		return category;
+		//TODO 카테고리 선택
+		
+		return smallCategory;
 	}
 }
