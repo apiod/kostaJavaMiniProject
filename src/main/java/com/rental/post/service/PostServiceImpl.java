@@ -41,6 +41,18 @@ public class PostServiceImpl implements PostService{
 	}
 
 	@Override
+	public List<Post> selectAll() throws PostException, NotFoundException{
+		List<Post> list = pr.selectAll();
+		if(list.isEmpty()) throw new NotFoundException("검색결과가 존재하지 않습니다."); 
+		return list;
+	}
+	@Override
+	public List<Post> selectById() throws PostException, NotFoundException {
+		List<Post> list = pr.selectById();
+		if(list.isEmpty()) throw new NotFoundException("검색결과가 존재하지 않습니다."); 
+		return list;
+	}
+	@Override
 	public Post selectByItemNum(int itemNum) throws PostException {
 		Post post = pr.selectByItemNum(itemNum);
 		if(post==null) throw new NotFoundException("검색결과가 존재하지 않습니다."); 

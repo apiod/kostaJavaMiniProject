@@ -44,6 +44,26 @@ public class PostController {
 			FailView.FailMessage(e.getMessage());
 		}
 	}
+	
+	public void selectAll() {
+		try {
+			SuccessView.printEntityList(ps.selectAll());
+		} catch (Exception e) {
+			FailView.FailMessage(e.getMessage());
+		}
+	}
+	
+	public List<Post> selectById(){
+		try {
+			List<Post> re =ps.selectById();
+			SuccessView.printEntityList(re);
+			return re;
+		} catch (Exception e) {
+			FailView.FailMessage(e.getMessage());
+		}
+		return null;
+	}
+	
 	public void selectByItemNum(int itemNum) {
 		try {
 			Post post = ps.selectByItemNum(itemNum);

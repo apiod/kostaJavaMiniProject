@@ -46,4 +46,8 @@ public interface PostRepository {
      * 대여 가능한 게시글 조회
      */
     List<AvailablePost> selectAvailablePost() throws PostException;
+
+	List<Post> selectById()throws PostException;
+
+	List<Post> selectAll()throws PostException;
 }

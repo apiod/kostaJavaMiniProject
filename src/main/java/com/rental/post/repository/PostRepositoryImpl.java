@@ -13,6 +13,7 @@ import main.java.com.rental.post.dto.AvailablePost;
 import main.java.com.rental.post.dto.PostCreate;
 import main.java.com.rental.post.dto.PostUpdate;
 import main.java.com.rental.post.entity.Post;
+import main.java.com.rental.session.Session;
 
 public class PostRepositoryImpl implements PostRepository {
 
@@ -94,6 +95,48 @@ public class PostRepositoryImpl implements PostRepository {
 		return result;
 	}
 	
+	@Override
+	public List<Post> selectAll() throws PostException {
+		String sql = """
+	            SELECT * FROM Post order by postNum
+	            """;
+	    List<Post> posts = new ArrayList<>();
+	    try (Connection conn = DBManager.getConnection();
+	         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+	        pstmt.setString(1, Session.getInstance().getLoginUser().getId());
+	        try (ResultSet rs = pstmt.executeQuery()) {
+	            while (rs.next()) {
+	                posts.add(mapPost(rs));
+	            }
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        throw new PostException();
+	    }
+	    return posts;
+	}
+
+	@Override
+	public List<Post> selectById() throws PostException {
+		String sql = """
+	            SELECT * FROM Post p join Item i on p.ItemNum = i.ItemNum WHERE LenderID = ?
+	            """;
+	    List<Post> posts = new ArrayList<>();
+	    try (Connection conn = DBManager.getConnection();
+	         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+	        pstmt.setString(1, Session.getInstance().getLoginUser().getId());
+	        try (ResultSet rs = pstmt.executeQuery()) {
+	            while (rs.next()) {
+	                posts.add(mapPost(rs));
+	            }
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        throw new PostException();
+	    }
+	    return posts;
+	}
+
 	@Override
 	public Post selectByItemNum(int itemNum)throws PostException {
 
