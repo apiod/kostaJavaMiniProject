@@ -82,9 +82,11 @@ public class Item {
 
 	@Override
 	public String toString() {
-		return "Item [itemNum=" + itemNum + ", itemName=" + itemName + ", status=" + status
-				+ ", smallCategoryCode=" + smallCategoryCode
-				+ ", lenderID=" + lenderID + "]";
+		String statusName = status ? "대여 가능" : "대여 불가";
+
+		return "[물품 #" + itemNum + "]\n"
+				+ "물품명 : " + itemName + "  |  상태 : " + statusName + "\n"
+				+ "카테고리 코드 : " + smallCategoryCode + "  |  대여자 : " + lenderID;
 	}
 	
 	

@@ -12,17 +12,11 @@ public class Rental {
 	
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("Rental [rentalNum=");
-		builder.append(rentalNum);
-		builder.append(", borrowerId=");
-		builder.append(borrowerId);
-		builder.append(", status=");
-		builder.append(status);
-		builder.append(", postNum=");
-		builder.append(postNum);
-		builder.append("]");
-		return builder.toString();
+		String statusName = status == null ? "상태 없음" : status.getName();
+
+		return "[대여 #" + rentalNum + "]\n"
+				+ "게시글번호 : " + postNum + "  |  상태 : " + statusName + "\n"
+				+ "임차인 : " + borrowerId;
 	}
 
 	public Rental() {
