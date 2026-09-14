@@ -1,8 +1,13 @@
 package main.java.com.rental.common.util;
 
+import java.util.List;
+
+import main.java.com.rental.item.entity.Item;
+import main.java.com.rental.post.entity.Post;
+
 public class ViewUtil {
 	// 010-1234-5678 형태로 변환을 위한 메소드
-	public String formatPhone(String phone) {
+	public static String formatPhone(String phone) {
 		phone = phone.replace("-", "");
 		if (phone.matches("\\d{11}")) {
 			phone = phone.replaceFirst("(\\d{3})(\\d{4})(\\d{4})", "$1-$2-$3");
@@ -13,4 +18,27 @@ public class ViewUtil {
 			return null;
 		}
 	}
+	/**
+	 * 리스트 순환 돌면서 해당하는 번호가 Item객체 반환
+	 * @param num
+	 * @return Item
+	 */
+	public static Item checkedItemNum(List<Item> list, int num) {
+		for (Item item : list) {
+			if (item.getItemNum() == num) {
+				return item;
+			}
+		}
+		return null;
+	}
+	
+	public static Post checkedPostNum(List<Post> list, int num) {
+		for (Post post : list) {
+			if (post.getPostNum() == num) {
+				return post;
+			}
+		}
+		return null;
+	}
+	
 }

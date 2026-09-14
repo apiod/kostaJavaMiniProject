@@ -13,7 +13,6 @@ public class LoginMenuView {
 
 	Scanner sc = new Scanner(System.in);
 	UserController userController = new UserController();
-	ViewUtil vu = new ViewUtil();
 
 	/**
 	 * [시작 메뉴] 로그인, 회원가입, 아이디 찾기 처리
@@ -99,7 +98,7 @@ public class LoginMenuView {
 			System.out.print("핸드폰 번호: ");
 			phone = sc.nextLine().trim();
 			// "-" 제거
-			phone = vu.formatPhone(phone);
+			phone = ViewUtil.formatPhone(phone);
 			if (phone != null)
 				phoneStatus = false;
 		}
@@ -118,7 +117,7 @@ public class LoginMenuView {
 		while (status) {
 			System.out.print("가입 시 등록한 핸드폰 번호: ");
 			phone = sc.nextLine().trim(); // 양끝 공백 제거
-			phone = vu.formatPhone(phone); // 3-4-4 format
+			phone = ViewUtil.formatPhone(phone); // 3-4-4 format
 			if (phone != null)
 				status = false;
 		}
@@ -135,7 +134,7 @@ public class LoginMenuView {
 		while (status) {
 			System.out.print("가입 시 등록한 핸드폰 번호: ");
 			phone = sc.nextLine().trim(); // 양끝 공백 제거
-			phone = vu.formatPhone(phone); // 3-4-4 format
+			phone = ViewUtil.formatPhone(phone); // 3-4-4 format
 			if (phone != null)
 				status = false;
 		}

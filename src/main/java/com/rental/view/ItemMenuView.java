@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 import main.java.com.rental.category.controller.CategoryController;
 import main.java.com.rental.category.entity.Category;
+import main.java.com.rental.common.util.ViewUtil;
 import main.java.com.rental.item.controller.ItemController;
 import main.java.com.rental.item.dto.ItemCreateRequest;
 import main.java.com.rental.item.entity.Item;
@@ -102,7 +103,7 @@ public class ItemMenuView {
 				System.out.print("수정할 물품 번호: ");
 				int itemNo = Integer.parseInt(sc.nextLine().trim());
 				
-				item = checkedItemNum(itemNo);//list에 있는지 확인
+				item = ViewUtil.checkedItemNum(this.list, itemNo);//list에 있는지 확인
 				if(item!=null)  break;
 				System.out.flush();
 				System.out.println("번호를 다시 입력해주세요.");
@@ -133,32 +134,14 @@ public class ItemMenuView {
 			System.out.println("\n[물품 삭제]");
 			// 삭제 대상 물품 확인을 위해 전체 물품 목록 출력
 			SuccessView.printEntityList(list);
-
-			// TODO 물품번호가 list.getItemNum에 있는지 확인해야한다.
 			System.out.print("삭제할 물품 번호: ");
 			int itemNo = Integer.parseInt(sc.nextLine().trim());
-			Item item = checkedItemNum(itemNo); 
+			Item item = ViewUtil.checkedItemNum(this.list,itemNo); 
 			// Controller를 호출하여 Service의 itemDelete 로직을 수행
 			itemController.itemDelete(item.getItemNum(), item.getLenderID());
 		} catch (NumberFormatException e) {
 			System.out.println("물품 번호는 숫자만 입력 가능합니다.");
 		}
-	}
-
-	
-	
-	/**
-	 * 리스트 순환 돌면서 해당하는 번호가 Item객체 반환
-	 * @param num
-	 * @return Item
-	 */
-	private Item checkedItemNum(int num) {
-		for (Item item : list) {
-			if (item.getItemNum() == num) {
-				return item;
-			}
-		}
-		return null;
 	}
 	
 	//처음 지정할 때

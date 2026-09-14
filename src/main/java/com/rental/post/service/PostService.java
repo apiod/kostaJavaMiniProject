@@ -37,4 +37,6 @@ public interface PostService {
     List<Post> selectByAddr(String addr)throws PostException;
     
     List<AvailablePost> selectAvailablePost() throws PostException, NotFoundException;
+	List<Post> selectById() throws PostException, NotFoundException;
+	List<Post> selectAll()throws PostException;
 }
