@@ -143,5 +143,14 @@ public class RentalServiceImpl implements RentalService {
 		if (result == 0)
 			throw new RentalException("반납완료에 실패되었습니다.");
 	}
+	
+	@Override
+	public List<Rental> getPendingApprovals() throws RentalException{
+		List<Rental> re = rr.getPendingApprovals();
+		if(re.isEmpty()) throw new NotFoundException();
+		return re;
+	}
+	
+	
 
 }

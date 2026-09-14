@@ -7,10 +7,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import main.java.com.rental.common.exception.NotFoundException;
 import main.java.com.rental.common.exception.RentalException;
 import main.java.com.rental.common.util.DBManager;
 import main.java.com.rental.rental.entity.Rental;
 import main.java.com.rental.rental.enums.RentalStatus;
+import main.java.com.rental.session.Session;
 import main.java.com.rental.rental.dto.RentalCreateRequest;
 
 public class RentalRepositoryImpl implements RentalRepository {
@@ -431,6 +433,41 @@ public class RentalRepositoryImpl implements RentalRepository {
 			DBManager.close(con, ps);
 		}
 	}
+	
+	/**
+	 * 로그인시 현재 승인 대기중인 목록 출력
+	 * @throws RentalException 
+	 */
+	@Override
+	public List<Rental> getPendingApprovals() throws RentalException {
+		String sql = """ 
+					SELECT *
+					FROM View_Rental_LenderID
+					WHERE status in (100,200) and LenderID =?
+					order by LenderID, PostNum
+					""";
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		String LenderID = Session.getInstance().getLoginUser().getId();
+		List<Rental> list = new ArrayList<>();
+		try {
+			con = DBManager.getConnection();
+			ps = con.prepareStatement(sql);
+			ps.setString(1, LenderID);
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				list.add(mapRental(rs));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new RentalException();
+		} finally {
+			DBManager.close(con, ps, rs);
+		}
+		return list;
+	}
+	
 
 	private Rental mapRental(ResultSet rs) throws SQLException {
 

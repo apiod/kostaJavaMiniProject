@@ -26,7 +26,7 @@ public interface UserService {
 	/**
 	   * ID 찾기 
 	   * */
-	String findId(FindIdRequest request) throws UserException;
+	String findId(String phone) throws UserException;
 
 	/**
 	   * 비밀번호 재설정 

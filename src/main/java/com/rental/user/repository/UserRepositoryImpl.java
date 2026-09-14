@@ -15,134 +15,107 @@ import main.java.com.rental.common.exception.PasswordUpdateException;
 import main.java.com.rental.common.exception.UserException;
 import main.java.com.rental.common.util.DBManager;
 
-public class UserRepositoryImpl implements UserRepository{
-	
-		@Override
-		//로그인 
-		public User login(UserLoginRequest request) throws UserException {
-			  User user = null;
-			  Connection con=null;
-			  PreparedStatement ps=null;
-			  ResultSet rs=null;
-			  
-			  
-			 try {
-			   con = DBManager.getConnection();
-			   ps= con.prepareStatement("select * from User where ID=? and PassWord=?");
-			   ps.setString(1, request.getId());
-			   ps.setString(2, request.getPassword());
-			   
-		        rs = ps.executeQuery(); 
-		        
-		        
-		      if(rs.next()) {
-		        	user = new User(rs.getString("ID"),rs.getString("PassWord"),rs.getString("NickName"), rs.getString("Name")
-		        			, rs.getString("Phone"));
-		        }
-		        
-	        }  catch (SQLException e) {
-	        	e.printStackTrace();
-	        	throw new UserException();
-	        	
-		}finally {
-	        	DBManager.close(con, ps, rs);
-	        }
-			return user;
+public class UserRepositoryImpl implements UserRepository {
+
+	// 로그인
+	@Override
+	public User login(UserLoginRequest request) throws UserException {
+		User user = null;
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		try {
+			con = DBManager.getConnection();
+			ps = con.prepareStatement("select * from User where ID=? and PassWord=?");
+			ps.setString(1, request.getId());
+			ps.setString(2, request.getPassword());
+
+			rs = ps.executeQuery();
+
+			if (rs.next()) {
+				user = new User(rs.getString("ID"), rs.getString("PassWord"), rs.getString("NickName"),
+						rs.getString("Name"), rs.getString("Phone"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new UserException();
+		} finally {
+			DBManager.close(con, ps, rs);
 		}
-		
-	 @Override
-	 //회원 가입 
-	 public int signUp(UserSignUpRequest request) throws UserException {
-		  Connection con=null;
-		  PreparedStatement ps=null;
-		  int result = 0;
-		   
-		  
-			   String sql="insert into User(ID, PassWord, NickName, Name, Phone) values (?, ?, ?, ?, ?) ";
-				try {
-					con = DBManager.getConnection();
-					ps = con.prepareStatement(sql);
-					
-					ps.setString(1, request.getId());
-					ps.setString(2, request.getPassword());
-					ps.setString(3, request.getNickName());
-					ps.setString(4, request.getName());
-					ps.setString(5, request.getPhoneNo());
-					
-					
-					result =  ps.executeUpdate();
-
-				  }  catch (SQLException e) {
-			        	e.printStackTrace();
-			        	throw new UserException();
-			        	
-				 } finally {
-					 DBManager.close(con, ps);
-				 
-				 }
-
-				return  result;
-				
+		return user;
 	}
-	 
-	 
-	 @Override
-	 //아이디 찾기 
-	 public String findId(FindIdRequest  request) throws UserException {
-	
-			  Connection con=null;
-			  PreparedStatement ps=null;
-			  ResultSet rs=null;
-			  String result = null;
-			  		  
-			 try {
-			   con = DBManager.getConnection();
-			   ps= con.prepareStatement("select ID from User where Phone = ?");
-			   ps.setString(1, request.getPhoneNo()); 
-		        rs = ps.executeQuery(); 
-		        
-		        if(rs.next()) {
-		        	result = rs.getString("ID");
-		        }
-			   }  catch (SQLException e) {
-		        	e.printStackTrace();
-		        	throw new UserException();
-		        	
-	        }finally {
-	        	DBManager.close(con, ps, rs);
-	        }
-			return result;
+
+	// 회원 가입
+	@Override
+	public int signUp(UserSignUpRequest request) throws UserException {
+		Connection con = null;
+		PreparedStatement ps = null;
+		int result = 0;
+		String sql = "insert into User(ID, PassWord, NickName, Name, Phone) values (?, ?, ?, ?, ?) ";
+		try {
+			con = DBManager.getConnection();
+			ps = con.prepareStatement(sql);
+			ps.setString(1, request.getId());
+			ps.setString(2, request.getPassword());
+			ps.setString(3, request.getNickName());
+			ps.setString(4, request.getName());
+			ps.setString(5, request.getPhoneNo());
+
+			result = ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new UserException();
+		} finally {
+			DBManager.close(con, ps);
 		}
-		  
-	 
-	 @Override
-	 // 비밀번호 수정 
-	 public int updatePassword(PasswordChangeRequest request)
-	         throws UserException {
+		return result;
+	}
 
-	    
-	         Connection con = null;
-	         PreparedStatement ps = null;
-	         int result = 0;
+	// 아이디 찾기
+	@Override
+	public String findId(String phone) throws UserException {
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		String result = null;
+		try {
+			con = DBManager.getConnection();
+			ps = con.prepareStatement("select ID from User where Phone = ?");
+			ps.setString(1, phone);
+			rs = ps.executeQuery();
 
-	         try {
-	             con = DBManager.getConnection();
+			if (rs.next()) {
+				result = rs.getString("ID");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new UserException();
+		} finally {
+			DBManager.close(con, ps, rs);
+		}
+		return result;
+	}
 
-	             ps = con.prepareStatement(
-	                 "update User set PassWord = ? where Phone = ?"
-	             );
+	@Override
+	// 비밀번호 수정
+	public int updatePassword(PasswordChangeRequest request) throws UserException {
+		Connection con = null;
+		PreparedStatement ps = null;
+		int result = 0;
+		try {
+			con = DBManager.getConnection();
+			ps = con.prepareStatement("update User set PassWord = ? where Phone = ?");
+			ps.setString(1, request.getNewPassword());
+			ps.setString(2, request.getPhoneNo());
 
-	             ps.setString(1, request.getNewPassword());
-	             ps.setString(2, request.getPhoneNo());
-
-	             result = ps.executeUpdate();
-	         }  catch (SQLException e) {
-		        	e.printStackTrace();
-		        	throw new UserException();
-	         } finally {
-	             DBManager.close(con, ps);
-	         }
-	         return result;
-	 
-	 }
+			result = ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new UserException();
+		} finally {
+			DBManager.close(con, ps);
+		}
+		return result;
+	}
 }

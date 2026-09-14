@@ -21,6 +21,15 @@ public class Item {
 	}
 
 
+	public Item(int itemNum, String itemName, String num2, String lenderID) {
+		super();
+		this.itemNum = itemNum;
+		this.itemName = itemName;
+		this.num2 = num2;
+		this.lenderID = lenderID;
+	}
+
+
 	public int getItemNum() {
 		return itemNum;
 	}

@@ -6,7 +6,7 @@ public class RentalApplication {
 
 	public static void main(String[] args) {
 		// 프로그램 진입점: 시작 메뉴부터 실행
-		MenuView.loginMenu();
+		new MenuView();
 	}
 
 }

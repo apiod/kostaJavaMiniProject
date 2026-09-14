@@ -1,10 +1,12 @@
 package main.java.com.rental.item.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import main.java.com.rental.common.exception.InvalidRentalStatusException;
 import main.java.com.rental.common.exception.ItemException;
 import main.java.com.rental.common.exception.NotFoundException;
+import main.java.com.rental.item.dto.ItemUpdateRequest;
 import main.java.com.rental.item.entity.Item;
 import main.java.com.rental.item.repository.ItemRepository;
 import main.java.com.rental.item.repository.ItemRepositoryImpl;
@@ -15,12 +17,9 @@ public class ItemServiceImpl implements ItemService {
     private ItemRepository ir = new ItemRepositoryImpl();
     
     // 싱글톤(Singleton) 객체 관리
-    private static ItemService is = new ItemServiceImpl();
-    
     private ItemServiceImpl() {}
-    
     public static ItemService getInstance() {
-        return is;
+        return new ItemServiceImpl();
     }
 
     // 물품 전체 목록 조회
@@ -93,11 +92,23 @@ public class ItemServiceImpl implements ItemService {
 
     // 물품 정보 삭제
     @Override
-    public void itemDelete(int itemNum) throws ItemException, NotFoundException {
-        int result = ir.itemDelete(itemNum);
+    public void itemDelete(int itemNum,String userId) throws ItemException, NotFoundException {
+        int result = ir.itemDelete(itemNum, userId);
 
         if (result == 0) {
             throw new NotFoundException("삭제 대상 물품 정보를 찾을 수 없습니다.");
         }
     }
+    
+    
+	@Override
+	public List<Item> selectByUserId(String userId) throws ItemException,NotFoundException {
+		List<Item> list = new ArrayList<>();
+		if(list.isEmpty()) throw new NotFoundException();
+		return list;
+	}
+    
+    
+    
+    
 }

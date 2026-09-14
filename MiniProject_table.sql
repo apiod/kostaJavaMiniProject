@@ -1,6 +1,6 @@
 create database mini;
 use mini;
-
+drop database mini;
 -- =========================================
 -- User
 -- =========================================
@@ -129,7 +129,6 @@ CREATE TABLE Admin (
     CONSTRAINT PK_Admin PRIMARY KEY (ID)
 );
 
-DROP VIEW IF EXISTS v_rental_info;
 DROP VIEW IF EXISTS View_Rental_Info;
 
 CREATE or replace view View_Rental_Info AS

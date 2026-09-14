@@ -27,7 +27,7 @@ public interface UserRepository {
 	   * 아이디 찾기
 	   * */
 	  
-	  String findId(FindIdRequest request) throws UserException;
+	  String findId(String phone) throws UserException;
 	  
 	  /**
 	   * 비밀번호 바꾸기

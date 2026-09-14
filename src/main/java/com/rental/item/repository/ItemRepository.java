@@ -4,6 +4,7 @@ import java.util.List;
 
 import main.java.com.rental.common.exception.ItemException;
 import main.java.com.rental.common.exception.NotFoundException;
+import main.java.com.rental.item.dto.ItemUpdateRequest;
 import main.java.com.rental.item.entity.Item;
 
 public interface ItemRepository {
@@ -27,5 +28,8 @@ public interface ItemRepository {
 	int itemUpdateStatus(int itemNum, boolean status) throws ItemException;
 
 	// 물품 삭제
-	int itemDelete(int itemNum) throws ItemException;
+	int itemDelete(int itemNum, String userId) throws ItemException;
+	
+	//사용자가 등록한 아이템 리스트 조회
+	public List<Item> selectByUserId(String userId)throws ItemException;
 }
