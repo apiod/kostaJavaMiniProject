@@ -14,8 +14,7 @@ import main.java.com.rental.item.entity.Item;
 
 public class ItemRepositoryImpl implements ItemRepository {
 
-
-	// 전체 조회
+	// 물품 전체 목록 조회
 	@Override
 	public List<Item> itemSelect() throws NotFoundException {
 		Connection con = null;
@@ -25,26 +24,25 @@ public class ItemRepositoryImpl implements ItemRepository {
 
 		try {
 			con = DBManager.getConnection();
-			ps = con.prepareStatement("select * from Item order by ItemNum");
+			ps = con.prepareStatement("SELECT * FROM Item ORDER BY ItemNum");
 			rs = ps.executeQuery();
 
 			while (rs.next()) {
 				list.add(mapRow(rs));
 			}
-		}catch (SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new NotFoundException();
-		}
-		finally {
+			throw new NotFoundException("물품 목록 조회 중 데이터베이스 오류가 발생했습니다.");
+		} finally {
 			DBManager.close(con, ps, rs);
 		}
 		return list;
 	}
 
-	// 물품번호 검색
+	// 물품 번호 기준 단건 조회
 	@Override
 	public Item itemSelectByitemNum(int itemNum) throws NotFoundException {
-		String sql = "select * from Item where ItemNum = ?";
+		String sql = "SELECT * FROM Item WHERE ItemNum = ?";
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
@@ -60,14 +58,14 @@ public class ItemRepositoryImpl implements ItemRepository {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new NotFoundException();
+			throw new NotFoundException("물품 상세 조회 중 데이터베이스 오류가 발생했습니다.");
 		} finally {
 			DBManager.close(con, ps, rs);
 		}
 		return null;
 	}
 
-	// 물품 검색
+	// 물품명 키워드 검색
 	@Override
 	public List<Item> itemSearch(String keyword) throws NotFoundException {
 		Connection con = null;
@@ -77,76 +75,77 @@ public class ItemRepositoryImpl implements ItemRepository {
 
 		try {
 			con = DBManager.getConnection();
-			ps = con.prepareStatement("select * from Item where ItemName like ?");
-			String like = "%" + (keyword) + "%";
-			ps.setString(1, like);
+			ps = con.prepareStatement("SELECT * FROM Item WHERE ItemName LIKE ? ORDER BY ItemNum");
+			String likeKeyword = "%" + keyword + "%";
+			ps.setString(1, likeKeyword);
 			rs = ps.executeQuery();
 
 			while (rs.next()) {
 				list.add(mapRow(rs));
 			}
-		}catch (SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new NotFoundException();
-		}
-		finally {
+			throw new NotFoundException("물품 검색 중 데이터베이스 오류가 발생했습니다.");
+		} finally {
 			DBManager.close(con, ps, rs);
 		}
 		return list;
 	}
 
-	// 물품 등록
+	// 물품 신규 등록
 	@Override
 	public int itemInsert(Item item) throws ItemException {
-		String sql = "insert into item "
-				+ "(ItemNum, ItemName, Status, Num2, LenderID) " 
-				+ "values (?, ?, ?, ?, ?)";
+		// 기본키(ItemNum) 자동 채번 환경에 맞추어 컬럼에서 제외하고 삽입
+		String sql = "INSERT INTO Item (ItemName, Status, Num2, LenderID) VALUES (?, ?, ?, ?)";
 
 		Connection con = null;
 		PreparedStatement ps = null;
-		int result =0;
+		int result = 0;
 		try {
 			con = DBManager.getConnection();
 			ps = con.prepareStatement(sql);
-			ps.setInt(1, item.getItemNum());
-			ps.setString(2, item.getItemName());
-			ps.setBoolean(3, item.isStatus());
-			ps.setString(4, item.getNum2());
-			ps.setString(5, item.getLenderID());
+			ps.setString(1, item.getItemName());
+			ps.setBoolean(2, item.isStatus());
+			ps.setString(3, item.getNum2());
+			ps.setString(4, item.getLenderID());
 
 			result = ps.executeUpdate();
-			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new ItemException();
-		}finally {
+		} finally {
 			DBManager.close(con, ps);
 		}
 		return result;
 	}
 
-	// 물품 수정
+	// 물품 정보 수정
 	@Override
 	public int itemUpdate(Item item) throws ItemException {
-		String sql = "update Item set " + "ItemNum = ?, ItemName = ?, Status = ?, Num2 = ?" + "where ItemNum = ?";
-
 		Connection con = null;
 		PreparedStatement ps = null;
+		int result = 0;
+
+		String sql = "UPDATE Item SET ItemName = ?, Status = ?, Num2 = ?, LenderID = ? WHERE ItemNum = ?";
+
 		try {
 			con = DBManager.getConnection();
 			ps = con.prepareStatement(sql);
-			ps.setInt(1, item.getItemNum());
-			ps.setString(2, item.getItemName());
-			ps.setBoolean(3, item.isStatus());
-			ps.setString(4, item.getNum2());
 
-			return ps.executeUpdate();
+			ps.setString(1, item.getItemName());
+			ps.setBoolean(2, item.isStatus());
+			ps.setString(3, item.getNum2());
+			ps.setString(4, item.getLenderID());
+			ps.setInt(5, item.getItemNum());
+
+			result = ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new ItemException();
-		}finally {
+		} finally {
 			DBManager.close(con, ps);
 		}
+		return result;
 	}
 
 	// 물품 삭제
@@ -156,37 +155,37 @@ public class ItemRepositoryImpl implements ItemRepository {
 		PreparedStatement ps = null;
 		try {
 			con = DBManager.getConnection();
-			ps = con.prepareStatement("delete from Item where ItemNum = ?");
+			ps = con.prepareStatement("DELETE FROM Item WHERE ItemNum = ?");
 			ps.setInt(1, itemNum);
 			return ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new ItemException();
-		}finally {
+		} finally {
 			DBManager.close(con, ps);
 		}
 	}
-	
+
 	// 대여 상태 변경
 	@Override
-	public int itemUpdateStatus(int itemNum, boolean status) throws ItemException{
+	public int itemUpdateStatus(int itemNum, boolean status) throws ItemException {
 		Connection con = null;
 		PreparedStatement ps = null;
 		try {
 			con = DBManager.getConnection();
-			ps = con.prepareStatement("update Item set Status = ? where ItemNum=?");
+			ps = con.prepareStatement("UPDATE Item SET Status = ? WHERE ItemNum = ?");
 			ps.setBoolean(1, status);
 			ps.setInt(2, itemNum);
 			return ps.executeUpdate();
-		}catch (SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new ItemException();
-		}finally {
-			DBManager.close(con,ps);
+		} finally {
+			DBManager.close(con, ps);
 		}
 	}
 
-	// ResultSet 현재 행을 Item으로 매핑
+	// ResultSet 결과 행을 Item 엔티티 객체로 변환
 	private static Item mapRow(ResultSet rs) throws SQLException {
 		Item item = new Item();
 		item.setItemNum(rs.getInt("ItemNum"));
@@ -196,6 +195,4 @@ public class ItemRepositoryImpl implements ItemRepository {
 		item.setLenderID(rs.getString("LenderID"));
 		return item;
 	}
-
-
 }
