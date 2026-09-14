@@ -29,7 +29,7 @@ public class UserController {
 			   userService.login(request);
 				 SuccessView.printMessage("로그인이 완료 되었습니다.");
 				}catch (UserException e) {
-					e.getMessage();
+					FailView.FailMessage(e.getMessage());
 				}catch (NotFoundException e) {
 					FailView.FailMessage(e.getMessage());
 				}
@@ -45,7 +45,7 @@ public class UserController {
 			   userService.signUp(request);
 				 SuccessView.printMessage("회원 가입이 완료 되었습니다");
 				}catch (UserException e) {
-					e.getMessage();
+					FailView.FailMessage(e.getMessage());
 				
 				}
 		   
@@ -60,7 +60,7 @@ public class UserController {
 			  String result= userService.findId(request);
 				 SuccessView.printMessage("회원님의 ID = "+ result);
 				}catch (UserException e) {
-					e.getMessage();
+					FailView.FailMessage(e.getMessage());
 				
 				}catch (NotFoundException e) {
 					FailView.FailMessage(e.getMessage());
@@ -77,7 +77,7 @@ public class UserController {
 			   userService.updatePassword(request);
 				 SuccessView.printMessage("비밀 번호가 변경이 되었습니다");
 				}catch (UserException e) {
-					e.getMessage();
+					FailView.FailMessage(e.getMessage());
 				
 				}catch (PasswordUpdateException e) {
 					FailView.FailMessage(e.getMessage());
