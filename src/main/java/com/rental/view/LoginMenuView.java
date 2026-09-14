@@ -18,8 +18,9 @@ public class LoginMenuView {
 	/**
 	 * [시작 메뉴] 로그인, 회원가입, 아이디 찾기 처리
 	 */
-	public LoginMenuView() {
+	public void loginMenuView() {
 		while (true) {
+			System.out.flush();
 			System.out.println("\n========================================");
 			System.out.println("   개인 간 물품 대여 서비스");
 			System.out.println("========================================");

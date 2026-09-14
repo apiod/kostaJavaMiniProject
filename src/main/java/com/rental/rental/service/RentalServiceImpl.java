@@ -29,7 +29,15 @@ public class RentalServiceImpl implements RentalService {
 		if (re == 0)
 			throw new RentalException("생성에 실패했습니다.");
 	}
+	//lenderid sessioid, status == 100
+	public List<Rental> selectRentalRequestListByLender() throws RentalException {
+		List<Rental> re = rr.selectRentalRequestListByLender();
+		if (re.isEmpty())
+			throw new NotFoundException();
+		return re;
+	}
 
+ 
 	@Override
 	public List<Rental> selectLendList(String lenderId) throws RentalException, NotFoundException {
 		List<Rental> re = rr.selectLendList(lenderId);

@@ -26,15 +26,14 @@ public class RentalRepositoryImpl implements RentalRepository {
 
 		String sql = """
 				INSERT INTO Rental
-				    (BorrowerId, Status, PostNum)
+				    (BorrowerId, PostNum)
 				VALUES
-				    (?, ?, ?)
+				    (?, ?)
 				""";
 		try (Connection conn = DBManager.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
 			ps.setString(1, rentalCreateRequest.getBorrowerId());
-			ps.setInt(2, rentalCreateRequest.getStatus().getCode());
-			ps.setInt(3, rentalCreateRequest.getPostNum());
+			ps.setInt(2, rentalCreateRequest.getPostNum());
 
 			return ps.executeUpdate();
 
@@ -42,6 +41,37 @@ public class RentalRepositoryImpl implements RentalRepository {
 			e.printStackTrace();
 			throw new RentalException();
 		}
+	}
+
+	/**
+	 * rentalRequest status ==100, LenderId가 session~getId()인
+	 * 
+	 * @throws RentalException
+	 */
+	public List<Rental> selectRentalRequestListByLender() throws RentalException {
+		List<Rental> list = new ArrayList<>();
+		String sql = """
+				SELECT RentalNum,
+				       BorrowerId,
+				       Status,
+				       PostNum
+				FROM View_Rental_LenderID
+				WHERE LenderId = ? AND Status =100
+				""";
+
+		try (Connection conn = DBManager.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+			ps.setString(1, Session.getInstance().getLoginUser().getId());
+			try (ResultSet rs = ps.executeQuery()) {
+				while (rs.next()) {
+					list.add(mapRental(rs));
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new RentalException();
+		}
+
+		return list;
 	}
 
 	@Override
@@ -433,19 +463,20 @@ public class RentalRepositoryImpl implements RentalRepository {
 			DBManager.close(con, ps);
 		}
 	}
-	
+
 	/**
 	 * 로그인시 현재 승인 대기중인 목록 출력
-	 * @throws RentalException 
+	 * 
+	 * @throws RentalException
 	 */
 	@Override
 	public List<Rental> getPendingApprovals() throws RentalException {
-		String sql = """ 
-					SELECT *
-					FROM View_Rental_LenderID
-					WHERE status in (100,200) and LenderID =?
-					order by LenderID, PostNum
-					""";
+		String sql = """
+				SELECT *
+				FROM View_Rental_LenderID
+				WHERE status in (100,200) and LenderID =?
+				order by LenderID, PostNum
+				""";
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
@@ -467,7 +498,6 @@ public class RentalRepositoryImpl implements RentalRepository {
 		}
 		return list;
 	}
-	
 
 	private Rental mapRental(ResultSet rs) throws SQLException {
 

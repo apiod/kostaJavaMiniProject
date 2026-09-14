@@ -2,10 +2,8 @@ package main.java.com.rental.view;
 
 import java.util.List;
 
-import main.java.com.rental.item.entity.Item;
-import main.java.com.rental.post.entity.Post;
+import main.java.com.rental.category.entity.Category;
 import main.java.com.rental.rental.entity.Rental;
-import main.java.com.rental.user.entity.User;
 
 public class SuccessView {
 	
@@ -19,6 +17,12 @@ public class SuccessView {
 	}
 	public static void printEntityList(List<?> list) {
 		list.forEach(System.out::println);
+	}
+	public static void printIndexCategoryList(List<Category> list) {
+		for(Category entity: list) {
+			int i=1;
+			System.out.print((i++)+". "+entity);
+		}
 	}
 	
 	public static void printPendingApprovals(List<Rental> list) {

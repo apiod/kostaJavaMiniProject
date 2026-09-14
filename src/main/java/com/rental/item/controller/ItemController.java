@@ -4,7 +4,7 @@ import java.util.List;
 
 import main.java.com.rental.common.exception.ItemException;
 import main.java.com.rental.common.exception.NotFoundException;
-import main.java.com.rental.item.dto.ItemUpdateRequest;
+import main.java.com.rental.item.dto.ItemCreateRequest;
 import main.java.com.rental.item.entity.Item;
 import main.java.com.rental.item.service.ItemService;
 import main.java.com.rental.item.service.ItemServiceImpl;
@@ -46,7 +46,7 @@ public class ItemController  {
 	}
 
 	// 물품 등록
-	public void itemInsert(Item item) {
+	public void itemInsert(ItemCreateRequest item) {
 		try {
 			itemService.itemInsert(item);
 			SuccessView.printMessage("물품이 등록되었습니다");

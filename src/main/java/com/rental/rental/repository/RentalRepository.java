@@ -27,7 +27,7 @@ public interface RentalRepository {
 	 * 대여 신청 현황 조회 status == 100
 	 */
 	public List<Rental> selectRentalRequestList(String userId) throws RentalException;
-
+	public List<Rental> selectRentalRequestListByLender() throws RentalException;
 	/**
 	 * 현재 대여 현황 조회 status == 110
 	 */
