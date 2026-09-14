@@ -8,14 +8,7 @@ public class Category {
 	public Category() {
 	}
 
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("카테고리 명: ");
-		builder.append(name);
-		return builder.toString();
-	}
-
+	
 	public Category(String code, String name) {
 		this.code = code;
 		this.name = name;
