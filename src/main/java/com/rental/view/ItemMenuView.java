@@ -68,15 +68,15 @@ public class ItemMenuView {
 			System.out.print("물품명: ");
 			String itemName = sc.nextLine().trim();
 
-			String num2 = selectCategory();
-			if (num2 == null) {
+			String smallCategoryCode = selectCategory();
+			if (smallCategoryCode == null) {
 				System.out.println("카테고리 선택이 취소되어 등록을 중단합니다.");
 				return;
 			}
 
 			Item item = new Item();
 			item.setItemName(itemName);
-			item.setNum2(num2); // TODO
+			item.setSmallCategoryCode(smallCategoryCode); // TODO
 			item.setStatus(true);
 			item.setLenderID(Session.getInstance().getLoginUser().getId());
 
