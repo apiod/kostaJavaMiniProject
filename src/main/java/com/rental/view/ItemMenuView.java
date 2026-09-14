@@ -145,6 +145,17 @@ public class ItemMenuView {
 			}
 		}
 		return null;
-
+	}
+	//처음 지정할 때
+	private String selectCategory() {
+		String category = null;
+		
+		return category;
+	}
+	//수정 할 때
+	private String selectCategory(Item item) {
+		String category = null;
+		
+		return category;
 	}
 }

@@ -42,16 +42,6 @@ public class MenuView {
 
 	}
 
-	
-
-	/**
-	 * 로그인한 사용자가 등록한 물품 목록 조회 및 출력
-	 */
-	private void printMyItemList() {
-		// MenuView(View) -> ItemController(Controller) -> ItemService(Service) ->
-		// ItemRepository(Repository)
-		itemController.itemSelect();
-	}
 
 	/**
 	 * [대여 메뉴] 물품 목록 조회 및 대여 신청
