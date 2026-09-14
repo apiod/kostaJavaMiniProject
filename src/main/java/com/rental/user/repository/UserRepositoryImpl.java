@@ -11,12 +11,15 @@ import main.java.com.rental.user.dto.UserLoginRequest;
 import main.java.com.rental.user.dto.UserSignUpRequest;
 import main.java.com.rental.user.entity.User;
 import main.java.com.rental.common.exception.NotFoundException;
+import main.java.com.rental.common.exception.PasswordUpdateException;
+import main.java.com.rental.common.exception.UserException;
 import main.java.com.rental.common.util.DBManager;
 
 public class UserRepositoryImpl implements UserRepository{
 	
 		@Override
-		public User login(UserLoginRequest request) throws SQLException {
+		//로그인 
+		public User login(UserLoginRequest request) throws UserException {
 			  User user = null;
 			  Connection con=null;
 			  PreparedStatement ps=null;
@@ -37,14 +40,19 @@ public class UserRepositoryImpl implements UserRepository{
 		        			, rs.getString("Phone"));
 		        }
 		        
-	        } finally {
+	        }  catch (SQLException e) {
+	        	e.printStackTrace();
+	        	throw new UserException();
+	        	
+		}finally {
 	        	DBManager.close(con, ps, rs);
 	        }
 			return user;
 		}
 		
 	 @Override
-	 public int signUp(UserSignUpRequest request) throws SQLException {
+	 //회원 가입 
+	 public int signUp(UserSignUpRequest request) throws UserException {
 		  Connection con=null;
 		  PreparedStatement ps=null;
 		  int result = 0;
@@ -64,7 +72,10 @@ public class UserRepositoryImpl implements UserRepository{
 					
 					result =  ps.executeUpdate();
 
-
+				  }  catch (SQLException e) {
+			        	e.printStackTrace();
+			        	throw new UserException();
+			        	
 				 } finally {
 					 DBManager.close(con, ps);
 				 
@@ -76,26 +87,27 @@ public class UserRepositoryImpl implements UserRepository{
 	 
 	 
 	 @Override
-	 public String findId(FindIdRequest  request) throws SQLException {
+	 //아이디 찾기 
+	 public String findId(FindIdRequest  request) throws UserException {
 	
-		
 			  Connection con=null;
 			  PreparedStatement ps=null;
 			  ResultSet rs=null;
 			  String result = null;
-			  
-			  
+			  		  
 			 try {
 			   con = DBManager.getConnection();
 			   ps= con.prepareStatement("select ID from User where Phone = ?");
-			   ps.setString(1, request.getPhoneNo());
-			   
+			   ps.setString(1, request.getPhoneNo()); 
 		        rs = ps.executeQuery(); 
-		        
 		        
 		        if(rs.next()) {
 		        	result = rs.getString("ID");
 		        }
+			   }  catch (SQLException e) {
+		        	e.printStackTrace();
+		        	throw new UserException();
+		        	
 	        }finally {
 	        	DBManager.close(con, ps, rs);
 	        }
@@ -104,8 +116,9 @@ public class UserRepositoryImpl implements UserRepository{
 		  
 	 
 	 @Override
+	 // 비밀번호 수정 
 	 public int updatePassword(PasswordChangeRequest request)
-	         throws SQLException {
+	         throws UserException {
 
 	    
 	         Connection con = null;
@@ -123,7 +136,9 @@ public class UserRepositoryImpl implements UserRepository{
 	             ps.setString(2, request.getPhoneNo());
 
 	             result = ps.executeUpdate();
-
+	         }  catch (SQLException e) {
+		        	e.printStackTrace();
+		        	throw new UserException();
 	         } finally {
 	             DBManager.close(con, ps);
 	         }

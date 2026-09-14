@@ -3,6 +3,7 @@ package main.java.com.rental.user.service;
 import java.sql.SQLException;
 
 import main.java.com.rental.common.exception.PasswordUpdateException;
+import main.java.com.rental.common.exception.UserException;
 import main.java.com.rental.common.exception.NotFoundException;
 import main.java.com.rental.session.Session;
 import main.java.com.rental.user.dto.FindIdRequest;
@@ -23,7 +24,7 @@ public class UserServiceImpl implements UserService{
 	
 	
 	@Override
-		public UserResponse login(UserLoginRequest request ) throws NotFoundException , SQLException{
+		public UserResponse login(UserLoginRequest request ) throws  UserException{
 			User user=userRepository.login(request);
 			if(user==null) {
 				throw new NotFoundException("회원님의 정보를 찾을 수 없습니다");
@@ -43,18 +44,19 @@ public class UserServiceImpl implements UserService{
 		}
 	
 	@Override
-	public int signUp(UserSignUpRequest request) throws SQLException {
+	public int signUp(UserSignUpRequest request) throws UserException {
 		int result = userRepository.signUp(request);
 		
 	    return result;
 	}
 	@Override
-	public String findId(FindIdRequest request) throws SQLException, NotFoundException {
+	public String findId(FindIdRequest request) throws UserException {
 		String result = userRepository.findId(request);
 		
 		if(result==null) {
 			throw new NotFoundException("회원님의 ID를 찾을 수 없습니다");
 		}
+	
 		
 		return result;
 		
@@ -62,7 +64,7 @@ public class UserServiceImpl implements UserService{
 	
 	@Override
 	public int updatePassword(PasswordChangeRequest request)
-	         throws SQLException, PasswordUpdateException {
+	         throws UserException {
 		int result = userRepository.updatePassword(request);
 		
 		if(result==0) {
