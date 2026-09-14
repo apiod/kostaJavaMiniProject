@@ -13,6 +13,7 @@ public class Category {
 		this.name = name;
 	}
 
+
 	public String getCode() {
 		return code;
 	}
@@ -27,5 +28,12 @@ public class Category {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	@Override
+	public String toString() {
+		return "[카테고리]\n"
+				+ "코드 : " + code + "\n"
+				+ "카테고리명 : " + name;
 	}
 }
