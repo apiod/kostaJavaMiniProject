@@ -10,7 +10,7 @@ import java.util.List;
 import main.java.com.rental.common.exception.ItemException;
 import main.java.com.rental.common.exception.NotFoundException;
 import main.java.com.rental.common.util.DBManager;
-import main.java.com.rental.item.dto.ItemUpdateRequest;
+import main.java.com.rental.item.dto.ItemCreateRequest;
 import main.java.com.rental.item.entity.Item;
 
 public class ItemRepositoryImpl implements ItemRepository {
@@ -95,7 +95,7 @@ public class ItemRepositoryImpl implements ItemRepository {
 
 	// 물품 신규 등록
 	@Override
-	public int itemInsert(Item item) throws ItemException {
+	public int itemInsert(ItemCreateRequest item) throws ItemException {
 		// 기본키(ItemNum) 자동 채번 환경에 맞추어 컬럼에서 제외하고 삽입
 		String sql = "INSERT INTO Item (ItemName, Status, SmallCategoryCode, LenderID) VALUES (?, ?, ?, ?)";
 

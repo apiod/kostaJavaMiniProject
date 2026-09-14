@@ -19,6 +19,7 @@ public class AfterLoginView {
 	 * [메인 메뉴] 로그인 성공 후 주요 서비스 진입
 	 */
 	public void mainMenu() {
+		ItemMenuView itemMenuView = new ItemMenuView();
 		boolean status = true;
 		while (status) {
 			System.out.println("\n========================================");
@@ -35,7 +36,7 @@ public class AfterLoginView {
 			try {
 				switch (sc.nextLine().trim()) {
 				case "1":
-					itemMenu();
+					itemMenuView.itemMenu();
 					break;
 				case "2":
 					rentItemMenu();

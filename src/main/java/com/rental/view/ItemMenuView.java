@@ -3,8 +3,10 @@ package main.java.com.rental.view;
 import java.util.List;
 import java.util.Scanner;
 
-import main.java.com.rental.common.exception.NotFoundException;
+import main.java.com.rental.category.controller.CategoryController;
+import main.java.com.rental.category.entity.Category;
 import main.java.com.rental.item.controller.ItemController;
+import main.java.com.rental.item.dto.ItemCreateRequest;
 import main.java.com.rental.item.entity.Item;
 import main.java.com.rental.session.Session;
 
@@ -13,9 +15,12 @@ public class ItemMenuView {
 	ItemController itemController = new ItemController();
 	String id = Session.getInstance().getLoginUser().getId();
 	List<Item> list = null;
-
+	CategoryController categoryController = new CategoryController();
+	List<Category> listBC = null;
+	
 	public ItemMenuView() {
 		list = itemController.selectByUserId(id);
+		listBC = categoryController.getBigCategories();
 		System.out.flush();// console.clear
 	}
 
@@ -74,11 +79,7 @@ public class ItemMenuView {
 				return;
 			}
 
-			Item item = new Item();
-			item.setItemName(itemName);
-			item.setSmallCategoryCode(smallCategoryCode); // TODO
-			item.setStatus(true);
-			item.setLenderID(Session.getInstance().getLoginUser().getId());
+			ItemCreateRequest item = new ItemCreateRequest(itemName, true, smallCategoryCode, id);
 
 			// Controller를 호출하여 Service의 itemInsert 로직을 수행
 			itemController.itemInsert(item);
@@ -110,9 +111,13 @@ public class ItemMenuView {
 			String updateName = sc.nextLine().trim();
 			item.setItemName(updateName);
 			
-			// TODO 카테고리 설정 하는 메소드 추가
-			String category = null;
-
+			//카테고리 선택
+			String smallCategoryCode = selectCategory(item);
+			if (smallCategoryCode == null) {
+				System.out.println("카테고리 선택이 취소되어 등록을 중단합니다.");
+				return;
+			}
+			
 			// Controller를 호출하여 Service의 itemUpdate 로직을 수행
 			itemController.itemUpdate(item);
 		} catch (NumberFormatException e) {
@@ -132,16 +137,22 @@ public class ItemMenuView {
 			// TODO 물품번호가 list.getItemNum에 있는지 확인해야한다.
 			System.out.print("삭제할 물품 번호: ");
 			int itemNo = Integer.parseInt(sc.nextLine().trim());
-
+			Item item = checkedItemNum(itemNo); 
 			// Controller를 호출하여 Service의 itemDelete 로직을 수행
-			itemController.itemDelete(itemNo, id);
+			itemController.itemDelete(item.getItemNum(), item.getLenderID());
 		} catch (NumberFormatException e) {
 			System.out.println("물품 번호는 숫자만 입력 가능합니다.");
 		}
 	}
 
+	
+	
+	/**
+	 * 리스트 순환 돌면서 해당하는 번호가 Item객체 반환
+	 * @param num
+	 * @return Item
+	 */
 	private Item checkedItemNum(int num) {
-		// 리스트 순환 돌면서 해당하는 번호가 있으면 트루 리턴
 		for (Item item : list) {
 			if (item.getItemNum() == num) {
 				return item;
@@ -152,19 +163,43 @@ public class ItemMenuView {
 	
 	//처음 지정할 때
 	private String selectCategory() {
-		String smallCategory=null;
-		
-		//TODO 카테고리 선택
-		
-		return smallCategory;
+		try {
+			//큰 카테고리값 저장 
+			String bigCategory = selectBigCategory();
+//			만약 null이면 사용자가 잘못된 입력으로 null리턴 
+			if (bigCategory==null)return null;
+			//bigCategory에 따른 ListSmallCategory출력
+			List<Category> listSc = categoryController.getSmallCategories(bigCategory);
+			SuccessView.printIndexCategoryList(listSc);
+			// 사용자 선택
+			System.out.print("카테고리 번호 >> ");
+			int sel = Integer.parseInt(sc.nextLine().trim());
+			
+			String smallCategory = listBC.get(sel-1).getCode();
+			return smallCategory;
+		} catch (NumberFormatException e) {
+			System.out.println("지원되지 않는 값을 입력했습니다.");
+			return null;
+		}
 	}
 	
 	//카테고리 변경할 때
 	private String selectCategory(Item item) {
-		String smallCategory=null;
-		
-		//TODO 카테고리 선택
-		
+		String smallCategory=selectCategory();
+		if(smallCategory==null) return null;
+		item.setSmallCategoryCode(smallCategory);
 		return smallCategory;
+	}
+	private String selectBigCategory() {
+		try {
+			SuccessView.printIndexCategoryList(listBC);
+			int sel = Integer.parseInt(sc.nextLine().trim());
+			System.out.print("카테고리 번호 >> ");
+			String bigCategory = listBC.get(sel-1).getCode();
+			return bigCategory;
+		} catch (NumberFormatException e) {
+			System.out.println("지원되지 않는 값을 입력했습니다.");
+			return null;
+		}
 	}
 }

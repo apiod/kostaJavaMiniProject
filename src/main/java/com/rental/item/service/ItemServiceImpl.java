@@ -6,7 +6,7 @@ import java.util.List;
 import main.java.com.rental.common.exception.InvalidRentalStatusException;
 import main.java.com.rental.common.exception.ItemException;
 import main.java.com.rental.common.exception.NotFoundException;
-import main.java.com.rental.item.dto.ItemUpdateRequest;
+import main.java.com.rental.item.dto.ItemCreateRequest;
 import main.java.com.rental.item.entity.Item;
 import main.java.com.rental.item.repository.ItemRepository;
 import main.java.com.rental.item.repository.ItemRepositoryImpl;
@@ -61,7 +61,7 @@ public class ItemServiceImpl implements ItemService {
 
     // 신규 물품 등록
     @Override
-    public void itemInsert(Item item) throws ItemException {
+    public void itemInsert(ItemCreateRequest item) throws ItemException {
         int result = ir.itemInsert(item);
 
         if (result == 0) {

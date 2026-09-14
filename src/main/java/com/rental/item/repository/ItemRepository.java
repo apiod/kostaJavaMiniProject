@@ -4,7 +4,7 @@ import java.util.List;
 
 import main.java.com.rental.common.exception.ItemException;
 import main.java.com.rental.common.exception.NotFoundException;
-import main.java.com.rental.item.dto.ItemUpdateRequest;
+import main.java.com.rental.item.dto.ItemCreateRequest;
 import main.java.com.rental.item.entity.Item;
 
 public interface ItemRepository {
@@ -19,7 +19,7 @@ public interface ItemRepository {
 	List<Item> itemSearch(String keyword) throws NotFoundException;
 
 	// 물품 신규 등록
-	int itemInsert(Item item) throws ItemException;
+	int itemInsert(ItemCreateRequest item) throws ItemException;
 
 	// 물품 정보 수정
 	int itemUpdate(Item item) throws ItemException;
