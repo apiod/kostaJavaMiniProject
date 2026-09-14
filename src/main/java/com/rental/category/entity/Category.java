@@ -33,8 +33,6 @@ public class Category {
 	
 	@Override
 	public String toString() {
-		return "[카테고리]\n"
-				+ "코드 : " + code + "\n"
-				+ "카테고리명 : " + name;
+		return name + " (" + code + ")";
 	}
 }

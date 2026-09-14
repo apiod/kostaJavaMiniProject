@@ -19,9 +19,9 @@ public class SuccessView {
 		list.forEach(System.out::println);
 	}
 	public static void printIndexCategoryList(List<Category> list) {
+		int i = 1;
 		for(Category entity: list) {
-			int i=1;
-			System.out.print((i++)+". "+entity);
+			System.out.println((i++) + ". " + entity);
 		}
 	}
 	
