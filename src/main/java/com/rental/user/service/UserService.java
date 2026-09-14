@@ -3,6 +3,7 @@ package main.java.com.rental.user.service;
 import java.sql.SQLException;
 
 import main.java.com.rental.common.exception.PasswordUpdateException;
+import main.java.com.rental.common.exception.UserException;
 import main.java.com.rental.common.exception.NotFoundException;
 import main.java.com.rental.user.dto.FindIdRequest;
 import main.java.com.rental.user.dto.PasswordChangeRequest;
@@ -15,22 +16,22 @@ public interface UserService {
 	/**
 	   * 로그인
 	   * */
-	UserResponse login(UserLoginRequest request) throws NotFoundException, SQLException;
+	UserResponse login(UserLoginRequest request) throws UserException;
 	
 	/**
 	   * 회원 가입 
 	   * */
-	int signUp(UserSignUpRequest request) throws SQLException;
+	int signUp(UserSignUpRequest request) throws UserException;
 	
 	/**
 	   * ID 찾기 
 	   * */
-	String findId(FindIdRequest request) throws NotFoundException, SQLException;
+	String findId(FindIdRequest request) throws UserException;
 
 	/**
 	   * 비밀번호 재설정 
 	   * */
-	int updatePassword(PasswordChangeRequest request) throws SQLException, PasswordUpdateException;
+	int updatePassword(PasswordChangeRequest request) throws UserException;
 
 
 	/**

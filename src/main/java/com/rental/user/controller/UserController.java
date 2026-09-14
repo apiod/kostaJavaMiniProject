@@ -4,6 +4,7 @@ import java.sql.SQLException;
 
 
 import main.java.com.rental.common.exception.PasswordUpdateException;
+import main.java.com.rental.common.exception.UserException;
 import main.java.com.rental.common.exception.NotFoundException;
 import main.java.com.rental.user.dto.FindIdRequest;
 import main.java.com.rental.user.dto.PasswordChangeRequest;
@@ -27,8 +28,8 @@ public class UserController {
 		   try {
 			   userService.login(request);
 				 SuccessView.printMessage("로그인이 완료 되었습니다.");
-				}catch (SQLException e) {
-					e.printStackTrace();
+				}catch (UserException e) {
+					e.getMessage();
 				}catch (NotFoundException e) {
 					FailView.FailMessage(e.getMessage());
 				}
@@ -43,8 +44,8 @@ public class UserController {
 		   try {
 			   userService.signUp(request);
 				 SuccessView.printMessage("회원 가입이 완료 되었습니다");
-				}catch (SQLException e) {
-					e.printStackTrace();
+				}catch (UserException e) {
+					e.getMessage();
 				
 				}
 		   
@@ -58,8 +59,8 @@ public class UserController {
 		   try {
 			  String result= userService.findId(request);
 				 SuccessView.printMessage("회원님의 ID = "+ result);
-				}catch (SQLException e) {
-					e.printStackTrace();
+				}catch (UserException e) {
+					e.getMessage();
 				
 				}catch (NotFoundException e) {
 					FailView.FailMessage(e.getMessage());
@@ -75,8 +76,8 @@ public class UserController {
 		   try {
 			   userService.updatePassword(request);
 				 SuccessView.printMessage("비밀 번호가 변경이 되었습니다");
-				}catch (SQLException e) {
-					e.printStackTrace();
+				}catch (UserException e) {
+					e.getMessage();
 				
 				}catch (PasswordUpdateException e) {
 					FailView.FailMessage(e.getMessage());
