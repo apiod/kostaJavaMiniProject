@@ -31,7 +31,7 @@ public class RentItemMenuView {
 			System.out.println("3. 대여 신청 승인"); // 대여 신청 대기중(100)인 리스트 출력, rentalController.approveRental(int rentalNum,int postNum)호출
 			System.out.println("4. 대여 신청 거절"); // 대여 신청 대기중 리스트 출력, rentalController.rejectRental(int rentalNum)호출
 			System.out.println("5. 대여 시작 처리(물품 인도 확인)"); // 메소드 만들어야함.
-			System.out.println("6. 대여 중 물품 조회"); // rentalController.selectCurrentRentalList(String userId)호출
+			System.out.println("6. 대여 중 물품 조회"); //borrowerid 기준
 			System.out.println("0. 메인 메뉴로 이동");
 			System.out.println("========================================");
 			System.out.print("메뉴 선택 >> ");
@@ -60,7 +60,7 @@ public class RentItemMenuView {
 				break;
 
 			case "6":
-				rentalController.selectCurrentRentalList(id);
+				rentalController.selectCurrentRentalList();
 				break;
 
 			case "0":
@@ -107,7 +107,7 @@ public class RentItemMenuView {
 	 */
 	private void approveRental() {
 
-		System.out.println();
+		System.out.flush();
 		System.out.println("========== 대여 신청 승인 ==========");
 
 		// 대여 신청 대기중인 목록 조회
@@ -162,7 +162,7 @@ public class RentItemMenuView {
 	 */
 	private void rejectRental() {
 
-	    System.out.println();
+	    System.out.flush();
 	    System.out.println("========== 대여 신청 거절 ==========");
 
 	    List<Rental> list = rentalController.selectByStatus(100);
@@ -212,7 +212,7 @@ public class RentItemMenuView {
 	 */
 	private void startRental() {
 
-	    System.out.println();
+	    System.out.flush();
 	    System.out.println("========== 대여 시작 처리 ==========");
 
 	    // 승인된 대여 목록

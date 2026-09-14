@@ -30,7 +30,7 @@ public interface RentalService {
 	/**
 	 * 현재 대여 현황 조회 status == 110
 	 */
-	public List<Rental> selectCurrentRentalList(String userId) throws RentalException, NotFoundException;
+	public List<Rental> selectCurrentRentalList() throws RentalException, NotFoundException;
 
 	/**
 	 * 과거 대여 이력 조회 status == 210 또는 211
@@ -67,5 +67,7 @@ public interface RentalService {
 	public List<Rental> selectByStatus(int status)throws NotFoundException, RentalException;
 
 	public void confirmRental(int rentalNum)throws RentalException;
+
+	public void requestReturn(int rentalNum)throws RentalException;
 
 }

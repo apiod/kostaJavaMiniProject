@@ -100,15 +100,22 @@ public class RentalController {
 	/**
 	 * 현재 대여 현황 조회 status == 110
 	 */
-	public void selectCurrentRentalList(String userId) {
+	public void selectCurrentRentalList() {
 		try {
-			List<Rental> list = rs.selectCurrentRentalList(userId);
+			List<Rental> list = rs.selectCurrentRentalList();
 			SuccessView.printEntityList(list);
 		} catch (Exception e) {
 			FailView.FailMessage(e.getMessage());
 		}
 	}
-
+	public void requestReturn(int rentalNum) {
+		try {
+			rs.requestReturn(rentalNum);
+			SuccessView.printMessage("반납 신청에 성공했습니다.");
+		} catch (Exception e) {
+			FailView.FailMessage(e.getMessage());
+		}
+	}
 	/**
 	 * 과거 대여 이력 조회 status == 210 또는 211
 	 */

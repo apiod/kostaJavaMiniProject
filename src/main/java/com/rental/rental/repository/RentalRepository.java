@@ -31,7 +31,7 @@ public interface RentalRepository {
 	/**
 	 * 현재 대여 현황 조회 status == 110
 	 */
-	public List<Rental> selectCurrentRentalList(String userId) throws RentalException;
+	public List<Rental> selectCurrentRentalList() throws RentalException;
 
 	/**
 	 * 과거 대여 이력 조회 status == 210 또는 211
@@ -86,4 +86,6 @@ public interface RentalRepository {
 	public List<Rental> selectByStatus(int status)throws RentalException;
 
 	public int confirmRental(int rentalNum)throws RentalException;
+
+	public int requestReturn(int rentalNum)throws RentalException;
 }

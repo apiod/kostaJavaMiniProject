@@ -56,6 +56,13 @@ public class RentalServiceImpl implements RentalService {
 	}
 	
 	
+	@Override
+	public void requestReturn(int rentalNum) throws RentalException {
+		int re = rr.requestReturn(rentalNum);
+		if(re==0)
+			throw new RentalException("반납 신청에 실패했습니다.");
+	}
+
 	//대여 시작
 	@Override
 	public void confirmRental(int rentalNum) throws RentalException {
@@ -89,8 +96,8 @@ public class RentalServiceImpl implements RentalService {
 	}
 
 	@Override
-	public List<Rental> selectCurrentRentalList(String userId) throws RentalException, NotFoundException {
-		List<Rental> re = rr.selectCurrentRentalList(userId);
+	public List<Rental> selectCurrentRentalList() throws RentalException, NotFoundException {
+		List<Rental> re = rr.selectCurrentRentalList();
 		if (re.isEmpty())
 			throw new NotFoundException();
 		return re;
