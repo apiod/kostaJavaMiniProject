@@ -82,4 +82,8 @@ public interface RentalRepository {
 	public List<Rental> getPendingApprovals() throws RentalException;
 
 	public Rental selectByRentalNum(int rentalNum)throws RentalException;
+
+	public List<Rental> selectByStatus(int status)throws RentalException;
+
+	public int confirmRental(int rentalNum)throws RentalException;
 }

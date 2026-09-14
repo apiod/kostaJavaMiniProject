@@ -9,20 +9,21 @@ import main.java.com.rental.session.Session;
 public class AfterLoginView {
 	Scanner sc = new Scanner(System.in);
 	RentalController rentalController = new RentalController();
-	//로그인 이후 실행될 뷰
+
+	// 로그인 이후 실행될 뷰
 	public AfterLoginView() {
-		//승인 대기중인 list보여주기
+		// 승인 대기중인 list 보여주기
 		rentalController.getPendingApprovals();
-		
+
 	}
-	
+
 	/**
 	 * [메인 메뉴] 로그인 성공 후 주요 서비스 진입
 	 */
 	public void mainMenu() {
 		ItemMenuView itemMenuView = new ItemMenuView();
-		RentItemMenuView rentItemMenuView =new RentItemMenuView();
-		while (Session.getInstance().getLoginUser()!=null) {
+		RentItemMenuView rentItemMenuView = new RentItemMenuView();
+		while (Session.getInstance().getLoginUser() != null) {
 			System.out.flush();
 			System.out.println("\n========================================");
 			System.out.println("\t\t\t메인 메뉴");
@@ -35,35 +36,28 @@ public class AfterLoginView {
 			System.out.println("----------------------------------------");
 			System.out.print("메뉴를 선택해주세요 >> ");
 
-			try {
-				switch (sc.nextLine().trim()) {
-				case "1":
-					itemMenuView.itemMenu();
-					break;
-//				case "2":
-//					//TODO post
-//					break;
-//				case "3":
-//					rentItemMenuView.rentItemMenu();
-//					break;
-//				case "4":
-//					returnItemMenu();
-//					break;
-				case "0":
-					System.out.println("로그아웃 되었습니다.");
-					Session.getInstance().logout();
-					return;
-				default:
-					System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
-					break;
-				}
-			} catch (NumberFormatException e) {
-				System.out.println("메뉴 번호는 숫자만 입력 가능합니다.");
-			} catch (NotFoundException e) {
-				System.out.println("[알림] " + e.getMessage());
-			} catch (Exception e) {
-				System.out.println("[시스템 오류] " + e.getMessage());
+			switch (sc.nextLine().trim()) {
+			case "1":
+				itemMenuView.itemMenu();
+				break;
+			case "2":
+//				 TODO post
+				break;
+			case "3":
+				rentItemMenuView.rentalMenu();
+				break;
+			case "4":
+//				returnItemMenu();
+				break;
+			case "0":
+				System.out.println("로그아웃 되었습니다.");
+				Session.getInstance().logout();
+				return;
+			default:
+				System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
+				break;
 			}
+
 		}
 	}
 }

@@ -45,6 +45,24 @@ public class RentalServiceImpl implements RentalService {
 			throw new NotFoundException();
 		return re;
 	}
+	
+
+	@Override
+	public List<Rental> selectByStatus(int status) throws NotFoundException, RentalException {
+		List<Rental> re = rr.selectByStatus(status);
+		if (re.isEmpty())
+			throw new NotFoundException();
+		return re;
+	}
+	
+	
+	//대여 시작
+	@Override
+	public void confirmRental(int rentalNum) throws RentalException {
+		int re = rr.confirmRental(rentalNum);
+		if(re==0)
+			throw new RentalException("대여에 실패했습니다.");
+	}
 
 	@Override
 	public List<Rental> selectLendList(String lenderId) throws RentalException, NotFoundException {

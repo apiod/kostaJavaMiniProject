@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import main.java.com.rental.common.exception.NotFoundException;
 import main.java.com.rental.common.exception.RentalException;
 import main.java.com.rental.common.util.DBManager;
 import main.java.com.rental.rental.entity.Rental;
@@ -83,11 +82,42 @@ public class RentalRepositoryImpl implements RentalRepository {
 				       Status,
 				       PostNum
 				FROM View_Rental_LenderID
-				WHERE LenderId = ? AND RentalNum
+				WHERE LenderId = ? AND RentalNum = ?
 				""";
 
 		try (Connection conn = DBManager.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 			ps.setString(1, Session.getInstance().getLoginUser().getId());
+			ps.setInt(2, rentalNum);
+			try (ResultSet rs = ps.executeQuery()) {
+				if (rs.next()) {
+					re = mapRental(rs);
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new RentalException();
+		}
+
+		return re;
+	}
+	
+	
+
+	@Override
+	public List<Rental> selectByStatus(int status) throws RentalException {
+		List<Rental> list = new ArrayList<>();
+		String sql = """
+				SELECT RentalNum,
+				       BorrowerId,
+				       Status,
+				       PostNum
+				FROM View_Rental_LenderID
+				WHERE LenderId = ? AND Status =?
+				""";
+
+		try (Connection conn = DBManager.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+			ps.setString(1, Session.getInstance().getLoginUser().getId());
+			ps.setInt(2, status);
 			try (ResultSet rs = ps.executeQuery()) {
 				while (rs.next()) {
 					list.add(mapRental(rs));
@@ -99,6 +129,22 @@ public class RentalRepositoryImpl implements RentalRepository {
 		}
 
 		return list;
+	}
+	
+	
+
+	@Override
+	public int confirmRental(int rentalNum) throws RentalException {
+		String sql = "UPDATE Rental " + "SET status = 110 " + "WHERE rentalNum = ? " + "AND status = 101";
+		int result = 0;
+		try (Connection conn = DBManager.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+			ps.setInt(1, rentalNum);
+			result = ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new RentalException();
+		}
+		return result;
 	}
 
 	@Override
@@ -129,6 +175,8 @@ public class RentalRepositoryImpl implements RentalRepository {
 
 		return list;
 	}
+	
+	
 
 	/**
 	 * 내가 빌린 물품 조회
