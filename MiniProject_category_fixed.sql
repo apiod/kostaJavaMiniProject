@@ -22,10 +22,10 @@ CREATE TABLE User (
 -- =========================================
 
 CREATE TABLE BigCategory (
-　BigCatregoryCode VARCHAR(10) NOT NULL,
+    BigCategoryCode VARCHAR(10) NOT NULL,
     Category VARCHAR(10) NOT NULL,
 
-    CONSTRAINT PK_BigCategory PRIMARY KEY (BigCatregoryCode)
+    CONSTRAINT PK_BigCategory PRIMARY KEY (BigCategoryCode)
 );
 
 
@@ -34,15 +34,15 @@ CREATE TABLE BigCategory (
 -- =========================================
 
 CREATE TABLE SmallCategory (
-    SmallCatregoryCode VARCHAR(10) NOT NULL,
-    BigCatregoryCode VARCHAR(10) NOT NULL,
+    SmallCategoryCode VARCHAR(10) NOT NULL,
+    BigCategoryCode VARCHAR(10) NOT NULL,
     Category VARCHAR(10) NOT NULL,
 
-    CONSTRAINT PK_SmallCategory PRIMARY KEY (SmallCatregoryCode),
+    CONSTRAINT PK_SmallCategory PRIMARY KEY (SmallCategoryCode),
 
     CONSTRAINT FK_SmallCategory_BigCategory
-        FOREIGN KEY (BigCatregoryCode)
-        REFERENCES BigCategory(BigCatregoryCode)
+        FOREIGN KEY (BigCategoryCode)
+        REFERENCES BigCategory(BigCategoryCode)
 );
 
 
@@ -55,7 +55,7 @@ CREATE TABLE Item (
     LenderID VARCHAR(20) NOT NULL,
     ItemName VARCHAR(50) NOT NULL,
     Status boolean NOT NULL DEFAULT TRUE,
-    Num2 VARCHAR(10) NOT NULL,
+    SmallCategoryCode VARCHAR(10) NOT NULL,
 
     CONSTRAINT PK_Item PRIMARY KEY (ItemNum),
 
@@ -64,8 +64,8 @@ CREATE TABLE Item (
         REFERENCES User(ID),
 
     CONSTRAINT FK_Item_SmallCategory
-        FOREIGN KEY (Num2)
-        REFERENCES SmallCategory(Num2)
+        FOREIGN KEY (SmallCategoryCode)
+        REFERENCES SmallCategory(SmallCategoryCode)
 );
 
 

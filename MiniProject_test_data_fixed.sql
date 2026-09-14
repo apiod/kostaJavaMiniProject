@@ -27,7 +27,7 @@ INSERT INTO User (ID, Name, PassWord, NickName, Phone) VALUES
 ('user20', '김다은', 'pass0120', '다은', '010-1000-0020');
 
 -- BigCategory (대분류 7개)
-INSERT INTO BigCategory (Num, Category) VALUES
+INSERT INTO BigCategory (BigCategoryCode, Category) VALUES
 ('B01', '컴퓨터'),
 ('B02', '모바일'),
 ('B03', '카메라'),
@@ -37,7 +37,7 @@ INSERT INTO BigCategory (Num, Category) VALUES
 ('B07', '주변기기');
 
 -- SmallCategory (대분류별 3~4개)
-INSERT INTO SmallCategory (Num2, Num, Category) VALUES
+INSERT INTO SmallCategory (SmallCategoryCode, BigCategoryCode, Category) VALUES
 ('S0101', 'B01', '노트북'),
 ('S0102', 'B01', '데스크탑'),
 ('S0103', 'B01', '태블릿'),
@@ -66,7 +66,7 @@ INSERT INTO SmallCategory (Num2, Num, Category) VALUES
 ('S0704', 'B07', '충전기');
 
 -- Item (사용자별 0~4개, 총 45개)
-INSERT INTO Item (ItemNum, LenderID, ItemName, Status, Num2) VALUES
+INSERT INTO Item (ItemNum, LenderID, ItemName, Status, SmallCategoryCode) VALUES
 (1, 'user01', 'LG 그램 16 2025', 1, 'S0101'),
 (2, 'user01', '갤럭시 워치7', 1, 'S0202'),
 (3, 'user01', 'GoPro HERO12 Black', 1, 'S0303'),
