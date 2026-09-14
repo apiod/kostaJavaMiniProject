@@ -110,21 +110,9 @@ public class RentItemMenuView {
 	    System.out.println("========== 대여 신청 승인 ==========");
 
 	    // 대여 신청 대기중인 목록 조회
-	    List<Rental> list = rentalController.selectRentalByStatus(100);
-
-	    if (list == null || list.isEmpty()) {
-	        System.out.println("대여 신청 대기중인 목록이 없습니다.");
-	        return;
-	    }
-
-	    for (Rental rental : list) {
-	        System.out.println(rental);
-	    }
-
-	    System.out.println();
+	    List<Rental> list = rentalController.selectRentalRequestListByLender();
 	    System.out.println("0. 이전 메뉴");
-
-	    System.out.print("승인할 대여 번호 : ");
+	    System.out.print("승인할 대여 번호 >> ");
 	    int rentalNum = Integer.parseInt(sc.nextLine());
 
 	    if (rentalNum == 0) {
@@ -138,7 +126,7 @@ public class RentItemMenuView {
 	        return;
 	    }
 
-	    if (rental.getStatus() != 100) {
+	    if (rental.getStatus().getCode() != 100) {
 	        System.out.println("대여 신청 대기중인 정보가 아닙니다.");
 	        return;
 	    }

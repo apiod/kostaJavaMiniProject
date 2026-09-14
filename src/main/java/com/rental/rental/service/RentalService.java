@@ -61,5 +61,7 @@ public interface RentalService {
 	public List<Rental> getPendingApprovals() throws RentalException;
 
 	public List<Rental> selectRentalRequestListByLender()throws RentalException;
+
+	public Rental selectByRentalNum(int rentalNum)throws NotFoundException, RentalException;
 ;
 }
