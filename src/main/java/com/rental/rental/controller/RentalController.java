@@ -23,15 +23,39 @@ public class RentalController {
 		}
 
 	}
+	
+	//rentalNum조회
 	public Rental selectByRentalNum(int rentalNum) {
-		Rental re = null;
 		try {
-			re = rs.selectByRentalNum(rentalNum);
+			Rental re = rs.selectByRentalNum(rentalNum);
+			return re;
 		} catch (Exception e) {
 			FailView.FailMessage(e.getMessage());
 		}
-		return re;
+		return null;
 	}
+	
+	//status 값 따라 출력
+	public List<Rental> selectByStatus(int status){
+		try {
+			List<Rental> list = rs.selectByStatus(status);
+			SuccessView.printEntityList(list);
+			return list;
+		} catch (Exception e) {
+			FailView.FailMessage(e.getMessage());
+		}
+		return null;
+	}
+	
+	public void confirmRental(int rentalNum) {
+		try {
+			rs.confirmRental(rentalNum);
+			SuccessView.printMessage("대여에 성공했습니다.");
+		} catch (RentalException e) {
+			FailView.FailMessage(e.getMessage());
+		}
+	}
+	
 	public void selectLendList(String lenderId) {
 		try {
 			List<Rental> list = rs.selectLendList(lenderId);
@@ -158,7 +182,7 @@ public class RentalController {
 		}
 	}
 	
-	//로그인시 현재 승인 대기중인 목록 출력
+	//로그인 시 현재 승인 대기중인 목록 출력
 	public void getPendingApprovals(){
 		try {
 			List<Rental> list = rs.getPendingApprovals();
