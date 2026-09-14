@@ -27,30 +27,8 @@ public class Post {
 		this.addr = addr;
 	}
 	
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("Post [postNum=");
-		builder.append(postNum);
-		builder.append(", itemNum=");
-		builder.append(itemNum);
-		builder.append(", title=");
-		builder.append(title);
-		builder.append(", content=");
-		builder.append(content);
-//		builder.append(", createAt=");
-//		builder.append(createAt);
-//		builder.append(", updateAt=");
-//		builder.append(updateAt);
-//		builder.append(", rentDate=");
-//		builder.append(rentDate);
-//		builder.append(", returnDate=");
-//		builder.append(returnDate);
-		builder.append(", addr=");
-		builder.append(addr);
-		builder.append("]");
-		return builder.toString();
-	}
+	
+	
 	public int getPostNum() {
 		return postNum;
 	}
@@ -105,6 +83,11 @@ public class Post {
 	public void setAddr(String addr) {
 		this.addr = addr;
 	}
-	
+	@Override
+	public String toString() {
+		return "[게시글 #" + postNum + "] " + title + "\n"
+				+ "물품번호 : " + itemNum + "  |  대여기간 : " + rentDate + " ~ " + returnDate + "\n"
+				+ "거래장소 : " + addr + "  |  내용 : " + content;
+	}
 	
 }

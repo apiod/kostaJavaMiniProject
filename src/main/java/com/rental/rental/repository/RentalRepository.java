@@ -27,7 +27,7 @@ public interface RentalRepository {
 	 * 대여 신청 현황 조회 status == 100
 	 */
 	public List<Rental> selectRentalRequestList(String userId) throws RentalException;
-
+	public List<Rental> selectRentalRequestListByLender() throws RentalException;
 	/**
 	 * 현재 대여 현황 조회 status == 110
 	 */
@@ -74,4 +74,10 @@ public interface RentalRepository {
 	 * 반납 완료 확인
 	 */
 	int confirmReturn(int rentalNum) throws RentalException;
+	
+	/**
+	 * 로그인시 status값이 100, 200인 대여 목록 리스트 출력
+	 * 로그인시 최초 1회
+	 */
+	public List<Rental> getPendingApprovals() throws RentalException;
 }

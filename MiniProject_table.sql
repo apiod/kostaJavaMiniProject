@@ -1,6 +1,6 @@
 create database mini;
 use mini;
-
+drop database mini;
 -- =========================================
 -- User
 -- =========================================
@@ -12,7 +12,8 @@ CREATE TABLE User (
     NickName VARCHAR(10) NOT NULL,
     Phone VARCHAR(13) NOT NULL,
 
-    CONSTRAINT PK_User PRIMARY KEY (ID)
+    CONSTRAINT PK_User PRIMARY KEY (ID),
+     CONSTRAINT UQ_User_Phone UNIQUE (Phone)
 );
 
 
@@ -21,10 +22,10 @@ CREATE TABLE User (
 -- =========================================
 
 CREATE TABLE BigCategory (
-    Num VARCHAR(10) NOT NULL,
+    BigCategoryCode VARCHAR(10) NOT NULL,
     Category VARCHAR(10) NOT NULL,
 
-    CONSTRAINT PK_BigCategory PRIMARY KEY (Num)
+    CONSTRAINT PK_BigCategory PRIMARY KEY (BigCategoryCode)
 );
 
 
@@ -33,15 +34,15 @@ CREATE TABLE BigCategory (
 -- =========================================
 
 CREATE TABLE SmallCategory (
-    Num2 VARCHAR(10) NOT NULL,
-    Num VARCHAR(10) NOT NULL,
+    SmallCategoryCode VARCHAR(10) NOT NULL,
+    BigCategoryCode VARCHAR(10) NOT NULL,
     Category VARCHAR(10) NOT NULL,
 
-    CONSTRAINT PK_SmallCategory PRIMARY KEY (Num2),
+    CONSTRAINT PK_SmallCategory PRIMARY KEY (SmallCategoryCode),
 
     CONSTRAINT FK_SmallCategory_BigCategory
-        FOREIGN KEY (Num)
-        REFERENCES BigCategory(Num)
+        FOREIGN KEY (BigCategoryCode)
+        REFERENCES BigCategory(BigCategoryCode)
 );
 
 
@@ -52,9 +53,9 @@ CREATE TABLE SmallCategory (
 CREATE TABLE Item (
     ItemNum INT NOT NULL AUTO_INCREMENT,
     LenderID VARCHAR(20) NOT NULL,
-    ItemName VARCHAR(10) NOT NULL,
+    ItemName VARCHAR(50) NOT NULL,
     Status boolean NOT NULL DEFAULT TRUE,
-    Num2 VARCHAR(10) NOT NULL,
+    SmallCategoryCode VARCHAR(10) NOT NULL,
 
     CONSTRAINT PK_Item PRIMARY KEY (ItemNum),
 
@@ -63,8 +64,8 @@ CREATE TABLE Item (
         REFERENCES User(ID),
 
     CONSTRAINT FK_Item_SmallCategory
-        FOREIGN KEY (Num2)
-        REFERENCES SmallCategory(Num2)
+        FOREIGN KEY (SmallCategoryCode)
+        REFERENCES SmallCategory(SmallCategoryCode)
 );
 
 
@@ -75,7 +76,7 @@ CREATE TABLE Item (
 CREATE TABLE Post (
     PostNum INT NOT NULL AUTO_INCREMENT,
     ItemNum INT NOT NULL,
-    Title VARCHAR(20) NOT NULL,
+    Title VARCHAR(50) NOT NULL,
     Content LONGTEXT NOT NULL,
     CreateAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     UpdateAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -101,7 +102,7 @@ CREATE TABLE Post (
 CREATE TABLE Rental (
     RentalNum INT NOT NULL AUTO_INCREMENT,
     BorrowerID VARCHAR(20) NOT NULL,
-    Status INT NOT NULL DEFAULT 0,
+    Status INT NOT NULL DEFAULT 100,
     Postnum INT NOT NULL,
 
     CONSTRAINT PK_Rental PRIMARY KEY (RentalNum),
@@ -128,7 +129,6 @@ CREATE TABLE Admin (
     CONSTRAINT PK_Admin PRIMARY KEY (ID)
 );
 
-DROP VIEW IF EXISTS v_rental_info;
 DROP VIEW IF EXISTS View_Rental_Info;
 
 CREATE or replace view View_Rental_Info AS
@@ -162,3 +162,24 @@ JOIN Post p ON r.PostNum = p.PostNum
 JOIN Item i ON p.ItemNum = i.ItemNum
 JOIN User l ON i.LenderID = l.ID;
 select *  from View_rental_lenderID;
+
+drop view View_Available_Post;
+CREATE OR REPLACE VIEW View_Available_Post AS
+SELECT 
+    p.PostNum,
+    p.Title,
+    p.Content,
+    p.RentDate,
+    p.ReturnDate,
+    p.Addr,
+    i.ItemName,
+    s.Category
+FROM Post p
+JOIN Item i
+    ON p.ItemNum = i.ItemNum
+JOIN SmallCategory s
+    ON i.SmallCategoryCode = s.SmallCategoryCode
+WHERE i.Status = TRUE;
+
+select * from item ;
+select * from rental where status in (101, 200, 201, 210, 211);

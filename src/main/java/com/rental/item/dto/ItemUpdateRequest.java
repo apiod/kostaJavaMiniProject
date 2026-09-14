@@ -5,16 +5,16 @@ public class ItemUpdateRequest {
 	private int itemNum;
 	private String itemName;
 	private boolean status;
-	private String num2;
+	private String smallCategoryCode;
 	
 	public ItemUpdateRequest() {}
 
-	public ItemUpdateRequest(int itemNum, String itemName, boolean status, String num2) {
+	public ItemUpdateRequest(int itemNum, String itemName, boolean status, String smallCategoryCode) {
 		super();
 		this.itemNum = itemNum;
 		this.itemName = itemName;
 		this.status = status;
-		this.num2 = num2;
+		this.smallCategoryCode = smallCategoryCode;
 	}
 
 	public int getItemNum() {
@@ -41,12 +41,12 @@ public class ItemUpdateRequest {
 		this.status = status;
 	}
 
-	public String getCatagory() {
-		return num2;
+	public String getSmallCategoryCode() {
+		return smallCategoryCode;
 	}
 
-	public void setCatagory(String catagory) {
-		this.num2 = catagory;
+	public void setSmallCategoryCode(String smallCategoryCode) {
+		this.smallCategoryCode = smallCategoryCode;
 	}
 
 	

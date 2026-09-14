@@ -3,6 +3,7 @@ package main.java.com.rental.post.repository;
 import java.util.List;
 
 import main.java.com.rental.common.exception.PostException;
+import main.java.com.rental.post.dto.AvailablePost;
 import main.java.com.rental.post.dto.PostCreate;
 import main.java.com.rental.post.dto.PostUpdate;
 import main.java.com.rental.post.entity.Post;
@@ -40,4 +41,9 @@ public interface PostRepository {
     List<Post> selectByRentDate(String rentDate)throws PostException;
 
     List<Post> selectByAddr(String addr)throws PostException;
+    
+    /**
+     * 대여 가능한 게시글 조회
+     */
+    List<AvailablePost> selectAvailablePost() throws PostException;
 }

@@ -3,6 +3,9 @@ package main.java.com.rental.post.controller;
 
 import java.util.List;
 
+import main.java.com.rental.common.exception.NotFoundException;
+import main.java.com.rental.common.exception.PostException;
+import main.java.com.rental.post.dto.AvailablePost;
 import main.java.com.rental.post.dto.PostCreate;
 import main.java.com.rental.post.dto.PostUpdate;
 import main.java.com.rental.post.entity.Post;
@@ -81,4 +84,14 @@ public class PostController {
 			FailView.FailMessage(e.getMessage());
 		}
 	}
+	public List<AvailablePost> selectAvailablePost() {
+		try {
+			List<AvailablePost> list = ps.selectAvailablePost();
+			return list;
+		} catch (PostException | NotFoundException e) {
+			FailView.FailMessage(e.getMessage());
+		}
+		return null;
+	}
+	
 }

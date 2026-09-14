@@ -2,35 +2,22 @@ package main.java.com.rental.item.dto;
 
 public class ItemCreateRequest {
 	
-	private int itemNum;
 	private String itemName;
 	private boolean status;
-	private String num2;
+	private String smallCategoryCode;
 	private String lenderID;
 	
 
 	public ItemCreateRequest() {}
 
 
-	public ItemCreateRequest(int itemNum, String itemName, boolean status, String num2, String lenderID) {
+	public ItemCreateRequest(String itemName, boolean status, String smallCategoryCode, String lenderID) {
 		super();
-		this.itemNum = itemNum;
 		this.itemName = itemName;
 		this.status = status;
-		this.num2 = num2;
+		this.smallCategoryCode = smallCategoryCode;
 		this.lenderID = lenderID;
 	}
-
-
-	public int getItemNum() {
-		return itemNum;
-	}
-
-
-	public void setItemNum(int itemNum) {
-		this.itemNum = itemNum;
-	}
-
 
 	public String getItemName() {
 		return itemName;
@@ -52,13 +39,13 @@ public class ItemCreateRequest {
 	}
 
 
-	public String getNum2() {
-		return num2;
+	public String getSmallCategoryCode() {
+		return smallCategoryCode;
 	}
 
 
-	public void setNum2(String num2) {
-		this.num2 = num2;
+	public void setSmallCategoryCode(String smallCategoryCode) {
+		this.smallCategoryCode = smallCategoryCode;
 	}
 
 

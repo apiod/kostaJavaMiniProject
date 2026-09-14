@@ -9,6 +9,7 @@ import java.util.List;
 
 import main.java.com.rental.common.exception.PostException;
 import main.java.com.rental.common.util.DBManager;
+import main.java.com.rental.post.dto.AvailablePost;
 import main.java.com.rental.post.dto.PostCreate;
 import main.java.com.rental.post.dto.PostUpdate;
 import main.java.com.rental.post.entity.Post;
@@ -212,6 +213,53 @@ public class PostRepositoryImpl implements PostRepository {
 	        throw new PostException();
 	    }
 	    return posts;
+	}
+	
+	@Override
+	public List<AvailablePost> selectAvailablePost() throws PostException {
+
+	    List<AvailablePost> list = new ArrayList<>();
+
+	    String sql = """
+	            SELECT PostNum,
+	                   Title,
+	                   Content,
+	                   RentDate,
+	                   ReturnDate,
+	                   Addr,
+	                   ItemName,
+	                   Category
+	            FROM View_Available_Post
+	            """;
+
+	    try (
+	        Connection conn = DBManager.getConnection();
+	        PreparedStatement ps = conn.prepareStatement(sql);
+	        ResultSet rs = ps.executeQuery()
+	    ) {
+
+	        while (rs.next()) {
+
+	            AvailablePost post = new AvailablePost();
+
+	            post.setPostNum(rs.getInt("PostNum"));
+	            post.setTitle(rs.getString("Title"));
+	            post.setContent(rs.getString("Content"));
+	            post.setRentDate(rs.getString("RentDate"));
+	            post.setReturnDate(rs.getString("ReturnDate"));
+	            post.setAddr(rs.getString("Addr"));
+	            post.setItemName(rs.getString("ItemName"));
+	            post.setCategory(rs.getString("Category"));
+
+	            list.add(post);
+	        }
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        throw new PostException();
+	    }
+
+	    return list;
 	}
 	
 	private Post mapPost(ResultSet rs) throws SQLException {

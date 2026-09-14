@@ -55,4 +55,11 @@ public interface RentalService {
 	public void rejectRental(int rentalNum) throws RentalException;
 
 	public void confirmReturn(int rentalNum) throws RentalException;
+	/**
+	 * 로그인시 대기중인 승인목록(status in(100,200)) 리스트
+	 */
+	public List<Rental> getPendingApprovals() throws RentalException;
+
+	public List<Rental> selectRentalRequestListByLender()throws RentalException;
+;
 }

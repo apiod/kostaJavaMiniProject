@@ -4,6 +4,7 @@ import java.util.List;
 
 import main.java.com.rental.common.exception.ItemException;
 import main.java.com.rental.common.exception.NotFoundException;
+import main.java.com.rental.item.dto.ItemCreateRequest;
 import main.java.com.rental.item.entity.Item;
 
 public interface ItemService {
@@ -18,7 +19,7 @@ public interface ItemService {
 	List<Item> itemSearch(String keyword) throws NotFoundException;
 
 	// 물품 등록
-	void itemInsert(Item item) throws ItemException;
+	void itemInsert(ItemCreateRequest item) throws ItemException;
 
 	// 물품 정보 수정 
 	void itemUpdate(Item item) throws ItemException, NotFoundException;
@@ -27,5 +28,9 @@ public interface ItemService {
 	void itemUpdateStatus(int itemNum, boolean status) throws ItemException, NotFoundException;
 
 	// 물품 삭제
-	void itemDelete(int itemNum) throws ItemException, NotFoundException;
+	void itemDelete(int itemNum,String userId) throws ItemException, NotFoundException;
+	
+	//사용자 아이디 기준 아이템 조회
+	List<Item> selectByUserId(String userId) throws ItemException, NotFoundException;
+	
 }

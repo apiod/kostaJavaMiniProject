@@ -1,7 +1,11 @@
 package main.java.com.rental.rental.controller;
 
+import java.util.List;
+
+import main.java.com.rental.common.exception.NotFoundException;
 import main.java.com.rental.common.exception.RentalException;
 import main.java.com.rental.rental.dto.RentalCreateRequest;
+import main.java.com.rental.rental.entity.Rental;
 import main.java.com.rental.rental.service.RentalService;
 import main.java.com.rental.rental.service.RentalServiceImpl;
 import main.java.com.rental.view.FailView;
@@ -22,7 +26,8 @@ public class RentalController {
 
 	public void selectLendList(String lenderId) {
 		try {
-			rs.selectLendList(lenderId);
+			List<Rental> list = rs.selectLendList(lenderId);
+			SuccessView.printEntityList(list);
 		} catch (Exception e) {
 			FailView.FailMessage(e.getMessage());
 		}
@@ -30,7 +35,8 @@ public class RentalController {
 
 	public void selectBorrowList(String borrowerId) {
 		try {
-			rs.selectBorrowList(borrowerId);
+			List<Rental> list = rs.selectBorrowList(borrowerId);
+			SuccessView.printEntityList(list);
 		} catch (Exception e) {
 			FailView.FailMessage(e.getMessage());
 		}
@@ -41,10 +47,22 @@ public class RentalController {
 	 */
 	public void selectRentalRequestList(String userId) {
 		try {
-			rs.selectRentalRequestList(userId);
+			List<Rental> list = rs.selectRentalRequestList(userId);
+			SuccessView.printEntityList(list);
 		} catch (Exception e) {
 			FailView.FailMessage(e.getMessage());
 		}
+	}
+	public List<Rental> selectRentalRequestListByLender() {
+		List<Rental> list = null;
+		try {
+			list = rs.selectRentalRequestListByLender();
+			SuccessView.printEntityList(list);
+		} catch (Exception e) {
+			FailView.FailMessage(e.getMessage());
+		}
+		return list;
+		
 	}
 
 	/**
@@ -52,7 +70,8 @@ public class RentalController {
 	 */
 	public void selectCurrentRentalList(String userId) {
 		try {
-			rs.selectCurrentRentalList(userId);
+			List<Rental> list = rs.selectCurrentRentalList(userId);
+			SuccessView.printEntityList(list);
 		} catch (Exception e) {
 			FailView.FailMessage(e.getMessage());
 		}
@@ -63,7 +82,8 @@ public class RentalController {
 	 */
 	public void selectRentalHistoryList(String userId) {
 		try {
-			rs.selectRentalHistoryList(userId);
+			List<Rental> list = rs.selectRentalHistoryList(userId);
+			SuccessView.printEntityList(list);
 		} catch (Exception e) {
 			FailView.FailMessage(e.getMessage());
 		}
@@ -78,7 +98,8 @@ public class RentalController {
 	 */
 	public void selectRequestList(String userId) {
 		try {
-			rs.selectRequestList(userId);
+			List<Rental> list = rs.selectRequestList(userId);
+			SuccessView.printEntityList(list);
 		} catch (Exception e) {
 			FailView.FailMessage(e.getMessage());
 		}
@@ -86,7 +107,8 @@ public class RentalController {
 
 	public void selectRentalRequestHistory(String userId) {
 		try {
-			rs.selectRentalRequestHistory(userId);
+			List<Rental> list = rs.selectRentalRequestHistory(userId);
+			SuccessView.printEntityList(list);
 		} catch (Exception e) {
 			FailView.FailMessage(e.getMessage());
 		}
@@ -94,7 +116,8 @@ public class RentalController {
 
 	public void selectReturnRequestHistory(String userId) {
 		try {
-			rs.selectReturnRequestHistory(userId);
+			List<Rental> list = rs.selectReturnRequestHistory(userId);
+			SuccessView.printEntityList(list);
 		} catch (Exception e) {
 			FailView.FailMessage(e.getMessage());
 		}
@@ -126,4 +149,17 @@ public class RentalController {
 			FailView.FailMessage(e.getMessage());
 		}
 	}
+	
+	//로그인시 현재 승인 대기중인 목록 출력
+	public void getPendingApprovals(){
+		try {
+			List<Rental> list = rs.getPendingApprovals();
+			SuccessView.printPendingApprovals(list);
+		} catch (NotFoundException e) {
+			//아무것도 없으면 출력안함.
+		}catch (RentalException e) {
+			FailView.FailMessage(e.getMessage());
+		}
+	}
+	
 }

@@ -10,6 +10,7 @@ import java.util.List;
 import main.java.com.rental.common.exception.ItemException;
 import main.java.com.rental.common.exception.NotFoundException;
 import main.java.com.rental.common.util.DBManager;
+import main.java.com.rental.item.dto.ItemCreateRequest;
 import main.java.com.rental.item.entity.Item;
 
 public class ItemRepositoryImpl implements ItemRepository {
@@ -94,9 +95,9 @@ public class ItemRepositoryImpl implements ItemRepository {
 
 	// 물품 신규 등록
 	@Override
-	public int itemInsert(Item item) throws ItemException {
+	public int itemInsert(ItemCreateRequest item) throws ItemException {
 		// 기본키(ItemNum) 자동 채번 환경에 맞추어 컬럼에서 제외하고 삽입
-		String sql = "INSERT INTO Item (ItemName, Status, Num2, LenderID) VALUES (?, ?, ?, ?)";
+		String sql = "INSERT INTO Item (ItemName, Status, SmallCategoryCode, LenderID) VALUES (?, ?, ?, ?)";
 
 		Connection con = null;
 		PreparedStatement ps = null;
@@ -106,7 +107,7 @@ public class ItemRepositoryImpl implements ItemRepository {
 			ps = con.prepareStatement(sql);
 			ps.setString(1, item.getItemName());
 			ps.setBoolean(2, item.isStatus());
-			ps.setString(3, item.getNum2());
+			ps.setString(3, item.getSmallCategoryCode());
 			ps.setString(4, item.getLenderID());
 
 			result = ps.executeUpdate();
@@ -126,17 +127,16 @@ public class ItemRepositoryImpl implements ItemRepository {
 		PreparedStatement ps = null;
 		int result = 0;
 
-		String sql = "UPDATE Item SET ItemName = ?, Status = ?, Num2 = ?, LenderID = ? WHERE ItemNum = ?";
+		String sql = "UPDATE Item SET ItemName = ?, SmallCategoryCode = ? WHERE ItemNum = ? AND LenderID = ?";
 
 		try {
 			con = DBManager.getConnection();
 			ps = con.prepareStatement(sql);
 
 			ps.setString(1, item.getItemName());
-			ps.setBoolean(2, item.isStatus());
-			ps.setString(3, item.getNum2());
+			ps.setString(2, item.getSmallCategoryCode());
+			ps.setInt(3, item.getItemNum());
 			ps.setString(4, item.getLenderID());
-			ps.setInt(5, item.getItemNum());
 
 			result = ps.executeUpdate();
 		} catch (SQLException e) {
@@ -150,13 +150,15 @@ public class ItemRepositoryImpl implements ItemRepository {
 
 	// 물품 삭제
 	@Override
-	public int itemDelete(int itemNum) throws ItemException {
+	public int itemDelete(int itemNum, String userId) throws ItemException {
 		Connection con = null;
 		PreparedStatement ps = null;
 		try {
 			con = DBManager.getConnection();
-			ps = con.prepareStatement("DELETE FROM Item WHERE ItemNum = ?");
+			ps = con.prepareStatement("DELETE FROM Item WHERE ItemNum = ? AND LenderID = ?");
 			ps.setInt(1, itemNum);
+			ps.setString(2, userId);
+			
 			return ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -184,14 +186,41 @@ public class ItemRepositoryImpl implements ItemRepository {
 			DBManager.close(con, ps);
 		}
 	}
+	
+	//사용자 아이디 기준 아이템 리스트 조회
+	@Override
+	public List<Item> selectByUserId(String userId) throws ItemException {
+		String sql = "SELECT * FROM Item WHERE LenderID = ?";
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		List<Item> list = new ArrayList<>();
+		try {
+			con = DBManager.getConnection();
+			ps = con.prepareStatement(sql);
+			ps.setString(1, userId);
+			rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				list.add(mapRow(rs));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new ItemException();
+		} finally {
+			DBManager.close(con, ps, rs);
+		}
+		return list;
+	}
 
 	// ResultSet 결과 행을 Item 엔티티 객체로 변환
-	private static Item mapRow(ResultSet rs) throws SQLException {
+	private Item mapRow(ResultSet rs) throws SQLException {
 		Item item = new Item();
 		item.setItemNum(rs.getInt("ItemNum"));
 		item.setItemName(rs.getString("ItemName"));
 		item.setStatus(rs.getBoolean("Status"));
-		item.setNum2(rs.getString("Num2"));
+		item.setSmallCategoryCode(rs.getString("SmallCategoryCode"));
 		item.setLenderID(rs.getString("LenderID"));
 		return item;
 	}

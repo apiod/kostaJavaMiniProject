@@ -20,22 +20,7 @@ public class User {
 	}
 
 
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("User [id=");
-		builder.append(id);
-		builder.append(", password=");
-		builder.append(password);
-		builder.append(", nickName=");
-		builder.append(nickName);
-		builder.append(", name=");
-		builder.append(name);
-		builder.append(", phoneNo=");
-		builder.append(phoneNo);
-		builder.append("]");
-		return builder.toString();
-	}
+	
 
 	public String getPassword() {
 		return password;
@@ -85,5 +70,12 @@ public class User {
 	public void setId(String id) {
 		this.id = id;
 	}
+	@Override
+	public String toString() {
+		return "[회원 정보]\n"
+				+ "아이디 : " + id + "  |  닉네임 : " + nickName + "\n"
+				+ "이름 : " + name + "  |  연락처 : " + phoneNo;
+	}
+
 
 }

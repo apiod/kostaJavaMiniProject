@@ -3,6 +3,7 @@ package main.java.com.rental.user.service;
 import java.sql.SQLException;
 
 import main.java.com.rental.common.exception.PasswordUpdateException;
+import main.java.com.rental.common.exception.UserException;
 import main.java.com.rental.common.exception.NotFoundException;
 import main.java.com.rental.session.Session;
 import main.java.com.rental.user.dto.FindIdRequest;
@@ -14,66 +15,61 @@ import main.java.com.rental.user.entity.User;
 import main.java.com.rental.user.repository.UserRepository;
 import main.java.com.rental.user.repository.UserRepositoryImpl;
 
+public class UserServiceImpl implements UserService {
 
-public class UserServiceImpl implements UserService{
-	
 	private Session session = Session.getInstance();
 	UserRepository userRepository = new UserRepositoryImpl();
-	
-	
-	
-	@Override
-		public UserResponse login(UserLoginRequest request ) throws NotFoundException , SQLException{
-			User user=userRepository.login(request);
-			if(user==null) {
-				throw new NotFoundException("회원님의 정보를 찾을 수 없습니다");
-			}
-			
-			UserResponse response = new UserResponse(
-				    user.getId(),
-				    user.getNickName(),
-				    user.getName(),
-				    user.getPhoneNo()
-				);
-			
-			session.setLoginUser(response);
 
-			return response;
-			
+	@Override
+	public UserResponse login(UserLoginRequest request) throws UserException {
+		User user = userRepository.login(request);
+		if (user == null) {
+			throw new NotFoundException("회원님의 정보를 찾을 수 없습니다");
 		}
-	
-	@Override
-	public int signUp(UserSignUpRequest request) throws SQLException {
-		int result = userRepository.signUp(request);
-		
-	    return result;
+
+		UserResponse response = new UserResponse(user.getId(), user.getNickName(), user.getName(), user.getPhoneNo());
+
+		session.setLoginUser(response);
+
+		return response;
+
 	}
+
 	@Override
-	public String findId(FindIdRequest request) throws SQLException, NotFoundException {
-		String result = userRepository.findId(request);
-		
-		if(result==null) {
+	public int signUp(UserSignUpRequest request) throws UserException {
+		int result = userRepository.signUp(request);
+		if (result == 0) {
+			throw new UserException("ID가 중복입니다. 다시 입력해주세요.");
+		}
+		return result;
+	}
+
+	@Override
+	public String findId(String phone) throws UserException {
+		String result = userRepository.findId(phone);
+
+		if (result == null) {
 			throw new NotFoundException("회원님의 ID를 찾을 수 없습니다");
 		}
-		
+
 		return result;
-		
+
 	}
-	
+
 	@Override
-	public int updatePassword(PasswordChangeRequest request)
-	         throws SQLException, PasswordUpdateException {
+	public int updatePassword(PasswordChangeRequest request) throws UserException {
 		int result = userRepository.updatePassword(request);
-		
-		if(result==0) {
+
+		if (result == 0) {
 			throw new PasswordUpdateException("정보를 다시 입력해 주세요");
-		
+
 		}
 		return result;
 	}
+
 	@Override
 	public void logout() {
-	    session.logout();
+		session.logout();
 	}
-	
-	}
+
+}

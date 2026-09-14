@@ -4,6 +4,7 @@ import java.util.List;
 
 import main.java.com.rental.common.exception.ItemException;
 import main.java.com.rental.common.exception.NotFoundException;
+import main.java.com.rental.item.dto.ItemCreateRequest;
 import main.java.com.rental.item.entity.Item;
 import main.java.com.rental.item.service.ItemService;
 import main.java.com.rental.item.service.ItemServiceImpl;
@@ -45,7 +46,7 @@ public class ItemController  {
 	}
 
 	// 물품 등록
-	public void itemInsert(Item item) {
+	public void itemInsert(ItemCreateRequest item) {
 		try {
 			itemService.itemInsert(item);
 			SuccessView.printMessage("물품이 등록되었습니다");
@@ -75,12 +76,24 @@ public class ItemController  {
 	}
 
 	// 물품 삭제
-	public void itemDelete(int itemNum) {
+	public void itemDelete(int itemNum,String userId) {
 		try {
-			itemService.itemDelete(itemNum);
+			itemService.itemDelete(itemNum, userId);
 			SuccessView.printMessage("물품이 삭제되었습니다");
 		} catch (ItemException e) {
 			FailView.FailMessage(e.getMessage());
 		}
+	}
+	
+	//유저 아이디 기준 아이템 정보
+	public List<Item> selectByUserId(String userId){
+		List<Item> list=null;
+		try {
+			list = itemService.selectByUserId(userId);
+			SuccessView.printEntityList(list);
+		} catch (NotFoundException | ItemException e) {
+			FailView.FailMessage(e.getMessage());
+		}
+		return list;
 	}
 }
