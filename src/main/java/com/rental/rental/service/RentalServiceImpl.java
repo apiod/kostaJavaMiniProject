@@ -39,6 +39,14 @@ public class RentalServiceImpl implements RentalService {
 
  
 	@Override
+	public Rental selectByRentalNum(int rentalNum) throws NotFoundException, RentalException {
+		Rental re = rr.selectByRentalNum(rentalNum);
+		if (re ==null)
+			throw new NotFoundException();
+		return re;
+	}
+
+	@Override
 	public List<Rental> selectLendList(String lenderId) throws RentalException, NotFoundException {
 		List<Rental> re = rr.selectLendList(lenderId);
 		if (re.isEmpty())

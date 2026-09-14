@@ -73,6 +73,33 @@ public class RentalRepositoryImpl implements RentalRepository {
 
 		return list;
 	}
+	
+	@Override
+	public Rental selectByRentalNum(int rentalNum) throws RentalException {
+		Rental re = null;
+		String sql = """
+				SELECT RentalNum,
+				       BorrowerId,
+				       Status,
+				       PostNum
+				FROM View_Rental_LenderID
+				WHERE LenderId = ? AND RentalNum
+				""";
+
+		try (Connection conn = DBManager.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+			ps.setString(1, Session.getInstance().getLoginUser().getId());
+			try (ResultSet rs = ps.executeQuery()) {
+				while (rs.next()) {
+					list.add(mapRental(rs));
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new RentalException();
+		}
+
+		return list;
+	}
 
 	@Override
 	public List<Rental> selectLendList(String lenderId) throws RentalException {

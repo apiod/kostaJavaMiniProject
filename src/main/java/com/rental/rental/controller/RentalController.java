@@ -23,7 +23,15 @@ public class RentalController {
 		}
 
 	}
-
+	public Rental selectByRentalNum(int rentalNum) {
+		Rental re = null;
+		try {
+			re = rs.selectByRentalNum(rentalNum);
+		} catch (Exception e) {
+			FailView.FailMessage(e.getMessage());
+		}
+		return re;
+	}
 	public void selectLendList(String lenderId) {
 		try {
 			List<Rental> list = rs.selectLendList(lenderId);
@@ -125,9 +133,9 @@ public class RentalController {
 
 	public void approveRental(int rentalNum, int postNum) {
 		try {
-			rs.approveRental(rentalNum, postNum);
-			SuccessView.printMessage("대여 승인에 성공했습니다.");
-		} catch (RentalException e) {
+			if(rs.approveRental(rentalNum, postNum))
+				SuccessView.printMessage("대여 승인에 성공했습니다.");
+		} catch (Exception e) {
 			FailView.FailMessage(e.getMessage());
 		}
 	}

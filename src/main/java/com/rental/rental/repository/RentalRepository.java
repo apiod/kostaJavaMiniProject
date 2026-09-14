@@ -80,4 +80,6 @@ public interface RentalRepository {
 	 * 로그인시 최초 1회
 	 */
 	public List<Rental> getPendingApprovals() throws RentalException;
+
+	public Rental selectByRentalNum(int rentalNum)throws RentalException;
 }
