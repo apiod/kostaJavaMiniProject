@@ -24,17 +24,17 @@ public class PostMenuView {
 	public void postMenu() {
 		System.out.flush();
 		while (true) {
+			System.out.println("\n========================================");
+			System.out.println("              게시글 관리 메뉴");
 			System.out.println("========================================");
-			System.out.println("\t\t\t게시글 메뉴");
-			System.out.println("========================================");
-			System.out.println("1. 등록");
-			System.out.println("2. 수정");
-			System.out.println("3. 삭제");
-			System.out.println("4. 게시글 목록 조회");
-			System.out.println("5. 게시글 검색");
-			System.out.println("0. 돌아가기");
-			System.out.println("==============================");
-			System.out.print("메뉴 선택 : ");
+			System.out.println(" 1. 새 게시글 등록");
+			System.out.println(" 2. 등록 게시글 정보 수정");
+			System.out.println(" 3. 등록 게시글 삭제");
+			System.out.println(" 4. 게시글 목록 조회");
+			System.out.println(" 5. 게시글 검색");
+			System.out.println(" 0. 상위 메뉴로 이동");
+			System.out.println("----------------------------------------");
+			System.out.print("메뉴를 선택해주세요 >> ");
 
 			switch (sc.nextLine().trim()) {
 
@@ -62,7 +62,7 @@ public class PostMenuView {
 				return;
 
 			default:
-				System.out.println("잘못된 메뉴입니다.");
+				System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
 			}
 		}
 	}
@@ -73,12 +73,12 @@ public class PostMenuView {
 	private void createPost() {
 
 		System.out.flush();
-		System.out.println("========== 게시글 등록 ==========");
+		System.out.println("\n[게시글 등록]");
 
 		List<Item> list = new ItemController().selectByUserId(Session.getInstance().getLoginUser().getId());
 
-		System.out.println("0. 돌아가기");
-		System.out.print("물품번호 >> ");
+		System.out.println(" 0. 상위 메뉴로 이동");
+		System.out.print("물품 번호를 입력해주세요 >> ");
 		int itemNum = 0;
 		try {
 			itemNum = Integer.parseInt(sc.nextLine());
@@ -127,11 +127,10 @@ public class PostMenuView {
 	 */
 	private void updatePost() {
 
-		System.out.println();
-		System.out.println("========== 게시글 수정 ==========");
+		System.out.println("\n[게시글 수정]");
 		List<Post> list = postController.selectById();
-		System.out.println("0. 돌아가기");
-		System.out.print("수정할 게시글 번호 >> ");
+		System.out.println(" 0. 상위 메뉴로 이동");
+		System.out.print("수정할 게시글 번호를 입력해주세요 >> ");
 		int postNum = 0;
 		try {
 			postNum = Integer.parseInt(sc.nextLine());
@@ -182,11 +181,10 @@ public class PostMenuView {
 	 */
 	private void deletePost() {
 
-		System.out.println();
-		System.out.println("========== 게시글 삭제 ==========");
+		System.out.println("\n[게시글 삭제]");
 		List<Post> list = postController.selectById();
-		System.out.println("0. 돌아가기");
-		System.out.print("삭제할 게시글 번호 : ");
+		System.out.println(" 0. 상위 메뉴로 이동");
+		System.out.print("삭제할 게시글 번호를 입력해주세요 >> ");
 
 		int postNum = 0;
 		try {
@@ -222,8 +220,7 @@ public class PostMenuView {
 	 */
 	private void selectPostList() {
 
-		System.out.println();
-		System.out.println("========== 게시글 목록 조회 ==========");
+		System.out.println("\n[게시글 목록 조회]");
 		postController.selectAll();
 
 	}
@@ -234,17 +231,18 @@ public class PostMenuView {
 	private void searchPost() {
 		System.out.flush();
 		while (true) {
-			System.out.println();
-			System.out.println("========== 게시글 검색 ==========");
-			System.out.println("1. 물품번호로 검색");
-			System.out.println("2. 제목으로 검색");
-			System.out.println("3. 내용으로 검색");
-			System.out.println("4. 대여일로 검색");
-			System.out.println("5. 주소로 검색");
-			System.out.println("0. 이전 메뉴");
-			System.out.println("==============================");
+			System.out.println("\n========================================");
+			System.out.println("              게시글 검색 메뉴");
+			System.out.println("========================================");
+			System.out.println(" 1. 물품 번호로 검색");
+			System.out.println(" 2. 제목으로 검색");
+			System.out.println(" 3. 내용으로 검색");
+			System.out.println(" 4. 대여일로 검색");
+			System.out.println(" 5. 주소로 검색");
+			System.out.println(" 0. 상위 메뉴로 이동");
+			System.out.println("----------------------------------------");
 
-			System.out.print("검색 방법 선택 : ");
+			System.out.print("검색 방법을 선택해주세요 >> ");
 
 			switch (sc.nextLine().trim()) {
 
@@ -272,7 +270,7 @@ public class PostMenuView {
 				return;
 
 			default:
-				System.out.println("잘못된 메뉴입니다.");
+				System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
 			}
 		}
 	}

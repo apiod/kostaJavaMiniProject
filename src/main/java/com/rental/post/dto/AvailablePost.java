@@ -75,6 +75,14 @@ public class AvailablePost {
 	public void setCategory(String category) {
 		this.category = category;
 	}
+
+	@Override
+	public String toString() {
+		return "[대여 가능 게시글 #" + postNum + "] " + title + "\n"
+				+ "물품명 : " + itemName + "  |  카테고리 : " + category + "\n"
+				+ "대여기간 : " + rentDate + " ~ " + returnDate + "\n"
+				+ "거래장소 : " + addr + "  |  내용 : " + content;
+	}
     
     
 }
