@@ -60,7 +60,7 @@ public class RentItemMenuView {
 				break;
 
 			case "6":
-				rentalController.selectCurrentRentalList(id);
+				rentalController.selectCurrentRentalList();
 				break;
 
 			case "0":
@@ -108,7 +108,6 @@ public class RentItemMenuView {
 	private void approveRental() {
 
 		System.out.println("\n[대여 신청 승인]");
-
 		// 대여 신청 대기중인 목록 조회
 		List<Rental> list = rentalController.selectByStatus(100);
 		if (list == null || list.isEmpty()) {
@@ -160,7 +159,6 @@ public class RentItemMenuView {
 	 * 선택한 rentalNum을 Controller 로 전달
 	 */
 	private void rejectRental() {
-
 	    System.out.println("\n[대여 신청 거절]");
 
 	    List<Rental> list = rentalController.selectByStatus(100);
@@ -208,7 +206,6 @@ public class RentItemMenuView {
 	 * 물품을 실제로 인도했는지 확인 후 대여 시작 처리
 	 */
 	private void startRental() {
-
 	    System.out.println("\n[대여 시작 처리]");
 
 	    // 승인된 대여 목록

@@ -251,7 +251,7 @@ public class RentalRepositoryImpl implements RentalRepository {
 	 * 실제 대여 중인 상태 = 110
 	 */
 	@Override
-	public List<Rental> selectCurrentRentalList(String userId) throws RentalException {
+	public List<Rental> selectCurrentRentalList() throws RentalException {
 		List<Rental> list = new ArrayList<>();
 		String sql = """
 				SELECT RentalNum,
@@ -259,16 +259,12 @@ public class RentalRepositoryImpl implements RentalRepository {
 				       Status,
 				       PostNum
 				FROM View_Rental_LenderID
-				WHERE Status = 110
-				  AND (BorrowerId = ?
-				        OR LenderId = ?)
+				WHERE Status = 110 AND BorrowerId = ?
 				""";
 
-		try (Connection conn = DBManager.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
-
-			ps.setString(1, userId);
-			ps.setString(2, userId);
-
+		try (Connection conn = DBManager.getConnection(); 
+				PreparedStatement ps = conn.prepareStatement(sql)) {
+			ps.setString(1, Session.getInstance().getLoginUser().getId());
 			try (ResultSet rs = ps.executeQuery()) {
 
 				while (rs.next()) {
@@ -520,6 +516,32 @@ public class RentalRepositoryImpl implements RentalRepository {
 		Connection con = null;
 		PreparedStatement ps = null;
 		String sql = "UPDATE Rental " + "SET status = 211 " + "WHERE rentalNum = ? " + "AND status = 210";
+
+		try {
+			con = DBManager.getConnection();
+			ps = con.prepareStatement(sql);
+
+			ps.setInt(1, rentalNum);
+
+			int result = ps.executeUpdate();
+			return result;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new RentalException();
+
+		} finally {
+			DBManager.close(con, ps);
+		}
+	}
+	
+
+	@Override
+	public int requestReturn(int rentalNum) throws RentalException {
+		Connection con = null;
+		PreparedStatement ps = null;
+		//TODO id 확인
+		String sql = "UPDATE Rental " + "SET status = 200 " + "WHERE rentalNum = ? " + "AND status = 110";
 
 		try {
 			con = DBManager.getConnection();
