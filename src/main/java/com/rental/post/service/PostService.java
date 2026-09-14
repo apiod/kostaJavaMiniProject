@@ -2,7 +2,9 @@ package main.java.com.rental.post.service;
 
 import java.util.List;
 
+import main.java.com.rental.common.exception.NotFoundException;
 import main.java.com.rental.common.exception.PostException;
+import main.java.com.rental.post.dto.AvailablePost;
 import main.java.com.rental.post.dto.PostCreate;
 import main.java.com.rental.post.dto.PostUpdate;
 import main.java.com.rental.post.entity.Post;
@@ -33,4 +35,6 @@ public interface PostService {
     List<Post> selectByRentDate(String rentDate)throws PostException;
 
     List<Post> selectByAddr(String addr)throws PostException;
+    
+    List<AvailablePost> selectAvailablePost() throws PostException, NotFoundException;
 }

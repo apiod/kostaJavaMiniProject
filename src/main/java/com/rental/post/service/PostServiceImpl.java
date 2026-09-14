@@ -4,6 +4,7 @@ import java.util.List;
 
 import main.java.com.rental.common.exception.NotFoundException;
 import main.java.com.rental.common.exception.PostException;
+import main.java.com.rental.post.dto.AvailablePost;
 import main.java.com.rental.post.dto.PostCreate;
 import main.java.com.rental.post.dto.PostUpdate;
 import main.java.com.rental.post.entity.Post;
@@ -70,6 +71,13 @@ public class PostServiceImpl implements PostService{
 	@Override
 	public List<Post> selectByAddr(String addr) throws PostException {
 		List<Post> list = pr.selectByAddr(addr);
+		if(list.isEmpty()) throw new NotFoundException("검색결과가 존재하지 않습니다."); 
+		return list;
+	}
+	
+	@Override
+	public List<AvailablePost> selectAvailablePost() throws PostException, NotFoundException{
+		List<AvailablePost> list = pr.selectAvailablePost();
 		if(list.isEmpty()) throw new NotFoundException("검색결과가 존재하지 않습니다."); 
 		return list;
 	}

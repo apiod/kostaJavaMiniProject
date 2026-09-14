@@ -34,9 +34,9 @@ public class ItemMenuView {
 			System.out.println("              물품 관리 메뉴");
 			System.out.println("========================================");
 			System.out.println(" 1. 새 물품 등록");
-			System.out.println(" 2. 등록 물품 정보 수정");
-			System.out.println(" 3. 등록 물품 삭제");
-			System.out.println(" 4. 내가 등록한 물품 목록");
+			System.out.println(" 2. 내가 등록한 물품 목록");
+			System.out.println(" 3. 등록 물품 정보 수정");
+			System.out.println(" 4. 등록 물품 삭제");
 			System.out.println(" 0. 상위 메뉴로 이동");
 			System.out.println("----------------------------------------");
 			System.out.print("메뉴를 선택해주세요 >> ");
@@ -46,13 +46,13 @@ public class ItemMenuView {
 				inputItemInsert();
 				break;
 			case "2":
-				inputItemUpdate();
+				SuccessView.printEntityList(list);
 				break;
 			case "3":
-				inputItemDelete();
+				inputItemUpdate();
 				break;
 			case "4":
-				SuccessView.printEntityList(list);
+				inputItemDelete();
 				break;
 			case "0":
 				status = false;

@@ -162,3 +162,24 @@ JOIN Post p ON r.PostNum = p.PostNum
 JOIN Item i ON p.ItemNum = i.ItemNum
 JOIN User l ON i.LenderID = l.ID;
 select *  from View_rental_lenderID;
+
+drop view View_Available_Post;
+CREATE OR REPLACE VIEW View_Available_Post AS
+SELECT 
+    p.PostNum,
+    p.Title,
+    p.Content,
+    p.RentDate,
+    p.ReturnDate,
+    p.Addr,
+    i.ItemName,
+    s.Category
+FROM Post p
+JOIN Item i
+    ON p.ItemNum = i.ItemNum
+JOIN SmallCategory s
+    ON i.SmallCategoryCode = s.SmallCategoryCode
+WHERE i.Status = TRUE;
+
+select * from item ;
+select * from rental where status in (101, 200, 201, 210, 211);

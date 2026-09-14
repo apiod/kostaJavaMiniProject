@@ -53,6 +53,17 @@ public class RentalController {
 			FailView.FailMessage(e.getMessage());
 		}
 	}
+	public List<Rental> selectRentalRequestListByLender() {
+		List<Rental> list = null;
+		try {
+			list = rs.selectRentalRequestListByLender();
+			SuccessView.printEntityList(list);
+		} catch (Exception e) {
+			FailView.FailMessage(e.getMessage());
+		}
+		return list;
+		
+	}
 
 	/**
 	 * 현재 대여 현황 조회 status == 110

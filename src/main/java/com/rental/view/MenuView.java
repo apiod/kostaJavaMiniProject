@@ -30,85 +30,20 @@ public class MenuView {
 	ItemController itemController = new ItemController();
 	// 대여 컨트롤러 인스턴스 생성
 	RentalController rentalController = new RentalController();
-	
+
 	/**
 	 * 
 	 */
 	public MenuView() {
-		//메뉴뷰 시작시 접근할 LoginMenuView
-		// TODO 로그아웃하면 다시 loginMenuView로 돌아가야함.
-		new LoginMenuView();
-		new AfterLoginView();
-
-	}
-
-
-	/**
-	 * [대여 메뉴] 물품 목록 조회 및 대여 신청
-	 */
-	public static void rentItemMenu() {
-		System.out.println("\n[물품 대여 - 목록 조회 및 대여 신청]");
-
-		String userId = Session.getInstance().getLoginUser().getId();
-		List<Integer> availablePostNums = printAvailablePostList(userId);
-		if (availablePostNums.isEmpty()) {
-			return;
-		}
-
-		System.out.print("대여 신청할 게시글 번호(PostNum) 입력 (취소: 0): ");
-		try {
-			int postNum = Integer.parseInt(sc.nextLine().trim());
-			if (postNum == 0) {
-				return;
-			}
-			if (!availablePostNums.contains(postNum)) {
-				System.out.println("목록에 없는 게시글 번호입니다.");
-				return;
-			}
-
-			RentalCreateRequest request = new RentalCreateRequest(postNum, RentalStatus.REQUESTED, userId);
-			rentalController.rentalCreate(request);
-		} catch (NumberFormatException e) {
-			System.out.println("게시글 번호는 숫자만 입력 가능합니다.");
+		// 메뉴뷰 시작 시 접근할 LoginMenuView
+		LoginMenuView lmv = new LoginMenuView();
+		AfterLoginView alv = new AfterLoginView();
+		while (true) {
+			lmv.loginMenuView();
+			alv.mainMenu();
 		}
 	}
 
-	/**
-	 * 대여 가능한(Status = true) 물품의 게시글 목록 조회 및 출력 (본인이 등록한 물품은 제외)
-	 */
-	private static List<Integer> printAvailablePostList(String userId) {
-		String sql = "SELECT p.PostNum, p.Title, p.RentDate, p.ReturnDate, p.Addr, i.ItemName " + "FROM Post p "
-				+ "INNER JOIN Item i ON p.ItemNum = i.ItemNum " + "WHERE i.Status = true AND i.LenderID <> ? "
-				+ "ORDER BY p.PostNum";
-
-		List<Integer> postNums = new ArrayList<>();
-		Connection con = null;
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		try {
-			con = DBManager.getConnection();
-			ps = con.prepareStatement(sql);
-			ps.setString(1, userId);
-			rs = ps.executeQuery();
-
-			while (rs.next()) {
-				int postNum = rs.getInt("PostNum");
-				postNums.add(postNum);
-				System.out.println(" - 게시글번호: " + postNum + " | 물품명: " + rs.getString("ItemName") + " | 제목: "
-						+ rs.getString("Title") + " | 대여기간: " + rs.getString("RentDate") + " ~ "
-						+ rs.getString("ReturnDate") + " | 위치: " + rs.getString("Addr"));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			DBManager.close(con, ps, rs);
-		}
-
-		if (postNums.isEmpty()) {
-			System.out.println("현재 대여 가능한 물품이 없습니다.");
-		}
-		return postNums;
-	}
 
 	/**
 	 * [반납 및 대여 내역 관리 메뉴]
