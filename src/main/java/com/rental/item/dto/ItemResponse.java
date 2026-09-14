@@ -5,16 +5,16 @@ public class ItemResponse {
 	private int itemNum;
 	private String itemName;
 	private String status;
-	private String catagory;
+	private String category;
 	
 	public ItemResponse() {}
 
-	public ItemResponse(int itemNum, String itemName, String status, String catagory) {
+	public ItemResponse(int itemNum, String itemName, String status, String category) {
 		super();
 		this.itemNum = itemNum;
 		this.itemName = itemName;
 		this.status = status;
-		this.catagory = catagory;
+		this.category = category;
 	}
 
 	public int getItemNum() {
@@ -41,12 +41,12 @@ public class ItemResponse {
 		this.status = status;
 	}
 
-	public String getCatagory() {
-		return catagory;
+	public String getCategory() {
+		return category;
 	}
 
-	public void setCatagory(String catagory) {
-		this.catagory = catagory;
+	public void setCategory(String category) {
+		this.category = category;
 	}
 	
 	

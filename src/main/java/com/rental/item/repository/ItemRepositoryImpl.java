@@ -97,7 +97,7 @@ public class ItemRepositoryImpl implements ItemRepository {
 	@Override
 	public int itemInsert(Item item) throws ItemException {
 		// 기본키(ItemNum) 자동 채번 환경에 맞추어 컬럼에서 제외하고 삽입
-		String sql = "INSERT INTO Item (ItemName, Status, Num2, LenderID) VALUES (?, ?, ?, ?)";
+		String sql = "INSERT INTO Item (ItemName, Status, SmallCategoryCode, LenderID) VALUES (?, ?, ?, ?)";
 
 		Connection con = null;
 		PreparedStatement ps = null;
@@ -107,7 +107,7 @@ public class ItemRepositoryImpl implements ItemRepository {
 			ps = con.prepareStatement(sql);
 			ps.setString(1, item.getItemName());
 			ps.setBoolean(2, item.isStatus());
-			ps.setString(3, item.getNum2());
+			ps.setString(3, item.getSmallCategoryCode());
 			ps.setString(4, item.getLenderID());
 
 			result = ps.executeUpdate();
@@ -127,16 +127,16 @@ public class ItemRepositoryImpl implements ItemRepository {
 		PreparedStatement ps = null;
 		int result = 0;
 
-		String sql = "UPDATE Item SET ItemName = ?, Num2 = ? WHERE ItemNum = ? AND LenderID = ?";
+		String sql = "UPDATE Item SET ItemName = ?, SmallCategoryCode = ? WHERE ItemNum = ? AND LenderID = ?";
 
 		try {
 			con = DBManager.getConnection();
 			ps = con.prepareStatement(sql);
 
 			ps.setString(1, item.getItemName());
-			ps.setString(2, item.getNum2());
+			ps.setString(2, item.getSmallCategoryCode());
 			ps.setInt(3, item.getItemNum());
-			ps.setString(4, item.getItemName());
+			ps.setString(4, item.getLenderID());
 
 			result = ps.executeUpdate();
 		} catch (SQLException e) {
@@ -220,7 +220,7 @@ public class ItemRepositoryImpl implements ItemRepository {
 		item.setItemNum(rs.getInt("ItemNum"));
 		item.setItemName(rs.getString("ItemName"));
 		item.setStatus(rs.getBoolean("Status"));
-		item.setNum2(rs.getString("Num2"));
+		item.setSmallCategoryCode(rs.getString("SmallCategoryCode"));
 		item.setLenderID(rs.getString("LenderID"));
 		return item;
 	}
