@@ -37,7 +37,7 @@ public class RentalRepositoryImpl implements RentalRepository {
 			return ps.executeUpdate();
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 			throw new RentalException();
 		}
 	}
@@ -66,7 +66,7 @@ public class RentalRepositoryImpl implements RentalRepository {
 				}
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 			throw new RentalException();
 		}
 
@@ -94,7 +94,7 @@ public class RentalRepositoryImpl implements RentalRepository {
 				}
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 			throw new RentalException();
 		}
 
@@ -123,7 +123,7 @@ public class RentalRepositoryImpl implements RentalRepository {
 				}
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 			throw new RentalException();
 		}
 
@@ -159,7 +159,7 @@ public class RentalRepositoryImpl implements RentalRepository {
 				}
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 			throw new RentalException();
 		}
 
@@ -192,7 +192,7 @@ public class RentalRepositoryImpl implements RentalRepository {
 				}
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 			throw new RentalException();
 		}
 
@@ -211,7 +211,7 @@ public class RentalRepositoryImpl implements RentalRepository {
 
 			result = ps.executeUpdate();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 			throw new RentalException();
 		}
 		return result > 0;
@@ -231,7 +231,7 @@ public class RentalRepositoryImpl implements RentalRepository {
 			return true;
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 			throw new RentalException();
 		} finally {
 			DBManager.close(null, ps);
@@ -255,7 +255,7 @@ public class RentalRepositoryImpl implements RentalRepository {
 			return result;
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 			throw new RentalException();
 
 		} finally {
@@ -290,7 +290,7 @@ public class RentalRepositoryImpl implements RentalRepository {
 				list.add(mapRental(rs));
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 			throw new RentalException();
 		} finally {
 			DBManager.close(con, ps, rs);

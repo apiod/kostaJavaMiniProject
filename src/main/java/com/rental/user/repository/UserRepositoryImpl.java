@@ -38,7 +38,7 @@ public class UserRepositoryImpl implements UserRepository {
 						rs.getString("Name"), rs.getString("Phone"));
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 			throw new UserException();
 		} finally {
 			DBManager.close(con, ps, rs);
@@ -64,7 +64,7 @@ public class UserRepositoryImpl implements UserRepository {
 
 			result = ps.executeUpdate();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 			throw new UserException();
 		} finally {
 			DBManager.close(con, ps);
@@ -89,7 +89,7 @@ public class UserRepositoryImpl implements UserRepository {
 				result = rs.getString("ID");
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 			throw new UserException();
 		} finally {
 			DBManager.close(con, ps, rs);
@@ -111,7 +111,7 @@ public class UserRepositoryImpl implements UserRepository {
 
 			result = ps.executeUpdate();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 			throw new UserException();
 		} finally {
 			DBManager.close(con, ps);

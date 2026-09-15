@@ -88,9 +88,9 @@ public class RentalServiceImpl implements RentalService {
 					con.rollback();
 				}
 			} catch (SQLException rollbackException) {
-				rollbackException.printStackTrace();
+				// rollbackException.printStackTrace();
 			}
-			e.printStackTrace();
+			// e.printStackTrace();
 			return false;
 
 		} finally {
