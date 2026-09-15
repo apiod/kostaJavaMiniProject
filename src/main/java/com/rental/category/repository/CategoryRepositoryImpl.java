@@ -47,7 +47,7 @@ public class CategoryRepositoryImpl implements CategoryRepository {
 				list.add(new Category(rs.getString(1), rs.getString(2)));
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 			throw new NotFoundException();
 		} finally {
 			DBManager.close(con, ps, rs);

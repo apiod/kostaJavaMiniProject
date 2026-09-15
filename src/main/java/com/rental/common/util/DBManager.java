@@ -20,12 +20,11 @@ public class DBManager {
 		try {
 			
 			proFile.load(new FileInputStream("resources/dbmanager.properties"));
-			
 			Class.forName(proFile.getProperty("driverName"));
 			
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 		}
 	}
 
@@ -49,7 +48,7 @@ public class DBManager {
 
 		}
 		catch(Exception e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 		}
 	}
 	
@@ -59,7 +58,7 @@ public class DBManager {
 			if(con != null) con.close();
 		}
 		catch(Exception e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 		}
 	}
 
