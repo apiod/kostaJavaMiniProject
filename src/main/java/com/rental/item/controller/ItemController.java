@@ -90,7 +90,7 @@ public class ItemController  {
 		List<Item> list=null;
 		try {
 			list = itemService.selectByUserId(userId);
-			SuccessView.printEntityList(list);
+//			SuccessView.printEntityList(list);
 		} catch (NotFoundException | ItemException e) {
 			FailView.FailMessage(e.getMessage());
 		}

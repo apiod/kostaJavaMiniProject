@@ -103,8 +103,8 @@ public class ItemServiceImpl implements ItemService {
     
 	@Override
 	public List<Item> selectByUserId(String userId) throws ItemException,NotFoundException {
-		List<Item> list = new ArrayList<>();
-		if(list.isEmpty()) throw new NotFoundException();
+		List<Item> list = ir.selectByUserId(userId);
+		if(list.isEmpty()) throw new NotFoundException("is.selectByUserId");
 		return list;
 	}
     

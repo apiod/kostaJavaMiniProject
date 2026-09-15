@@ -20,7 +20,7 @@ public class ItemMenuView {
 	List<Category> listBC = null;
 	
 	public ItemMenuView() {
-		list = itemController.selectByUserId(id);
+		list = itemController.selectByUserId(Session.getInstance().getLoginUser().getId());
 		listBC = categoryController.getBigCategories();
 		System.out.flush();// console.clear
 	}

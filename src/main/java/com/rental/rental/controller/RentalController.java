@@ -83,10 +83,8 @@ public class RentalController {
 		try {
 			List<Rental> list = rs.getPendingApprovals();
 			SuccessView.printPendingApprovals(list);
-		} catch (NotFoundException e) {
+		} catch (Exception e) {
 			// 아무것도 없으면 출력안함.
-		} catch (RentalException e) {
-			FailView.FailMessage(e.getMessage());
 		}
 	}
 }

@@ -13,8 +13,8 @@ public class AfterLoginView {
 	// 로그인 이후 실행될 뷰
 	public AfterLoginView() {
 		// 승인 대기중인 list 보여주기
-		rentalController.getPendingApprovals();
-
+		new RentalController().getPendingApprovals();
+		System.out.println("========================================");
 	}
 
 	/**
@@ -23,6 +23,8 @@ public class AfterLoginView {
 	public void mainMenu() {
 		ItemMenuView itemMenuView = new ItemMenuView();
 		RentalMenuView rentItemMenuView = new RentalMenuView();
+		PostMenuView postMenuView = new PostMenuView();
+		ReturnMenuView returnMenuView = new ReturnMenuView();
 		while (Session.getInstance().getLoginUser() != null) {
 			System.out.flush();
 			System.out.println("========================================");
@@ -41,13 +43,13 @@ public class AfterLoginView {
 				itemMenuView.itemMenu();
 				break;
 			case "2":
-//				 TODO post
+				 postMenuView.postMenu();
 				break;
 			case "3":
 				rentItemMenuView.rentalMenu();
 				break;
 			case "4":
-//				returnItemMenu();
+				returnMenuView.returnMenuView();
 				break;
 			case "0":
 				System.out.println("로그아웃 되었습니다.");
