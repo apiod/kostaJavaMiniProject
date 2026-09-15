@@ -22,10 +22,10 @@ public class AfterLoginView {
 	 */
 	public void mainMenu() {
 		ItemMenuView itemMenuView = new ItemMenuView();
-		RentItemMenuView rentItemMenuView = new RentItemMenuView();
+		RentalMenuView rentItemMenuView = new RentalMenuView();
 		while (Session.getInstance().getLoginUser() != null) {
 			System.out.flush();
-			System.out.println("\n========================================");
+			System.out.println("========================================");
 			System.out.println("\t\t\t메인 메뉴");
 			System.out.println("========================================");
 			System.out.println(" 1. 물품 관리 (등록/조회/수정/삭제)");

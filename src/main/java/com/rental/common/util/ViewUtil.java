@@ -4,6 +4,7 @@ import java.util.List;
 
 import main.java.com.rental.item.entity.Item;
 import main.java.com.rental.post.entity.Post;
+import main.java.com.rental.rental.entity.Rental;
 
 public class ViewUtil {
 	// 010-1234-5678 형태로 변환을 위한 메소드
@@ -36,6 +37,14 @@ public class ViewUtil {
 		for (Post post : list) {
 			if (post.getPostNum() == num) {
 				return post;
+			}
+		}
+		return null;
+	}
+	public static Rental checkedRentalNum(List<Rental> list, int num) {
+		for (Rental rental : list) {
+			if (rental.getPostNum() == num) {
+				return rental;
 			}
 		}
 		return null;

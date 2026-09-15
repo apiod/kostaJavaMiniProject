@@ -29,23 +29,14 @@ public class RentalServiceImpl implements RentalService {
 		if (re == 0)
 			throw new RentalException("생성에 실패했습니다.");
 	}
-	//lenderid sessioid, status == 100
-	public List<Rental> selectRentalRequestListByLender() throws RentalException {
-		List<Rental> re = rr.selectRentalRequestListByLender();
-		if (re.isEmpty())
-			throw new NotFoundException();
-		return re;
-	}
 
- 
 	@Override
 	public Rental selectByRentalNum(int rentalNum) throws NotFoundException, RentalException {
 		Rental re = rr.selectByRentalNum(rentalNum);
-		if (re ==null)
+		if (re == null)
 			throw new NotFoundException();
 		return re;
 	}
-	
 
 	@Override
 	public List<Rental> selectByStatus(int status) throws NotFoundException, RentalException {
@@ -54,75 +45,18 @@ public class RentalServiceImpl implements RentalService {
 			throw new NotFoundException();
 		return re;
 	}
-	
-	
-	//대여 시작
-	@Override
-	public void confirmRental(int rentalNum) throws RentalException {
-		int re = rr.confirmRental(rentalNum);
-		if(re==0)
-			throw new RentalException("대여에 실패했습니다.");
-	}
 
 	@Override
-	public List<Rental> selectLendList(String lenderId) throws RentalException, NotFoundException {
-		List<Rental> re = rr.selectLendList(lenderId);
+	public List<Rental> selectRentalRequestList() throws RentalException, NotFoundException {
+		List<Rental> re = rr.selectRentalRequestList();
 		if (re.isEmpty())
 			throw new NotFoundException();
 		return re;
 	}
 
 	@Override
-	public List<Rental> selectBorrowList(String borrowerId) throws RentalException, NotFoundException {
-		List<Rental> re = rr.selectBorrowList(borrowerId);
-		if (re.isEmpty())
-			throw new NotFoundException();
-		return re;
-	}
-
-	@Override
-	public List<Rental> selectRentalRequestList(String userId) throws RentalException, NotFoundException {
-		List<Rental> re = rr.selectRentalRequestList(userId);
-		if (re.isEmpty())
-			throw new NotFoundException();
-		return re;
-	}
-
-	@Override
-	public List<Rental> selectCurrentRentalList(String userId) throws RentalException, NotFoundException {
-		List<Rental> re = rr.selectCurrentRentalList(userId);
-		if (re.isEmpty())
-			throw new NotFoundException();
-		return re;
-	}
-
-	@Override
-	public List<Rental> selectRentalHistoryList(String userId) throws RentalException, NotFoundException {
-		List<Rental> re = rr.selectRentalHistoryList(userId);
-		if (re.isEmpty())
-			throw new NotFoundException();
-		return re;
-	}
-
-	@Override
-	public List<Rental> selectRequestList(String userId) throws RentalException, NotFoundException {
-		List<Rental> re = rr.selectRequestList(userId);
-		if (re.isEmpty())
-			throw new NotFoundException();
-		return re;
-	}
-
-	@Override
-	public List<Rental> selectRentalRequestHistory(String userId) throws RentalException, NotFoundException {
-		List<Rental> re = rr.selectRentalRequestHistory(userId);
-		if (re.isEmpty())
-			throw new NotFoundException();
-		return re;
-	}
-
-	@Override
-	public List<Rental> selectReturnRequestHistory(String userId) throws RentalException, NotFoundException {
-		List<Rental> re = rr.selectReturnRequestHistory(userId);
+	public List<Rental> selectCurrentRentalList() throws RentalException, NotFoundException {
+		List<Rental> re = rr.selectCurrentRentalList();
 		if (re.isEmpty())
 			throw new NotFoundException();
 		return re;
@@ -165,26 +99,19 @@ public class RentalServiceImpl implements RentalService {
 	}
 
 	@Override
-	public void rejectRental(int rentalNum) throws RentalException {
-		int result = rr.rejectRental(rentalNum);
-		if (result == 0)
-			throw new RentalException("거절에 실패되었습니다.");
+	public List<Rental> getPendingApprovals() throws RentalException {
+		List<Rental> re = rr.getPendingApprovals();
+		if (re.isEmpty())
+			throw new NotFoundException();
+		return re;
 	}
 
 	@Override
-	public void confirmReturn(int rentalNum) throws RentalException {
-		int result = rr.confirmReturn(rentalNum);
+	public int updateStatusRentalNum(int setStatus, int rentalNum, int status) throws RentalException {
+		int result = rr.updateStatusRentalNum(setStatus, rentalNum, status);
 		if (result == 0)
-			throw new RentalException("반납완료에 실패되었습니다.");
+			throw new RentalException("실패되었습니다.");
+		return result;
 	}
-	
-	@Override
-	public List<Rental> getPendingApprovals() throws RentalException{
-		List<Rental> re = rr.getPendingApprovals();
-		if(re.isEmpty()) throw new NotFoundException();
-		return re;
-	}
-	
-	
 
 }
