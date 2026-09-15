@@ -66,19 +66,24 @@ public class RentalServiceImpl implements RentalService {
 	public boolean approveRental(int rentalNum, int postNum) throws RentalException {
 		Connection con = null;
 		try {
+			
 			con = DBManager.getConnection();
 			// 트랜잭션 시작
+			System.out.println("트랜잭션 시작");
 			con.setAutoCommit(false);
 			// 1. 다른 대여 요청 거절
 			if (!rr.rejectOtherRentals(con, postNum, rentalNum)) {
+				System.out.println("다른 대여 요청 거절 실패");
 				con.rollback();
 				return false;
 			}
 			// 2. 현재 대여 요청 승인
 			if (!rr.approveRental(con, rentalNum)) {
+				System.out.println("대여 요청 승인 실패");
 				con.rollback();
 				return false;
 			}
+			
 			// 둘 다 성공
 			con.commit();
 			return true;
@@ -88,9 +93,9 @@ public class RentalServiceImpl implements RentalService {
 					con.rollback();
 				}
 			} catch (SQLException rollbackException) {
-				// rollbackException.printStackTrace();
+				 rollbackException.printStackTrace();
 			}
-			// e.printStackTrace();
+			 e.printStackTrace();
 			return false;
 
 		} finally {

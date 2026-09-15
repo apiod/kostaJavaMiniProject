@@ -43,7 +43,8 @@ public class ViewUtil {
 	}
 	public static Rental checkedRentalNum(List<Rental> list, int num) {
 		for (Rental rental : list) {
-			if (rental.getPostNum() == num) {
+			if (rental.getRentalNum() == num) {
+				System.out.println(rental);
 				return rental;
 			}
 		}

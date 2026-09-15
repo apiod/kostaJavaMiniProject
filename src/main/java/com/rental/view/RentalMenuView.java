@@ -126,7 +126,10 @@ public class RentalMenuView {
 		}
 		
 		Rental rental = ViewUtil.checkedRentalNum(list, rentalNum);
-		if(rental ==null) return;
+		if(rental ==null) {
+			System.out.println("rental null");
+			return;
+		}
 		int postNum = rental.getPostNum();
 
 		System.out.println("선택한 대여 신청 >> " + rental);

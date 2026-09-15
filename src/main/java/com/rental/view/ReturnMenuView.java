@@ -61,7 +61,7 @@ public class ReturnMenuView {
 		System.out.flush();
 		System.out.println("========== 반납 신청 ==========");
 		List<Rental> list = rentalController.selectByStatus(110);
-		if (list.isEmpty())
+		if (list ==null||list.isEmpty())
 			return;
 		System.out.print("반납할 대여 번호를 입력하세요 (취소: 0) : ");
 		String input = sc.nextLine().trim();
@@ -93,7 +93,7 @@ public class ReturnMenuView {
 		System.out.println("====== 반납 신청 승인 ======");
 		// 대여자가 받은 반납 요청 목록 조회
 		List<Rental> list = rentalController.selectByStatus(200);
-		if (list.isEmpty())
+		if (list ==null||list.isEmpty())
 			return;
 		System.out.print("승인할 대여 번호를 입력하세요 (0. 취소) : ");
 		String input = sc.nextLine().trim();
@@ -124,7 +124,7 @@ public class ReturnMenuView {
 		System.out.flush();
 		System.out.println("========== 반납 거래신청 ==========");
 		List<Rental> list = rentalController.selectByStatus(201);
-		if (list.isEmpty())
+		if (list ==null||list.isEmpty())
 			return;
 		System.out.print("반납 거래 신청을 할 번호를 입력하세요 (취소: 0) : ");
 		String input = sc.nextLine().trim();
@@ -155,7 +155,7 @@ public class ReturnMenuView {
 		System.out.flush();
 		System.out.println("========== 반납 확인 ==========");
 		List<Rental> list = rentalController.selectByStatus(210);
-		if (list.isEmpty())
+		if (list ==null||list.isEmpty())
 			return;
 		System.out.print("반납 거래 신청을 할 번호를 입력하세요 (취소: 0) : ");
 		String input = sc.nextLine().trim();
