@@ -1,11 +1,9 @@
 package main.java.com.rental.user.controller;
 
-import java.sql.SQLException;
 
 import main.java.com.rental.common.exception.PasswordUpdateException;
 import main.java.com.rental.common.exception.UserException;
 import main.java.com.rental.common.exception.NotFoundException;
-import main.java.com.rental.user.dto.FindIdRequest;
 import main.java.com.rental.user.dto.PasswordChangeRequest;
 import main.java.com.rental.user.dto.UserLoginRequest;
 import main.java.com.rental.user.dto.UserSignUpRequest;

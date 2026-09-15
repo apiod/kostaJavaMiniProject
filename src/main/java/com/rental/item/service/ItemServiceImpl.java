@@ -1,6 +1,5 @@
 package main.java.com.rental.item.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import main.java.com.rental.common.exception.InvalidRentalStatusException;
