@@ -19,7 +19,7 @@ public class DBManager {
 	static {
 		try {
 			
-			proFile.load(new FileInputStream("resources/dbInfo.properties"));
+			proFile.load(new FileInputStream("dbmanager.properties"));
 			
 			Class.forName(proFile.getProperty("driverName"));
 			
