@@ -9,7 +9,7 @@ public class MenuView {
 		while (true) {
 			lmv.loginMenuView();
 			if(alv ==null) new AfterLoginView();
-			alv.mainMenu();
+			if(alv !=null) alv.mainMenu();
 		}
 	}
 }
