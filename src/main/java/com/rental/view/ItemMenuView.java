@@ -15,16 +15,10 @@ public class ItemMenuView {
 	Scanner sc = new Scanner(System.in);
 	ItemController itemController = new ItemController();
 	String id = Session.getInstance().getLoginUser().getId();
-	List<Item> list = null;
+	List<Item> list = itemController.selectByUserId(id);
 	CategoryController categoryController = new CategoryController();
-	List<Category> listBC = null;
+	List<Category> listBC = categoryController.getBigCategories();
 	
-	public ItemMenuView() {
-		list = itemController.selectByUserId(Session.getInstance().getLoginUser().getId());
-		listBC = categoryController.getBigCategories();
-		System.out.flush();// console.clear
-	}
-
 	/**
 	 * [물품 관리 메뉴] 등록, 수정, 삭제 선택
 	 */
@@ -47,6 +41,10 @@ public class ItemMenuView {
 				inputItemInsert();
 				break;
 			case "2":
+				if(list==null) {
+					System.out.println("등록한 물품 정보가 없습니다.");
+					break;
+				}
 				SuccessView.printEntityList(list);
 				break;
 			case "3":
@@ -95,9 +93,14 @@ public class ItemMenuView {
 	public void inputItemUpdate() {
 		try {
 			Item item =null;
+			if(list==null) {
+				System.out.println("등록된 물품 리스트가 없습니다.");
+				return;
+			}
 			while(true) {
 				System.out.println("\n[물품 수정]");
 				// 수정 대상 물품 확인을 위해 전체 물품 목록 출력
+				
 				SuccessView.printEntityList(list);
 				
 				System.out.print("수정할 물품 번호: ");
@@ -131,12 +134,20 @@ public class ItemMenuView {
 	 */
 	public void inputItemDelete() {
 		try {
+			if(list==null) {
+				System.out.println("등록된 물품 리스트가 없습니다.");
+				return;
+			}
 			System.out.println("\n[물품 삭제]");
 			// 삭제 대상 물품 확인을 위해 전체 물품 목록 출력
 			SuccessView.printEntityList(list);
 			System.out.print("삭제할 물품 번호: ");
 			int itemNo = Integer.parseInt(sc.nextLine().trim());
 			Item item = ViewUtil.checkedItemNum(this.list,itemNo); 
+			if(item==null) {
+				System.out.println("리스트에 있는 번호를 입력해주세요");
+				return;
+			}
 			// Controller를 호출하여 Service의 itemDelete 로직을 수행
 			itemController.itemDelete(item.getItemNum(), item.getLenderID());
 		} catch (NumberFormatException e) {
@@ -156,11 +167,12 @@ public class ItemMenuView {
 			SuccessView.printIndexCategoryList(listSc);
 			// 사용자 선택
 			System.out.print("카테고리 번호 >> ");
+			
 			int sel = Integer.parseInt(sc.nextLine().trim());
 			
-			String smallCategory = listBC.get(sel-1).getCode();
+			String smallCategory = listSc.get(sel-1).getCode();
 			return smallCategory;
-		} catch (NumberFormatException e) {
+		} catch (NumberFormatException | IndexOutOfBoundsException e) {
 			System.out.println("지원되지 않는 값을 입력했습니다.");
 			return null;
 		}
@@ -176,11 +188,12 @@ public class ItemMenuView {
 	private String selectBigCategory() {
 		try {
 			SuccessView.printIndexCategoryList(listBC);
-			int sel = Integer.parseInt(sc.nextLine().trim());
+			
 			System.out.print("카테고리 번호 >> ");
+			int sel = Integer.parseInt(sc.nextLine().trim());
 			String bigCategory = listBC.get(sel-1).getCode();
 			return bigCategory;
-		} catch (NumberFormatException e) {
+		} catch (NumberFormatException |IndexOutOfBoundsException e) {
 			System.out.println("지원되지 않는 값을 입력했습니다.");
 			return null;
 		}

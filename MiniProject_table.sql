@@ -43,6 +43,7 @@ CREATE TABLE SmallCategory (
     CONSTRAINT FK_SmallCategory_BigCategory
         FOREIGN KEY (BigCategoryCode)
         REFERENCES BigCategory(BigCategoryCode)
+        on delete cascade
 );
 
 
@@ -61,11 +62,13 @@ CREATE TABLE Item (
 
     CONSTRAINT FK_Item_User
         FOREIGN KEY (LenderID)
-        REFERENCES User(ID),
+        REFERENCES User(ID)
+        on delete cascade,
 
     CONSTRAINT FK_Item_SmallCategory
         FOREIGN KEY (SmallCategoryCode)
         REFERENCES SmallCategory(SmallCategoryCode)
+        on delete cascade
 );
 
 
@@ -92,6 +95,7 @@ CREATE TABLE Post (
     CONSTRAINT FK_Post_Item
         FOREIGN KEY (ItemNum)
         REFERENCES Item(ItemNum)
+        on delete cascade
 );
 
 
@@ -109,11 +113,13 @@ CREATE TABLE Rental (
 
     CONSTRAINT FK_Rental_User
         FOREIGN KEY (BorrowerID)
-        REFERENCES User(ID),
+        REFERENCES User(ID)
+        on delete cascade,
 
     CONSTRAINT FK_Rental_Post
         FOREIGN KEY (PostNum)
         REFERENCES Post(PostNum)
+        on delete cascade
 );
 
 
@@ -180,6 +186,3 @@ JOIN Item i
 JOIN SmallCategory s
     ON i.SmallCategoryCode = s.SmallCategoryCode
 WHERE i.Status = TRUE;
-
-select * from item ;
-select * from rental where status in (101, 200, 201, 210, 211);

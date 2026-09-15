@@ -2,7 +2,6 @@ package main.java.com.rental.rental.controller;
 
 import java.util.List;
 
-import main.java.com.rental.common.exception.NotFoundException;
 import main.java.com.rental.common.exception.RentalException;
 import main.java.com.rental.rental.dto.RentalCreateRequest;
 import main.java.com.rental.rental.entity.Rental;
@@ -79,12 +78,14 @@ public class RentalController {
 	}
 
 	// 로그인 시 현재 승인 대기중인 목록 출력
-	public void getPendingApprovals() {
+	public List<Rental> getPendingApprovals() {
 		try {
 			List<Rental> list = rs.getPendingApprovals();
-			SuccessView.printPendingApprovals(list);
+			return list;
+//			SuccessView.printPendingApprovals(list);
 		} catch (Exception e) {
 			// 아무것도 없으면 출력안함.
 		}
+		return null;
 	}
 }

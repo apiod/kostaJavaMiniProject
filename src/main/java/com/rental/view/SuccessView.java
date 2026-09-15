@@ -13,12 +13,15 @@ public class SuccessView {
 	
 	//User, Item, Post, Rental상관없이 가능
 	public static void printEntity(Object obj) {
+		if(obj==null) return;
 		System.out.println(obj);
 	}
 	public static void printEntityList(List<?> list) {
+		if(list==null) return;
 		list.forEach(System.out::println);
 	}
 	public static void printIndexCategoryList(List<Category> list) {
+		if(list==null) return;
 		int i = 1;
 		for(Category entity: list) {
 			System.out.println((i++) + ". " + entity);
@@ -26,6 +29,7 @@ public class SuccessView {
 	}
 	
 	public static void printPendingApprovals(List<Rental> list) {
+		if(list==null) return;
 		System.out.println("\n[알림] 확인이 필요한 대여/반납 내역 총"+list.size()+"개 있습니다.");
 		list.forEach(System.out::println);
 	}

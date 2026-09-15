@@ -2,7 +2,6 @@ package main.java.com.rental.view;
 
 import java.util.Scanner;
 
-
 import main.java.com.rental.rental.controller.RentalController;
 import main.java.com.rental.session.Session;
 
@@ -26,7 +25,6 @@ public class AfterLoginView {
 		PostMenuView postMenuView = new PostMenuView();
 		ReturnMenuView returnMenuView = new ReturnMenuView();
 		while (Session.getInstance().getLoginUser() != null) {
-			System.out.flush();
 			System.out.println("========================================");
 			System.out.println("\t\t\t메인 메뉴");
 			System.out.println("========================================");

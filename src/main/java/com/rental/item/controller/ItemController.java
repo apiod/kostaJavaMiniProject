@@ -91,7 +91,9 @@ public class ItemController  {
 		try {
 			list = itemService.selectByUserId(userId);
 //			SuccessView.printEntityList(list);
-		} catch (NotFoundException | ItemException e) {
+		} catch (ItemException e) {
+			FailView.FailMessage(e.getMessage());
+		} catch (NotFoundException e) {
 			FailView.FailMessage(e.getMessage());
 		}
 		return list;

@@ -161,7 +161,7 @@ public class ItemRepositoryImpl implements ItemRepository {
 			
 			return ps.executeUpdate();
 		} catch (SQLException e) {
-			// e.printStackTrace();
+			 e.printStackTrace();
 			throw new ItemException();
 		} finally {
 			DBManager.close(con, ps);

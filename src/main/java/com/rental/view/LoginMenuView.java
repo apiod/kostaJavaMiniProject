@@ -20,7 +20,7 @@ public class LoginMenuView {
 	public void loginMenuView() {
 		while (true) {
 			System.out.flush();
-			System.out.println("\n========================================");
+			System.out.println("========================================");
 			System.out.println("   개인 간 물품 대여 서비스");
 			System.out.println("========================================");
 			System.out.println(" 1. 회원가입");

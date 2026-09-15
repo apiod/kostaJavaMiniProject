@@ -73,45 +73,45 @@ INSERT INTO Item (ItemNum, LenderID, ItemName, Status, SmallCategoryCode) VALUES
 (4, 'user01', 'Sony WH-1000XM5', 1, 'S0401'),
 (5, 'user02', 'Apple Watch Series 10', 1, 'S0202'),
 (6, 'user02', 'DJI Osmo Action 5 Pro', 1, 'S0303'),
-(7, 'user04', 'Bose QuietComfort Ultra', 0, 'S0401'),
-(8, 'user04', 'Nintendo Switch OLED', 0, 'S0501'),
-(9, 'user04', '삼성 비스포크 큐브 Air', 0, 'S0603'),
-(10, 'user05', 'Nintendo Switch Lite', 0, 'S0501'),
+(7, 'user04', 'Bose QuietComfort Ultra', 1, 'S0401'),
+(8, 'user04', 'Nintendo Switch OLED', 1, 'S0501'),
+(9, 'user04', '삼성 비스포크 큐브 Air', 1, 'S0603'),
+(10, 'user05', 'Nintendo Switch Lite', 1, 'S0501'),
 (11, 'user06', 'LG 퓨리케어 360', 1, 'S0603'),
-(12, 'user06', 'Logitech Brio 4K', 0, 'S0703'),
-(13, 'user06', 'LG 울트라기어 27GP850', 0, 'S0104'),
-(14, 'user06', '갤럭시 S24 Ultra', 0, 'S0201'),
+(12, 'user06', 'Logitech Brio 4K', 1, 'S0703'),
+(13, 'user06', 'LG 울트라기어 27GP850', 1, 'S0104'),
+(14, 'user06', '갤럭시 S24 Ultra', 1, 'S0201'),
 (15, 'user07', 'Razer Kiyo Pro', 1, 'S0703'),
-(16, 'user07', '삼성 Odyssey G5 32', 0, 'S0104'),
-(17, 'user08', 'Dell UltraSharp U2723QE', 0, 'S0104'),
-(18, 'user08', 'iPhone 16 Pro', 0, 'S0201'),
+(16, 'user07', '삼성 Odyssey G5 32', 1, 'S0104'),
+(17, 'user08', 'Dell UltraSharp U2723QE', 1, 'S0104'),
+(18, 'user08', 'iPhone 16 Pro', 1, 'S0201'),
 (19, 'user08', 'Canon EOS 90D', 1, 'S0302'),
-(20, 'user10', 'Nikon D7500', 0, 'S0302'),
-(21, 'user10', 'AirPods Pro 2', 0, 'S0402'),
-(22, 'user11', '갤럭시 버즈3 Pro', 0, 'S0402'),
-(23, 'user11', 'Steam Deck OLED', 0, 'S0504'),
-(24, 'user11', 'Dyson V12 Detect Slim', 0, 'S0601'),
-(25, 'user11', 'Logitech MX Master 3S', 0, 'S0702'),
+(20, 'user10', 'Nikon D7500', 1, 'S0302'),
+(21, 'user10', 'AirPods Pro 2', 1, 'S0402'),
+(22, 'user11', '갤럭시 버즈3 Pro', 1, 'S0402'),
+(23, 'user11', 'Steam Deck OLED', 1, 'S0504'),
+(24, 'user11', 'Dyson V12 Detect Slim', 1, 'S0601'),
+(25, 'user11', 'Logitech MX Master 3S', 1, 'S0702'),
 (26, 'user12', 'ASUS ROG Ally X', 1, 'S0504'),
-(27, 'user13', '삼성 비스포크 제트 AI', 0, 'S0601'),
-(28, 'user13', 'Razer DeathAdder V3 Pro', 0, 'S0702'),
-(29, 'user13', '갤럭시 탭 S10+', 0, 'S0103'),
-(30, 'user14', 'Logitech G Pro X Superlight 2', 0, 'S0702'),
-(31, 'user14', 'iPad Air M2 11인치', 0, 'S0103'),
-(32, 'user15', 'iPad Pro M4 13인치', 0, 'S0103'),
+(27, 'user13', '삼성 비스포크 제트 AI', 1, 'S0601'),
+(28, 'user13', 'Razer DeathAdder V3 Pro', 1, 'S0702'),
+(29, 'user13', '갤럭시 탭 S10+', 1, 'S0103'),
+(30, 'user14', 'Logitech G Pro X Superlight 2', 1, 'S0702'),
+(31, 'user14', 'iPad Air M2 11인치', 1, 'S0103'),
+(32, 'user15', 'iPad Pro M4 13인치', 1, 'S0103'),
 (33, 'user15', '갤럭시 Z Fold6', 1, 'S0204'),
-(34, 'user15', 'Sony A7 IV', 0, 'S0301'),
-(35, 'user15', 'JBL Charge 5', 0, 'S0403'),
-(36, 'user17', 'Fujifilm X-T5', 0, 'S0301'),
-(37, 'user17', 'Marshall Acton III', 0, 'S0403'),
-(38, 'user18', 'Bose SoundLink Max', 0, 'S0403'),
-(39, 'user18', 'Xbox Series S', 0, 'S0503'),
+(34, 'user15', 'Sony A7 IV', 1, 'S0301'),
+(35, 'user15', 'JBL Charge 5', 1, 'S0403'),
+(36, 'user17', 'Fujifilm X-T5', 1, 'S0301'),
+(37, 'user17', 'Marshall Acton III', 1, 'S0403'),
+(38, 'user18', 'Bose SoundLink Max', 1, 'S0403'),
+(39, 'user18', 'Xbox Series S', 1, 'S0503'),
 (40, 'user18', 'Samsung The Freestyle 2세대', 1, 'S0602'),
-(41, 'user19', 'Xbox Series X', 0, 'S0503'),
-(42, 'user20', 'LG CineBeam Q', 0, 'S0602'),
-(43, 'user20', 'Keychron Q1 Max', 0, 'S0701'),
-(44, 'user20', 'Lenovo Legion Tower 5i', 0, 'S0102'),
-(45, 'user20', 'Kindle Paperwhite 11세대', 0, 'S0203');
+(41, 'user19', 'Xbox Series X', 1, 'S0503'),
+(42, 'user20', 'LG CineBeam Q', 1, 'S0602'),
+(43, 'user20', 'Keychron Q1 Max', 1, 'S0701'),
+(44, 'user20', 'Lenovo Legion Tower 5i', 1, 'S0102'),
+(45, 'user20', 'Kindle Paperwhite 11세대', 1, 'S0203');
 
 -- Post (물품 1개당 1개, 총 45개)
 INSERT INTO Post (PostNum, ItemNum, Title, Content, CreateAt, RentDate, ReturnDate, Addr) VALUES
@@ -395,21 +395,3 @@ SELECT
 FROM Rental
 GROUP BY PostNum
 ORDER BY PostNum;
-
--- Rental 상태와 Item 대여 가능 상태가 맞지 않는 물품 확인
--- Rental이 없거나 100/102만 있으면 Item.Status = 1
--- 101/110/200/201/210/211 중 하나라도 있으면 Item.Status = 0
--- 아래 조회 결과가 0건이면 정상
-SELECT
-    i.ItemNum,
-    i.Status AS ItemStatus,
-    GROUP_CONCAT(r.Status ORDER BY r.RentalNum SEPARATOR ', ') AS RentalStatuses
-FROM Item i
-LEFT JOIN Post p ON i.ItemNum = p.ItemNum
-LEFT JOIN Rental r ON p.PostNum = r.PostNum
-GROUP BY i.ItemNum, i.Status
-HAVING i.Status <> CASE
-    WHEN COUNT(r.RentalNum) = 0
-      OR SUM(r.Status IN (101, 110, 200, 201, 210, 211)) = 0 THEN 1
-    ELSE 0
-END;

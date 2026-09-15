@@ -63,7 +63,6 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public void itemInsert(ItemCreateRequest item) throws ItemException {
         int result = ir.itemInsert(item);
-
         if (result == 0) {
             throw new InvalidRentalStatusException("등록되지 않았습니다.");
         }
@@ -104,7 +103,7 @@ public class ItemServiceImpl implements ItemService {
 	@Override
 	public List<Item> selectByUserId(String userId) throws ItemException,NotFoundException {
 		List<Item> list = ir.selectByUserId(userId);
-		if(list.isEmpty()) throw new NotFoundException("is.selectByUserId");
+		if(list.isEmpty()) throw new NotFoundException();
 		return list;
 	}
     
