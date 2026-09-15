@@ -2,7 +2,7 @@ package main.java.com.rental.view;
 
 import java.util.Scanner;
 
-import main.java.com.rental.common.exception.NotFoundException;
+
 import main.java.com.rental.rental.controller.RentalController;
 import main.java.com.rental.session.Session;
 
