@@ -3,8 +3,10 @@ package main.java.com.rental.view;
 import java.util.List;
 import java.util.Scanner;
 
+import main.java.com.rental.common.util.ViewUtil;
 import main.java.com.rental.rental.controller.RentalController;
 import main.java.com.rental.rental.entity.Rental;
+import main.java.com.rental.rental.enums.RentalStatus;
 
 public class ReturnMenuView {
 
@@ -17,10 +19,10 @@ public class ReturnMenuView {
 			System.out.println("=================================");
 			System.out.println("       물품 반납 내역 관리");
 			System.out.println("=================================");
-			System.out.println("1. 반납 신청 (내가 빌린 물품)");
-			System.out.println("2. 반납 신청 승인 (내가 빌려준 물품)");
-			System.out.println("3. 반납 완료 (임차인)");
-			System.out.println("4. 반납 확인 및 평가 (대여자 최종 확인)");
+			System.out.println("1. 반납 신청 (내가 빌린 물품)");// 110 -> 200
+			System.out.println("2. 반납 신청 승인 (내가 빌려준 물품)"); // 200 ->201
+			System.out.println("3. 반납 거래 신청 "); // 201 ->210
+			System.out.println("4. 반납 확인 및 평가 (대여자 최종 확인)"); // 210 -> 211
 			System.out.println("0. 메인 메뉴로 이동");
 			System.out.println("=================================");
 			System.out.print("메뉴 선택 : ");
@@ -52,16 +54,16 @@ public class ReturnMenuView {
 	}
 
 	/**
-	 * 6. 반납 신청 내가 빌린 물품의 대여 번호를 입력하여 반납 신청
+	 * 1. 반납 신청 내가 빌린 물품의 대여 번호를 입력하여 반납 신청
 	 */
 	private void returnRequest() {
-
+		RentalStatus status = RentalStatus.RETURN_REQUESTED;
 		System.out.flush();
 		System.out.println("========== 반납 신청 ==========");
-
-		List<Rental> list = rentalController.selectByStatus(101);
+		List<Rental> list = rentalController.selectByStatus(110);
+		if (list.isEmpty())
+			return;
 		System.out.print("반납할 대여 번호를 입력하세요 (취소: 0) : ");
-
 		String input = sc.nextLine().trim();
 
 		if ("0".equals(input)) {
@@ -70,78 +72,78 @@ public class ReturnMenuView {
 
 		try {
 			int rentalNum = Integer.parseInt(input);
-
-			rentalController.requestReturn(rentalNum);
-
-			System.out.println("현재 반납 신청 기능은 Controller에 메소드가 없습니다.");
-
+			Rental rental = ViewUtil.checkedRentalNum(list, rentalNum);
+			if (rental == null) {
+				System.out.println("리스트에 존재하는 번호를 입력해주세요.");
+				return;
+			}
+			rentalController.updateStatusRentalNum(status.getCode(), rental.getRentalNum(),
+					rental.getStatus().getCode());
 		} catch (NumberFormatException e) {
-
 			System.out.println("대여 번호는 숫자로 입력해주세요.");
 		}
 	}
 
 	/**
-	 * 7. 반납 신청 승인 내가 빌려준 물품의 반납 신청을 승인
+	 * 2. 반납 신청 승인 내가 빌려준 물품의 반납 신청을 승인
 	 */
 	private void approveReturn() {
-
-		System.out.println();
+		RentalStatus status = RentalStatus.RETURN_APPROVED;
+		System.out.flush();
 		System.out.println("====== 반납 신청 승인 ======");
-
 		// 대여자가 받은 반납 요청 목록 조회
-		rentalController.selectByStatus(200);
-
+		List<Rental> list = rentalController.selectByStatus(200);
+		if (list.isEmpty())
+			return;
 		System.out.print("승인할 대여 번호를 입력하세요 (0. 취소) : ");
-
-		String input = sc.nextLine();
+		String input = sc.nextLine().trim();
 
 		if ("0".equals(input)) {
 			return;
 		}
 
 		try {
-
 			int rentalNum = Integer.parseInt(input);
-
-			// TODO
-			// 반납 승인 메소드가 RentalController에 추가되어야 함
-			//
-			// rc.approveReturn(rentalNum);
-
-			System.out.println("현재 반납 승인 기능은 Controller에 메소드가 없습니다.");
-
+			Rental rental = ViewUtil.checkedRentalNum(list, rentalNum);
+			if (rental == null) {
+				System.out.println("리스트에 존재하는 번호를 입력해주세요.");
+				return;
+			}
+			rentalController.updateStatusRentalNum(status.getCode(), rental.getRentalNum(),
+					rental.getStatus().getCode());
 		} catch (NumberFormatException e) {
-
 			System.out.println("대여 번호는 숫자로 입력해주세요.");
 		}
 	}
 
 	/**
-	 * 8. 반납 완료 임차인이 실제 물품을 반납한 후 반납 완료 처리
+	 * 3. 반납 신청 승인이 된 물품 거래 신청
 	 */
 	private void confirmReturn() {
-
-		System.out.println();
-		System.out.println("========== 반납 완료 ==========");
-
-		System.out.print("반납 완료할 대여 번호를 입력하세요 (0. 취소) : ");
-
-		String input = sc.nextLine();
+		RentalStatus status = RentalStatus.BORROWER_CONFIRMED;
+		System.out.flush();
+		System.out.println("========== 반납 거래신청 ==========");
+		List<Rental> list = rentalController.selectByStatus(201);
+		if (list.isEmpty())
+			return;
+		System.out.print("반납 거래 신청을 할 번호를 입력하세요 (취소: 0) : ");
+		String input = sc.nextLine().trim();
 
 		if ("0".equals(input)) {
 			return;
 		}
 
 		try {
-
 			int rentalNum = Integer.parseInt(input);
-
-			rentalController.confirmReturn(rentalNum);
-
+			Rental rental = ViewUtil.checkedRentalNum(list, rentalNum);
+			if (rental == null) {
+				System.out.println("리스트에 존재하는 번호를 입력해주세요.");
+				return;
+			}
+			rentalController.updateStatusRentalNum(status.getCode(), rental.getRentalNum(),
+					rental.getStatus().getCode());
 		} catch (NumberFormatException e) {
-
-			System.out.println("대여 번호는 숫자로 입력해주세요.");
+			System.out.println("숫자로 입력해주세요.");
 		}
 	}
 
@@ -149,37 +151,30 @@ public class ReturnMenuView {
 	 * 9. 반납 확인 및 평가 대여자가 최종적으로 반납을 확인
 	 */
 	private void confirmReturnFinal() {
-
-		System.out.println();
-		System.out.println("====== 반납 확인 및 평가 ======");
-
-		// TODO
-		// 대여자의 반납 확인 대상 조회
-		//
-		// rc.selectByStatus(210);
-
-		System.out.print("확인할 대여 번호를 입력하세요 (0. 취소) : ");
-
-		String input = sc.nextLine();
+		RentalStatus status = RentalStatus.COMPLETED;
+		System.out.flush();
+		System.out.println("========== 반납 확인 ==========");
+		List<Rental> list = rentalController.selectByStatus(210);
+		if (list.isEmpty())
+			return;
+		System.out.print("반납 거래 신청을 할 번호를 입력하세요 (취소: 0) : ");
+		String input = sc.nextLine().trim();
 
 		if ("0".equals(input)) {
 			return;
 		}
 
 		try {
-
 			int rentalNum = Integer.parseInt(input);
-
-			// TODO
-			// 최종 반납 확인 메소드가 RentalController에 추가되어야 함
-			//
-			// rc.finalConfirmReturn(rentalNum);
-
-			System.out.println("현재 최종 반납 확인 기능은 Controller에 메소드가 없습니다.");
-
+			Rental rental = ViewUtil.checkedRentalNum(list, rentalNum);
+			if (rental == null) {
+				System.out.println("리스트에 존재하는 번호를 입력해주세요.");
+				return;
+			}
+			rentalController.updateStatusRentalNum(status.getCode(), rental.getRentalNum(),
+					rental.getStatus().getCode());
 		} catch (NumberFormatException e) {
-
-			System.out.println("대여 번호는 숫자로 입력해주세요.");
+			System.out.println("숫자로 입력해주세요.");
 		}
 	}
 }

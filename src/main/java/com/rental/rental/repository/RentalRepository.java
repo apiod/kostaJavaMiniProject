@@ -88,4 +88,8 @@ public interface RentalRepository {
 	public int confirmRental(int rentalNum)throws RentalException;
 
 	public int requestReturn(int rentalNum)throws RentalException;
+
+	public int approveReturn(int rentalNum)throws RentalException;
+
+	public int updateStatusRentalNum(int setStatus, int rentalNum, int status)throws RentalException;
 }

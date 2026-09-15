@@ -25,7 +25,7 @@ public class AfterLoginView {
 		RentItemMenuView rentItemMenuView = new RentItemMenuView();
 		while (Session.getInstance().getLoginUser() != null) {
 			System.out.flush();
-			System.out.println("\n========================================");
+			System.out.println("========================================");
 			System.out.println("\t\t\t메인 메뉴");
 			System.out.println("========================================");
 			System.out.println(" 1. 물품 관리 (등록/조회/수정/삭제)");

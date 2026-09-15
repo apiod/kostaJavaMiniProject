@@ -63,6 +63,13 @@ public class RentalServiceImpl implements RentalService {
 			throw new RentalException("반납 신청에 실패했습니다.");
 	}
 
+	@Override
+	public void approveReturn(int rentalNum) throws RentalException {
+		int re = rr.approveReturn(rentalNum);
+		if(re==0)
+			throw new RentalException("승인에 실패했습니다.");
+	}
+
 	//대여 시작
 	@Override
 	public void confirmRental(int rentalNum) throws RentalException {
@@ -190,6 +197,14 @@ public class RentalServiceImpl implements RentalService {
 		List<Rental> re = rr.getPendingApprovals();
 		if(re.isEmpty()) throw new NotFoundException();
 		return re;
+	}
+
+	@Override
+	public int updateStatusRentalNum(int setStatus, int rentalNum, int status) throws RentalException {
+		int result = rr.updateStatusRentalNum(setStatus, rentalNum, status);
+		if (result == 0)
+			throw new RentalException("실패되었습니다.");
+		return result;
 	}
 	
 	

@@ -70,4 +70,8 @@ public interface RentalService {
 
 	public void requestReturn(int rentalNum)throws RentalException;
 
+	public void approveReturn(int rentalNum)throws RentalException;
+
+	public int updateStatusRentalNum(int setStatus, int rentalNum, int status)throws RentalException;
+
 }

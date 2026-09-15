@@ -108,6 +108,7 @@ public class RentalController {
 			FailView.FailMessage(e.getMessage());
 		}
 	}
+	//사용
 	public void requestReturn(int rentalNum) {
 		try {
 			rs.requestReturn(rentalNum);
@@ -116,6 +117,17 @@ public class RentalController {
 			FailView.FailMessage(e.getMessage());
 		}
 	}
+	public void approveReturn(int rentalNum) {
+		try {
+			rs.approveReturn(rentalNum);
+			SuccessView.printMessage("반납 신청이 승인되었습니다.");
+		} catch (Exception e) {
+			FailView.FailMessage(e.getMessage());
+		}
+	}
+	
+	
+	
 	/**
 	 * 과거 대여 이력 조회 status == 210 또는 211
 	 */
@@ -187,6 +199,16 @@ public class RentalController {
 		} catch (RentalException e) {
 			FailView.FailMessage(e.getMessage());
 		}
+	}
+	
+	//set Status = ? where rentalNum = ? AND status =?
+	public int updateStatusRentalNum(int setStatus, int rentalNum, int status) {
+		try {
+			return rs.updateStatusRentalNum(setStatus, rentalNum, status);
+		} catch (RentalException e) {
+			FailView.FailMessage(e.getMessage());
+		}
+		return 0;
 	}
 	
 	//로그인 시 현재 승인 대기중인 목록 출력

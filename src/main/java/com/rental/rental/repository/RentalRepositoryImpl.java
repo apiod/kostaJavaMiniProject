@@ -102,7 +102,7 @@ public class RentalRepositoryImpl implements RentalRepository {
 	}
 	
 	
-
+//사용
 	@Override
 	public List<Rental> selectByStatus(int status) throws RentalException {
 		List<Rental> list = new ArrayList<>();
@@ -510,7 +510,8 @@ public class RentalRepositoryImpl implements RentalRepository {
 			DBManager.close(con, ps);
 		}
 	}
-
+	
+	//최종 완료
 	@Override
 	public int confirmReturn(int rentalNum) throws RentalException {
 		Connection con = null;
@@ -537,12 +538,59 @@ public class RentalRepositoryImpl implements RentalRepository {
 	
 
 	@Override
+	public int updateStatusRentalNum(int setStatus, int rentalNum, int status) throws RentalException {
+		Connection con = null;
+		PreparedStatement ps = null;
+		String sql = "UPDATE Rental " + "SET status = ? " + "WHERE rentalNum = ? " + "AND status = ?";
+		try {
+			con = DBManager.getConnection();
+			ps = con.prepareStatement(sql);
+
+			ps.setInt(1, setStatus);
+			ps.setInt(2, rentalNum);
+			ps.setInt(3, status);
+
+			int result = ps.executeUpdate();
+			return result;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new RentalException();
+
+		} finally {
+			DBManager.close(con, ps);
+		}
+	}
+
+	//사용
+	@Override
 	public int requestReturn(int rentalNum) throws RentalException {
 		Connection con = null;
 		PreparedStatement ps = null;
-		//TODO id 확인
 		String sql = "UPDATE Rental " + "SET status = 200 " + "WHERE rentalNum = ? " + "AND status = 110";
+		try {
+			con = DBManager.getConnection();
+			ps = con.prepareStatement(sql);
 
+			ps.setInt(1, rentalNum);
+
+			int result = ps.executeUpdate();
+			return result;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new RentalException();
+
+		} finally {
+			DBManager.close(con, ps);
+		}
+	}
+	//사용
+	@Override
+	public int approveReturn(int rentalNum) throws RentalException {
+		Connection con = null;
+		PreparedStatement ps = null;
+		String sql = "UPDATE Rental " + "SET status = 201 " + "WHERE rentalNum = ? " + "AND status = 200";
 		try {
 			con = DBManager.getConnection();
 			ps = con.prepareStatement(sql);
