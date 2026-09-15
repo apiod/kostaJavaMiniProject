@@ -8,7 +8,7 @@ public class MenuView {
 		AfterLoginView alv = null;
 		while (true) {
 			lmv.loginMenuView();
-			if(alv ==null) new AfterLoginView();
+			if(alv ==null) alv = new AfterLoginView();
 			if(alv !=null) alv.mainMenu();
 		}
 	}
