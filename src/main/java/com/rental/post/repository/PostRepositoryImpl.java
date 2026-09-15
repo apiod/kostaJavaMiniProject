@@ -37,7 +37,7 @@ public class PostRepositoryImpl implements PostRepository {
 			result = ps.executeUpdate();
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 			throw new PostException();
 		} finally {
 			DBManager.close(con, ps);
@@ -67,7 +67,7 @@ public class PostRepositoryImpl implements PostRepository {
 			result = ps.executeUpdate();
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 			throw new PostException();
 			
 		} finally {
@@ -88,7 +88,7 @@ public class PostRepositoryImpl implements PostRepository {
 			ps = con.prepareStatement(sql);
 			ps.setInt(1, postNum);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 		}finally {
 			DBManager.close(con, ps);
 		}
@@ -110,7 +110,7 @@ public class PostRepositoryImpl implements PostRepository {
 	            }
 	        }
 	    } catch (SQLException e) {
-	        e.printStackTrace();
+	        // e.printStackTrace();
 	        throw new PostException();
 	    }
 	    return posts;
@@ -131,7 +131,7 @@ public class PostRepositoryImpl implements PostRepository {
 	            }
 	        }
 	    } catch (SQLException e) {
-	        e.printStackTrace();
+	        // e.printStackTrace();
 	        throw new PostException();
 	    }
 	    return posts;
@@ -152,7 +152,7 @@ public class PostRepositoryImpl implements PostRepository {
 	    	if (rs.next()) return mapPost(rs);
 
 	    } catch (SQLException e) {
-	        e.printStackTrace();
+	        // e.printStackTrace();
 	        throw new PostException();
 	    } finally {
 			DBManager.close(con, ps, rs);
@@ -178,7 +178,7 @@ public class PostRepositoryImpl implements PostRepository {
 	            }
 	        }
 	    } catch (SQLException e) {
-	        e.printStackTrace();
+	        // e.printStackTrace();
 	        throw new PostException();
 	    }
 	    return posts;
@@ -203,7 +203,7 @@ public class PostRepositoryImpl implements PostRepository {
 	            }
 	        }
 	    } catch (SQLException e) {
-	        e.printStackTrace();
+	        // e.printStackTrace();
 	        throw new PostException();
 	    }
 	    return posts;
@@ -227,7 +227,7 @@ public class PostRepositoryImpl implements PostRepository {
 	            }
 	        }
 	    } catch (SQLException e) {
-	        e.printStackTrace();
+	        // e.printStackTrace();
 	        throw new PostException();
 	    }
 	    return posts;
@@ -252,7 +252,7 @@ public class PostRepositoryImpl implements PostRepository {
 	            }
 	        }
 	    } catch (SQLException e) {
-	        e.printStackTrace();
+	        // e.printStackTrace();
 	        throw new PostException();
 	    }
 	    return posts;
@@ -298,7 +298,7 @@ public class PostRepositoryImpl implements PostRepository {
 	        }
 
 	    } catch (SQLException e) {
-	        e.printStackTrace();
+	        // e.printStackTrace();
 	        throw new PostException();
 	    }
 

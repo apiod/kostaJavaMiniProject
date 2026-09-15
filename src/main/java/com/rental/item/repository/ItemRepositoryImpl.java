@@ -32,7 +32,7 @@ public class ItemRepositoryImpl implements ItemRepository {
 				list.add(mapRow(rs));
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 			throw new NotFoundException("물품 목록 조회 중 데이터베이스 오류가 발생했습니다.");
 		} finally {
 			DBManager.close(con, ps, rs);
@@ -58,7 +58,7 @@ public class ItemRepositoryImpl implements ItemRepository {
 				return mapRow(rs);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 			throw new NotFoundException("물품 상세 조회 중 데이터베이스 오류가 발생했습니다.");
 		} finally {
 			DBManager.close(con, ps, rs);
@@ -85,7 +85,7 @@ public class ItemRepositoryImpl implements ItemRepository {
 				list.add(mapRow(rs));
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 			throw new NotFoundException("물품 검색 중 데이터베이스 오류가 발생했습니다.");
 		} finally {
 			DBManager.close(con, ps, rs);
@@ -112,7 +112,7 @@ public class ItemRepositoryImpl implements ItemRepository {
 
 			result = ps.executeUpdate();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 			throw new ItemException();
 		} finally {
 			DBManager.close(con, ps);
@@ -140,7 +140,7 @@ public class ItemRepositoryImpl implements ItemRepository {
 
 			result = ps.executeUpdate();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 			throw new ItemException();
 		} finally {
 			DBManager.close(con, ps);
@@ -161,7 +161,7 @@ public class ItemRepositoryImpl implements ItemRepository {
 			
 			return ps.executeUpdate();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 			throw new ItemException();
 		} finally {
 			DBManager.close(con, ps);
@@ -180,7 +180,7 @@ public class ItemRepositoryImpl implements ItemRepository {
 			ps.setInt(2, itemNum);
 			return ps.executeUpdate();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 			throw new ItemException();
 		} finally {
 			DBManager.close(con, ps);
@@ -206,7 +206,7 @@ public class ItemRepositoryImpl implements ItemRepository {
 			}
 			
 		} catch (SQLException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 			throw new ItemException();
 		} finally {
 			DBManager.close(con, ps, rs);
