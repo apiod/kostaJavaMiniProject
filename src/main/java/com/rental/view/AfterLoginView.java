@@ -22,7 +22,7 @@ public class AfterLoginView {
 	 */
 	public void mainMenu() {
 		ItemMenuView itemMenuView = new ItemMenuView();
-		RentItemMenuView rentItemMenuView = new RentItemMenuView();
+		RentalMenuView rentItemMenuView = new RentalMenuView();
 		while (Session.getInstance().getLoginUser() != null) {
 			System.out.flush();
 			System.out.println("========================================");

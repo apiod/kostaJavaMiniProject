@@ -3,14 +3,16 @@ package main.java.com.rental.view;
 import java.util.List;
 import java.util.Scanner;
 
+import main.java.com.rental.common.util.ViewUtil;
 import main.java.com.rental.post.controller.PostController;
 import main.java.com.rental.post.dto.AvailablePost;
 import main.java.com.rental.rental.controller.RentalController;
 import main.java.com.rental.rental.dto.RentalCreateRequest;
 import main.java.com.rental.rental.entity.Rental;
+import main.java.com.rental.rental.enums.RentalStatus;
 import main.java.com.rental.session.Session;
 
-public class RentItemMenuView {
+public class RentalMenuView {
 
 	Scanner sc = new Scanner(System.in);
 	RentalController rentalController = new RentalController();
@@ -40,7 +42,7 @@ public class RentItemMenuView {
 
 			case "1":
 				System.out.flush();
-				rentalController.selectRentalRequestList(id);
+				rentalController.selectRentalRequestList();
 				break;
 
 			case "2":
@@ -79,8 +81,7 @@ public class RentItemMenuView {
 		System.out.flush();
 		System.out.println("\n[물품 대여 - 목록 조회 및 대여 신청]");
 		List<AvailablePost> list = postController.selectAvailablePost();
-		if (list.isEmpty())
-			return;
+		if (list.isEmpty()) return;
 		SuccessView.printEntityList(list);
 		System.out.print("대여 신청할 게시글 번호(PostNum) 입력 (취소: 0) >>  ");
 		try {
@@ -106,13 +107,11 @@ public class RentItemMenuView {
 	 * Controller 로 전달
 	 */
 	private void approveRental() {
-
+		System.out.flush();
 		System.out.println("\n[대여 신청 승인]");
 		// 대여 신청 대기중인 목록 조회
 		List<Rental> list = rentalController.selectByStatus(100);
-		if (list == null || list.isEmpty()) {
-	        return;
-	    }
+		if (list.isEmpty()) return;
 		System.out.println(" 0. 상위 메뉴로 이동");
 		System.out.print("승인할 대여 번호를 입력해주세요 >> ");
 		int rentalNum = 0; 
@@ -125,18 +124,9 @@ public class RentItemMenuView {
 		if (rentalNum == 0) {
 			return;
 		}
-
-		Rental rental = rentalController.selectByRentalNum(rentalNum);
-
-		if (rental == null) {
-			return;
-		}
-
-		if (rental.getStatus().getCode() != 100) {
-			System.out.println("대여 신청 대기중인 정보가 아닙니다.");
-			return;
-		}
-
+		
+		Rental rental = ViewUtil.checkedRentalNum(list, rentalNum);
+		if(rental ==null) return;
 		int postNum = rental.getPostNum();
 
 		System.out.println("선택한 대여 신청 >> " + rental);
@@ -147,7 +137,7 @@ public class RentItemMenuView {
 			System.out.println("승인을 취소했습니다.");
 			return;
 		}
-
+		//트랜잭션관리
 		rentalController.approveRental(rentalNum, postNum);
 
 		System.out.println("대여 신청이 승인되었습니다.");
@@ -159,33 +149,23 @@ public class RentItemMenuView {
 	 * 선택한 rentalNum을 Controller 로 전달
 	 */
 	private void rejectRental() {
+		RentalStatus status = RentalStatus.REJECTED;
+		System.out.flush();
 	    System.out.println("\n[대여 신청 거절]");
-
 	    List<Rental> list = rentalController.selectByStatus(100);
-	    if (list == null || list.isEmpty()) {
-	        return;
-	    }
+	    if (list.isEmpty()) return;
+	    
 	    System.out.println(" 0. 상위 메뉴로 이동");
-
 	    System.out.print("거절할 대여 번호를 입력해주세요 >> ");
 	    int rentalNum = Integer.parseInt(sc.nextLine());
 
 	    if (rentalNum == 0) {
 	        return;
 	    }
-	    Rental rental = rentalController.selectByRentalNum(rentalNum);
-
-	    if (rental == null) {
-	        System.out.println("존재하지 않는 대여 신청입니다.");
-	        return;
-	    }
-
-	    if (rental.getStatus().getCode() != 100) {
-	        System.out.println("대여 신청 대기중인 정보가 아닙니다.");
-	        return;
-	    }
-
-	    System.out.println("선택한 대여 신청");
+	    Rental rental = ViewUtil.checkedRentalNum(list, rentalNum);
+		if(rental ==null) return;
+		
+	    System.out.println("선택한 대여 거절 내역");
 	    System.out.println(rental);
 
 	    System.out.print("대여 신청을 거절하시겠습니까? (Y/N) : ");
@@ -195,7 +175,7 @@ public class RentItemMenuView {
 	        System.out.println("거절을 취소했습니다.");
 	        return;
 	    }
-	    rentalController.rejectRental(rentalNum);
+	    rentalController.updateStatusRentalNum(status.getCode(),rental.getRentalNum(),rental.getStatus().getCode());
 
 	    System.out.println("대여 신청이 거절되었습니다.");
 	}
@@ -206,39 +186,27 @@ public class RentItemMenuView {
 	 * 물품을 실제로 인도했는지 확인 후 대여 시작 처리
 	 */
 	private void startRental() {
+		RentalStatus status = RentalStatus.RENTED;
+		System.out.flush();
 	    System.out.println("\n[대여 시작 처리]");
 
 	    // 승인된 대여 목록
 	    List<Rental> list = rentalController.selectByStatus(101);
 
-	    if (list == null || list.isEmpty()) {
-	        System.out.println("대여 시작 가능한 목록이 없습니다.");
+	    if (list.isEmpty()) {
 	        return;
 	    }
 
-	    for (Rental rental : list) {
-	        System.out.println(rental);
-	    }
-
 	    System.out.println(" 0. 상위 메뉴로 이동");
-
 	    System.out.print("대여 시작할 대여 번호를 입력해주세요 >> ");
+	   
 	    int rentalNum = Integer.parseInt(sc.nextLine());
-
 	    if (rentalNum == 0) {
 	        return;
 	    }
 
-	    Rental rental = rentalController.selectByRentalNum(rentalNum);
-
-	    if (rental == null) {
-	        return;
-	    }
-
-	    if (rental.getStatus().getCode() != 101) {
-	        System.out.println("대여 승인된 상태의 물품만 대여를 시작할 수 있습니다.");
-	        return;
-	    }
+	    Rental rental = ViewUtil.checkedRentalNum(list, rentalNum);
+		if(rental ==null) return;
 
 	    System.out.println();
 	    System.out.println("선택한 대여 정보");
@@ -252,12 +220,12 @@ public class RentItemMenuView {
 	        return;
 	    }
 
-	    rentalController.confirmRental(rentalNum);
+	    rentalController.updateStatusRentalNum(status.getCode(),rental.getRentalNum(),rental.getStatus().getCode());
 
 	    System.out.println("대여가 시작되었습니다.");
 	}
 	
-
+	//대여가능한 게시글중 postNum 해당하는지 확인
 	private AvailablePost checkedPostNum(List<AvailablePost> list, int postNum) {
 		for (AvailablePost post : list) {
 			if (post.getPostNum() == postNum) {

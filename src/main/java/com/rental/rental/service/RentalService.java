@@ -14,64 +14,26 @@ public interface RentalService {
 	public void rentalCreate(RentalCreateRequest rentalCreateRequest) throws RentalException;
 
 	/**
-	 * 물품 조회
-	 *
-	 * 내가 빌려주는 물품 내가 빌린 물품
-	 */
-	public List<Rental> selectLendList(String lenderId) throws RentalException, NotFoundException;
-
-	public List<Rental> selectBorrowList(String borrowerId) throws RentalException, NotFoundException;
-
-	/**
 	 * 대여 신청 현황 조회 status == 100
 	 */
-	public List<Rental> selectRentalRequestList(String userId) throws RentalException, NotFoundException;
+	public List<Rental> selectRentalRequestList() throws RentalException, NotFoundException;
 
 	/**
 	 * 현재 대여 현황 조회 status == 110
 	 */
 	public List<Rental> selectCurrentRentalList() throws RentalException, NotFoundException;
 
-	/**
-	 * 과거 대여 이력 조회 status == 210 또는 211
-	 */
-	public List<Rental> selectRentalHistoryList(String userId) throws RentalException, NotFoundException;
-
-	/**
-	 * 대여/반납 요청 내역 조회
-	 *
-	 * status % 100 == 0
-	 *
-	 * 100 ~ 199 : 대여 요청 200 ~ 299 : 반납 요청
-	 */
-	public List<Rental> selectRequestList(String userId) throws RentalException, NotFoundException;
-
-	public List<Rental> selectRentalRequestHistory(String userId) throws RentalException, NotFoundException;
-
-	public List<Rental> selectReturnRequestHistory(String userId) throws RentalException, NotFoundException;
-
 	public boolean approveRental(int rentalNum, int postNum) throws RentalException;
 
-	public void rejectRental(int rentalNum) throws RentalException;
-
-	public void confirmReturn(int rentalNum) throws RentalException;
 	/**
 	 * 로그인시 대기중인 승인목록(status in(100,200)) 리스트
 	 */
 	public List<Rental> getPendingApprovals() throws RentalException;
 
-	public List<Rental> selectRentalRequestListByLender()throws RentalException;
+	public Rental selectByRentalNum(int rentalNum) throws NotFoundException, RentalException;
 
-	public Rental selectByRentalNum(int rentalNum)throws NotFoundException, RentalException;
-	
-	public List<Rental> selectByStatus(int status)throws NotFoundException, RentalException;
+	public List<Rental> selectByStatus(int status) throws NotFoundException, RentalException;
 
-	public void confirmRental(int rentalNum)throws RentalException;
-
-	public void requestReturn(int rentalNum)throws RentalException;
-
-	public void approveReturn(int rentalNum)throws RentalException;
-
-	public int updateStatusRentalNum(int setStatus, int rentalNum, int status)throws RentalException;
+	public int updateStatusRentalNum(int setStatus, int rentalNum, int status) throws RentalException;
 
 }

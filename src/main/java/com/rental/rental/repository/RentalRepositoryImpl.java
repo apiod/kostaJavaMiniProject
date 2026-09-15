@@ -72,7 +72,7 @@ public class RentalRepositoryImpl implements RentalRepository {
 
 		return list;
 	}
-	
+
 	@Override
 	public Rental selectByRentalNum(int rentalNum) throws RentalException {
 		Rental re = null;
@@ -100,8 +100,7 @@ public class RentalRepositoryImpl implements RentalRepository {
 
 		return re;
 	}
-	
-	
+
 //사용
 	@Override
 	public List<Rental> selectByStatus(int status) throws RentalException {
@@ -130,85 +129,6 @@ public class RentalRepositoryImpl implements RentalRepository {
 
 		return list;
 	}
-	
-	
-
-	@Override
-	public int confirmRental(int rentalNum) throws RentalException {
-		String sql = "UPDATE Rental " + "SET status = 110 " + "WHERE rentalNum = ? " + "AND status = 101";
-		int result = 0;
-		try (Connection conn = DBManager.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
-			ps.setInt(1, rentalNum);
-			result = ps.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new RentalException();
-		}
-		return result;
-	}
-
-	@Override
-	public List<Rental> selectLendList(String lenderId) throws RentalException {
-
-		List<Rental> list = new ArrayList<>();
-
-		String sql = """
-				SELECT RentalNum,
-				       BorrowerId,
-				       Status,
-				       PostNum
-				FROM View_Rental_LenderID
-				WHERE LenderId = ?
-				""";
-
-		try (Connection conn = DBManager.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
-			ps.setString(1, lenderId);
-			try (ResultSet rs = ps.executeQuery()) {
-				while (rs.next()) {
-					list.add(mapRental(rs));
-				}
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new RentalException();
-		}
-
-		return list;
-	}
-	
-	
-
-	/**
-	 * 내가 빌린 물품 조회
-	 * 
-	 * @throws RentalException
-	 */
-	@Override
-	public List<Rental> selectBorrowList(String borrowerId) throws RentalException {
-
-		List<Rental> list = new ArrayList<>();
-
-		String sql = """
-				SELECT RentalNum,
-				       BorrowerId,
-				       Status,
-				       PostNum
-				FROM Rental
-				WHERE BorrowerId = ?
-				""";
-		try (Connection conn = DBManager.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
-			ps.setString(1, borrowerId);
-			try (ResultSet rs = ps.executeQuery()) {
-				while (rs.next()) {
-					list.add(mapRental(rs));
-				}
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new RentalException();
-		}
-		return list;
-	}
 
 	/**
 	 * 대여 신청 현황
@@ -218,7 +138,7 @@ public class RentalRepositoryImpl implements RentalRepository {
 	 * @throws RentalException
 	 */
 	@Override
-	public List<Rental> selectRentalRequestList(String userId) throws RentalException {
+	public List<Rental> selectRentalRequestList() throws RentalException {
 		List<Rental> list = new ArrayList<>();
 		String sql = """
 				SELECT RentalNum,
@@ -230,8 +150,9 @@ public class RentalRepositoryImpl implements RentalRepository {
 				  AND (BorrowerId = ?OR LenderId =?)
 				""";
 		try (Connection conn = DBManager.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
-			ps.setString(1, userId);
-			ps.setString(2, userId);
+			String id = Session.getInstance().getLoginUser().getId();
+			ps.setString(1, id);
+			ps.setString(2, id);
 			try (ResultSet rs = ps.executeQuery()) {
 				while (rs.next()) {
 					list.add(mapRental(rs));
@@ -262,8 +183,7 @@ public class RentalRepositoryImpl implements RentalRepository {
 				WHERE Status = 110 AND BorrowerId = ?
 				""";
 
-		try (Connection conn = DBManager.getConnection(); 
-				PreparedStatement ps = conn.prepareStatement(sql)) {
+		try (Connection conn = DBManager.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 			ps.setString(1, Session.getInstance().getLoginUser().getId());
 			try (ResultSet rs = ps.executeQuery()) {
 
@@ -277,179 +197,6 @@ public class RentalRepositoryImpl implements RentalRepository {
 		}
 
 		return list;
-	}
-
-	/**
-	 * 과거 대여 이력
-	 *
-	 * 210 : 반납 확인 중 211 : 반납 완료
-	 *
-	 */
-	@Override
-	public List<Rental> selectRentalHistoryList(String userId) throws RentalException {
-
-		List<Rental> list = new ArrayList<>();
-
-		String sql = """
-				SELECT RentalNum,
-				       BorrowerId,
-				       Status,
-				       PostNum
-				FROM View_Rental_LenderID
-				WHERE Status = 211
-				  AND (BorrowerId = ? OR LenderID = ?)
-				ORDER BY RentalNum DESC
-				""";
-
-		try (Connection conn = DBManager.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
-			ps.setString(1, userId);
-			ps.setString(2, userId);
-			try (ResultSet rs = ps.executeQuery()) {
-				while (rs.next()) {
-					list.add(mapRental(rs));
-				}
-			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new RentalException();
-		}
-
-		return list;
-	}
-
-	/**
-	 * 대여/반납 요청 내역
-	 *
-	 * status % 100 == 0
-	 */
-	@Override
-	public List<Rental> selectRequestList(String userId) throws RentalException {
-
-		List<Rental> list = new ArrayList<>();
-		String sql = """
-				 SELECT RentalNum,
-				        BorrowerId,
-				        Status,
-				        PostNum
-				 FROM View_Rental_LenderID
-				 WHERE MOD(Status, 100) = 0
-				   AND ( BorrowerId = ? OR LenderID = ? )
-				 ORDER BY RentalNum DESC
-				""";
-		try (Connection conn = DBManager.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
-			ps.setString(1, userId);
-			ps.setString(2, userId);
-			try (ResultSet rs = ps.executeQuery()) {
-				while (rs.next()) {
-					list.add(mapRental(rs));
-				}
-			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new RentalException();
-		}
-
-		return list;
-	}
-
-	/**
-	 * 대여 요청 내역
-	 *
-	 * status / 100 == 1 status % 100 == 0
-	 *
-	 * 결과적으로 status == 100
-	 */
-	@Override
-	public List<Rental> selectRentalRequestHistory(String userId) throws RentalException {
-
-		List<Rental> list = new ArrayList<>();
-
-		String sql = """
-				SELECT RentalNum,
-				       BorrowerId,
-				       Status,
-				       PostNum
-				FROM View_Rental_LenderID
-				WHERE MOD(Status, 100) = 0
-				  AND FLOOR(Status / 100) = 1
-				  AND (BorrowerId = ? OR LenderID = ? )
-				ORDER BY RentalNum DESC
-				""";
-		try (Connection conn = DBManager.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
-			ps.setString(1, userId);
-			ps.setString(2, userId);
-			try (ResultSet rs = ps.executeQuery()) {
-				while (rs.next()) {
-					list.add(mapRental(rs));
-				}
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new RentalException();
-		}
-
-		return list;
-	}
-
-	/**
-	 * 반납 요청 내역
-	 *
-	 * status / 100 == 2 status % 100 == 0
-	 *
-	 * 결과적으로 status == 200
-	 */
-	@Override
-	public List<Rental> selectReturnRequestHistory(String userId) throws RentalException {
-
-		List<Rental> list = new ArrayList<>();
-
-		String sql = """
-				SELECT RentalNum,
-				       BorrowerId,
-				       Status,
-				       PostNum
-				FROM View_Rental_LenderID
-				WHERE MOD(Status, 100) = 0
-				  AND FLOOR(Status / 100) = 2
-				  AND ( BorrowerId = ? OR LenderID = ? )
-				ORDER BY RentalNum DESC
-				""";
-
-		try (Connection conn = DBManager.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
-			ps.setString(1, userId);
-			ps.setString(2, userId);
-			try (ResultSet rs = ps.executeQuery()) {
-				while (rs.next()) {
-					list.add(mapRental(rs));
-				}
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new RentalException();
-		}
-		return list;
-	}
-
-	@Override
-	public int deleteRental(int rentalNum) throws RentalException {
-		Connection con = null;
-		PreparedStatement ps = null;
-		int result = 0;
-		String sql = "DELETE FROM Rental " + "WHERE RentalNum = ? " + "AND status = 100";
-		try {
-			con = DBManager.getConnection();
-			ps = con.prepareStatement(sql);
-			ps.setInt(1, rentalNum);
-			result = ps.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new RentalException();
-		} finally {
-			DBManager.close(con, ps);
-		}
-		return result;
 	}
 
 	@Override
@@ -492,52 +239,6 @@ public class RentalRepositoryImpl implements RentalRepository {
 	}
 
 	@Override
-	public int rejectRental(int rentalNum) throws RentalException {
-		Connection con = null;
-		PreparedStatement ps = null;
-		String sql = "UPDATE Rental " + "SET status = 102 " + "WHERE rentalNum = ? " + "AND status = 100";
-		try {
-			con = DBManager.getConnection();
-			ps = con.prepareStatement(sql);
-			ps.setInt(1, rentalNum);
-			int result = ps.executeUpdate();
-			return result;
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new RentalException();
-		} finally {
-			DBManager.close(con, ps);
-		}
-	}
-	
-	//최종 완료
-	@Override
-	public int confirmReturn(int rentalNum) throws RentalException {
-		Connection con = null;
-		PreparedStatement ps = null;
-		String sql = "UPDATE Rental " + "SET status = 211 " + "WHERE rentalNum = ? " + "AND status = 210";
-
-		try {
-			con = DBManager.getConnection();
-			ps = con.prepareStatement(sql);
-
-			ps.setInt(1, rentalNum);
-
-			int result = ps.executeUpdate();
-			return result;
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new RentalException();
-
-		} finally {
-			DBManager.close(con, ps);
-		}
-	}
-	
-
-	@Override
 	public int updateStatusRentalNum(int setStatus, int rentalNum, int status) throws RentalException {
 		Connection con = null;
 		PreparedStatement ps = null;
@@ -549,53 +250,6 @@ public class RentalRepositoryImpl implements RentalRepository {
 			ps.setInt(1, setStatus);
 			ps.setInt(2, rentalNum);
 			ps.setInt(3, status);
-
-			int result = ps.executeUpdate();
-			return result;
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new RentalException();
-
-		} finally {
-			DBManager.close(con, ps);
-		}
-	}
-
-	//사용
-	@Override
-	public int requestReturn(int rentalNum) throws RentalException {
-		Connection con = null;
-		PreparedStatement ps = null;
-		String sql = "UPDATE Rental " + "SET status = 200 " + "WHERE rentalNum = ? " + "AND status = 110";
-		try {
-			con = DBManager.getConnection();
-			ps = con.prepareStatement(sql);
-
-			ps.setInt(1, rentalNum);
-
-			int result = ps.executeUpdate();
-			return result;
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new RentalException();
-
-		} finally {
-			DBManager.close(con, ps);
-		}
-	}
-	//사용
-	@Override
-	public int approveReturn(int rentalNum) throws RentalException {
-		Connection con = null;
-		PreparedStatement ps = null;
-		String sql = "UPDATE Rental " + "SET status = 201 " + "WHERE rentalNum = ? " + "AND status = 200";
-		try {
-			con = DBManager.getConnection();
-			ps = con.prepareStatement(sql);
-
-			ps.setInt(1, rentalNum);
 
 			int result = ps.executeUpdate();
 			return result;
